@@ -1,0 +1,15 @@
+# Compiled output
+/dist
+# Dependencies
+/node_modules
+/lib
+/es
+
+.idea
+.vscode
+node_modules
+*.DS_Store
+build
+npm-debug.log
+coverage
+stats.json

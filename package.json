@@ -1,0 +1,38 @@
+{
+  "name": "react-effector-form",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clean && npm run build:cjs && npm run build:es",
+    "build:cjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --extensions '.ts','.tsx'",
+    "build:es": "cross-env babel src --out-dir es --extensions '.ts','.tsx'",
+    "test": "cross-env NODE_ENV=test jest",
+    "clean": "rimraf dist lib es"
+  },
+  "author": "Goncharov Timofey",
+  "license": "ISC",
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.8.6",
+    "effector": "^20.15.9",
+    "effector-react": "^20.7.3"
+  },
+  "dependencies": {
+    "effector": "^20.16.0",
+    "effector-react": "^20.7.4",
+    "lodash.topath": "^4.5.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.1",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/plugin-transform-typescript": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "@types/react": "^16.9.36",
+    "cross-env": "^7.0.2",
+    "rimraf": "^3.0.2"
+  }
+}
