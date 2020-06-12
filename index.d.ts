@@ -1,10 +1,12 @@
 import {Store, Event} from 'effector';
 import {SyntheticEvent} from 'react';
 
-type Message = string | undefined;
+type AnyState = Record<string, unknown>;
+
+export type Message = string | undefined;
 
 type Messages<Values> = {
-  [key in keyof Values]?: Values[key] extends Record<string, unknown>
+  [key in keyof Values]?: Values[key] extends AnyState
     ? Messages<Values[key]> : Message;
 };
 
@@ -72,6 +74,30 @@ type UseFormParams<Values> = undefined | {
   $form?: Store<FormState>,
 }
 
-declare const useForm: <Values extends Record<string, unknown> = Record<string, unknown>>(
+declare const useForm: <Values extends AnyState = AnyState>(
   params?: UseFormParams<Values>,
 ) => ResultHook<Values>;
+
+declare const setIn: <O extends AnyState = AnyState, V = any>(
+  object: O,
+  path: string,
+  value: V,
+) => O;
+
+declare const deleteIn: <O extends AnyState = AnyState>(
+  object: O,
+  path: string,
+  removeEmpty: boolean = false,
+  inDeep: boolean = true,
+) => O;
+
+declare const getIn: <O extends AnyState = AnyState, V = any>(
+  object: O,
+  path: string,
+  removeEmpty: boolean = false,
+  inDeep: boolean = true,
+) => V = any;
+
+declare const mapInlineToMapNested: <O extends AnyState = AnyState, R extends AnyState>(
+  inlineMap: O,
+) => R;
