@@ -1,8 +1,9 @@
 {
   "name": "react-effector-form",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "scripts": {
     "build": "npm run clean && npm run build:cjs && npm run build:es",
     "build:cjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --extensions '.ts','.tsx'",

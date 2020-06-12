@@ -12,8 +12,8 @@ import {
 } from '../index';
 import {createStore, createEvent, restore} from 'effector';
 import {useStore} from 'effector-react';
-import {getValue} from '@utils/dom-helper';
-import {setIn, getIn, deleteIn, mapInlineToMapNested} from '@utils/object-manager';
+import {getValue} from './utils/dom-helper';
+import {setIn, getIn, deleteIn, mapInlineToMapNested} from './utils/object-manager';
 
 const initialFieldState: FieldState = {
   touched: false,
@@ -29,8 +29,8 @@ const initialFormState = {
 
 const useForm = <Values extends Record<string, unknown>>({
   $values: $valuesProp,
-  $errors: $errorsProp,
-  $fields: $fieldsProp,
+  $errorsInline: $errorsInlineProp,
+  $fieldsInline: $fieldsInlineProp,
   $form: $formProp,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
   const setIsMounted = useMemo(() => createEvent<boolean>(), []);
@@ -42,9 +42,9 @@ const useForm = <Values extends Record<string, unknown>>({
   const setSubmitted = useMemo(() => createEvent<boolean>(`hookForm_SetSubmitted`), []);
 
   const $values = useMemo(() => $valuesProp || createStore<Values>({} as Values), []);
-  const $errorsInline = useMemo(() => $errorsProp || createStore<Record<string, Message>>({}), []);
+  const $errorsInline = useMemo(() => $errorsInlineProp || createStore<Record<string, Message>>({}), []);
   const $errors = useMemo(() => $errorsInline.map((state) => mapInlineToMapNested<Messages<Values>>(state)), []);
-  const $fieldsInline = useMemo(() => $fieldsProp || createStore<Record<string, FieldState>>({}), []);
+  const $fieldsInline = useMemo(() => $fieldsInlineProp || createStore<Record<string, FieldState>>({}), []);
   const $form = useMemo(() => $formProp || createStore<FormState>(initialFormState), []);
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const useForm = <Values extends Record<string, unknown>>({
       const error = errorsInline[name];
 
       const fieldsState = useStore($fieldsInline);
-      const fieldState = fieldsState[name];
+      const fieldState = fieldsState[name] ||  initialFieldState;
 
       const formState = useStore($form);
 

@@ -1,7 +1,7 @@
 import {Store, Event} from 'effector';
 import {SyntheticEvent} from 'react';
 
-type Message = string | void;
+type Message = string | undefined;
 
 type Messages<Values> = {
   [key in keyof Values]?: Values[key] extends Record<string, unknown>
@@ -67,8 +67,11 @@ type ResultHook<Values> = {
 
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>
-  $errors?: Store<Record<string, Message>>,
-  $fields?: Store<Record<string, FieldState>>,
+  $errorsInline?: Store<Record<string, Message>>,
+  $fieldsInline?: Store<Record<string, FieldState>>,
   $form?: Store<FormState>,
 }
 
+declare const useForm: <Values extends Record<string, unknown> = Record<string, unknown>>(
+  params?: UseFormParams<Values>,
+) => ResultHook<Values>;
