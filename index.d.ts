@@ -1,7 +1,11 @@
 import {Store, Event} from 'effector';
 import {SyntheticEvent} from 'react';
 
-type AnyState = Record<string, unknown>;
+type AnyState = Record<string, any>;
+
+export type ErrorsInline = Record<string, Message>;
+
+export type FieldsInline = Record<string, FieldState>
 
 export type Message = string | undefined;
 
@@ -13,8 +17,8 @@ type Messages<Values> = {
 export type SubmitParams<Values> = {
   values: Values,
   errors: Messages<Values>,
-  errorsInline: Record<string, Message>,
-  fieldsInline: Record<string, FieldState>,
+  errorsInline: ErrorsInline,
+  fieldsInline: FieldsInline,
   form: FormState,
 };
 
@@ -23,6 +27,7 @@ export type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 export type FormState = {
   submitted: boolean,
   hasError: boolean,
+  forcedError: boolean,
 }
 
 export type FieldState = {
@@ -49,6 +54,7 @@ export type ControllerInjectedResult = {
   form: FormState,
   validate?: (value: any) => Message,
   setFieldState: ({field: string, state: FieldState}) => void;
+  setOrDeleteError: ({field: string, error: Message}) => void;
   fieldState: FieldState,
 };
 
@@ -60,7 +66,7 @@ type ResultHook<Values> = {
   controller: ControllerHof,
   handleSubmit: (onSubmit: OnSubmit<Values>) => (e: SyntheticEvent<HTMLFormElement>) => void,
   setValue: Event<{name: string, value: any}>,
-  setError: Event<{field: string, error: Message}>
+  setOrDeleteError: Event<{field: string, error: Message}>
   $values: Store<Values>,
   $errorsInline: Store<Record<string, Message>>,
   $errors: Store<Messages<Values>>,
