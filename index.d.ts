@@ -70,6 +70,7 @@ type ResultHook<Values> = {
   $values: Store<Values>,
   $errorsInline: Store<Record<string, Message>>,
   $errors: Store<Messages<Values>>,
+  $form: Store<FormState>,
   $fieldsInline: Store<Record<string, FieldState>>
 }
 

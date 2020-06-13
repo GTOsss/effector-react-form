@@ -160,6 +160,7 @@ const useForm = <Values extends AnyState>({
     $errorsInline,
     $errors,
     $fieldsInline,
+    $form,
   }
 };
 
