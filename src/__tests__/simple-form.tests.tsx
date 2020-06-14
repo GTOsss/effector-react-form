@@ -74,9 +74,9 @@ const SimpleForm = () => {
 
 
 describe('SimpleForm', () => {
-  render(<SimpleForm />);
 
   test('onChange username', () => {
+    render(<SimpleForm />);
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, {target: {value: 'test'}});
     const inputs = screen.getAllByRole('textbox');
@@ -84,6 +84,7 @@ describe('SimpleForm', () => {
   });
 
   test('onChange profile.fistName', () => {
+    render(<SimpleForm />);
     const input = screen.getByPlaceholderText('First name');
     fireEvent.change(input, {target: {value: 'test'}});
     const inputs = screen.getAllByRole('textbox');
@@ -91,6 +92,7 @@ describe('SimpleForm', () => {
   });
 
   test('setError profile.firstName', () => {
+    render(<SimpleForm />);
     const button = screen.getByText('set error for firstName');
     fireEvent.click(button);
     const inputs = screen.getAllByRole('wrapper-for-input');
@@ -98,6 +100,7 @@ describe('SimpleForm', () => {
   });
 
   test('setError profile.firstName and submit', () => {
+    render(<SimpleForm />);
     const button = screen.getByText('set error for firstName');
     fireEvent.click(button);
     const buttonSubmit = screen.getByText('submit')

@@ -38,7 +38,7 @@ const useForm = <Values extends AnyState>({
   const $isMounted = useMemo(() => restore(setIsMounted, false), []);
   const validateMapByName: Record<string, any> = useMemo(() => ({}), []);
   const setValue = useMemo(() => createEvent<{name: string, value: any}>(`hookForm_SetValue`), []);
-  const setOrDeleteError = useMemo(() => createEvent<{field: string, error: Message}>(`hookForm_SetError`), []);
+  const setOrDeleteError = useMemo(() => createEvent<{field: string, error: Message, forced?: boolean}>(`hookForm_SetError`), []);
   const setFieldState = useMemo(() => createEvent<{field: string, state: FieldState}>(`hookForm_SetFieldState`), []);
   const setSubmitted = useMemo(() => createEvent<boolean>(`hookForm_SetSubmitted`), []);
 
@@ -57,7 +57,7 @@ const useForm = <Values extends AnyState>({
     $fieldsInline.on(setFieldState, (state, {field, state: fieldState}) =>
       ({...state, [field]: fieldState}));
 
-    $form.on(setOrDeleteError, (state) => ({...state, forcedError: true}));
+    $form.on(setOrDeleteError, (state, {forced = true}) => ({...state, forcedError: forced}));
 
     $form.on(setSubmitted, (state, value) => setIn(state, 'submitted', value));
 
@@ -139,7 +139,7 @@ const useForm = <Values extends AnyState>({
 
     Object.entries(validateMapByName).forEach(([name, validate]) => {
       const error = validate && validate(getIn($values.getState(), name));
-      setOrDeleteError({field: name, error});
+      setOrDeleteError({field: name, error, forced: false});
     });
 
     onSubmit({
