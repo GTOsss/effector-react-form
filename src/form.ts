@@ -48,6 +48,16 @@ const useForm = <Values extends AnyState>({
   const $fieldsInline = useMemo(() => $fieldsInlineProp || createStore<FieldsInline>({}), []);
   const $form = useMemo(() => $formProp || createStore<FormState>(initialFormState), []);
 
+  const formIsMounted = useStore($isMounted);
+
+  const validateForm = () => {
+    const values = $values.getState();
+    Object.entries(validateMapByName).forEach(([name, validate]) => {
+      const error = validate && validate(getIn(values, name));
+      setOrDeleteError({field: name, error, forced: false});
+    });
+  }
+
   useEffect(() => {
     $values.on(setValue, (state, {name, value}) => setIn(state, name, value));
 
@@ -66,6 +76,10 @@ const useForm = <Values extends AnyState>({
 
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    validateForm();
+  }, [formIsMounted]);
 
   const controller = useCallback<ControllerHof>(({
     name,
@@ -137,10 +151,7 @@ const useForm = <Values extends AnyState>({
     e.preventDefault();
     setSubmitted(true);
 
-    Object.entries(validateMapByName).forEach(([name, validate]) => {
-      const error = validate && validate(getIn($values.getState(), name));
-      setOrDeleteError({field: name, error, forced: false});
-    });
+    validateForm();
 
     onSubmit({
       values: $values.getState(),
