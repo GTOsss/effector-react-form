@@ -64,7 +64,7 @@ const SimpleForm = () => {
 }
 
 
-describe('SimpleForm', () => {
+describe('GlobalStore', () => {
   test('onChange username', () => {
     render(<SimpleForm />);
     const input = screen.getByPlaceholderText('Username');
