@@ -37,7 +37,7 @@ const useForm = <Values extends AnyState>({
   const setIsMounted = useMemo(() => createEvent<boolean>(), []);
   const $isMounted = useMemo(() => restore(setIsMounted, false), []);
   const validateMapByName: Record<string, any> = useMemo(() => ({}), []);
-  const setValue = useMemo(() => createEvent<{name: string, value: any}>(`hookForm_SetValue`), []);
+  const setValue = useMemo(() => createEvent<{field: string, value: any}>(`hookForm_SetValue`), []);
   const setOrDeleteError = useMemo(() => createEvent<{field: string, error: Message, forced?: boolean}>(`hookForm_SetError`), []);
   const setFieldState = useMemo(() => createEvent<{field: string, state: FieldState}>(`hookForm_SetFieldState`), []);
   const setSubmitted = useMemo(() => createEvent<boolean>(`hookForm_SetSubmitted`), []);
@@ -59,7 +59,7 @@ const useForm = <Values extends AnyState>({
   }
 
   useEffect(() => {
-    $values.on(setValue, (state, {name, value}) => setIn(state, name, value));
+    $values.on(setValue, (state, {field, value}) => setIn(state, field, value));
 
     $errorsInline.on(setOrDeleteError, (state, {field, error}) =>
       error ? {...state, [field]: error} : deleteIn(state, field, false, false));

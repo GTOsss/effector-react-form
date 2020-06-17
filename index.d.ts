@@ -65,7 +65,7 @@ export type ControllerHof = (a: ControllerParams) => Controller;
 type ResultHook<Values> = {
   controller: ControllerHof,
   handleSubmit: (onSubmit: OnSubmit<Values>) => (e: SyntheticEvent<HTMLFormElement>) => void,
-  setValue: Event<{name: string, value: any}>,
+  setValue: Event<{field: string, value: any}>,
   setOrDeleteError: Event<{field: string, error: Message}>
   $values: Store<Values>,
   $errorsInline: Store<Record<string, Message>>,
