@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UnmountField $errorsInline after submit > removed > submit 1`] = `
+Object {
+  "fields[0].value": "Field is required",
+}
+`;
+
+exports[`UnmountField $errorsInline after submit > removed 1`] = `
+Object {
+  "fields[0].value": "Field is required",
+}
+`;
+
+exports[`UnmountField $form after submit and removed 1`] = `
+Object {
+  "forcedError": false,
+  "hasError": true,
+  "submitted": true,
+}
+`;
+
+exports[`UnmountField render fields 1`] = `
+Array [
+  <input
+    class="input"
+    name="fields[0].value"
+    placeholder="value № 0"
+    role="textbox"
+    value=""
+  />,
+  <input
+    class="input"
+    name="fields[1].value"
+    placeholder="value № 1"
+    role="textbox"
+    value=""
+  />,
+]
+`;
+
+exports[`UnmountField render fields after removed 1`] = `
+Array [
+  <input
+    class="input"
+    name="fields[0].value"
+    placeholder="value № 0"
+    role="textbox"
+    value=""
+  />,
+]
+`;
+
+exports[`UnmountField render fields after submit and removed 1`] = `
+Array [
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      value № 0
+    </label>
+    <input
+      class="input"
+      name="fields[0].value"
+      placeholder="value № 0"
+      role="textbox"
+      value=""
+    />
+    <span>
+      Field is required
+    </span>
+  </div>,
+]
+`;
