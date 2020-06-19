@@ -20,6 +20,17 @@ Object {
 }
 `;
 
+exports[`UnmountField $values after removed > onChange("test") 1`] = `
+Object {
+  "fields": Array [
+    Object {
+      "id": 2,
+      "value": "test",
+    },
+  ],
+}
+`;
+
 exports[`UnmountField render fields 1`] = `
 Array [
   <input

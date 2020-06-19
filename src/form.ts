@@ -37,8 +37,8 @@ const useForm = <Values extends AnyState>({
 
   const willMount = useRef(true);
 
-  const validateMapByName = useRef<Record<string, any>>({});
-  validateMapByName.current = {};
+  const validateMapByNameRef = useRef<Record<string, any>>({});
+  validateMapByNameRef.current = {};
   const setValue = useMemo(() => createEvent<{field: string, value: any}>(`hookForm_SetValue`), []);
   const setOrDeleteError = useMemo(() => createEvent<SetOrDeleteErrorParams>(`hookForm_SetError`), []);
   const setErrorsInlineState = useMemo(() => createEvent<ErrorsInline>(`hookForm_SetErrorsInlineState`), []);
@@ -60,7 +60,7 @@ const useForm = <Values extends AnyState>({
   const validateForm = useCallback(() => {
     const values = $values.getState();
     const errorsInlineState = {};
-    Object.entries(validateMapByName.current).forEach(([name, validate]) => {
+    Object.entries(validateMapByNameRef.current).forEach(([name, validate]) => {
       const error = validate && validate(getIn(values, name));
       if (error) {
         errorsInlineState[name] = validate && validate(getIn(values, name));
@@ -91,51 +91,73 @@ const useForm = <Values extends AnyState>({
       setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)));
 
     validateForm();
+
+    return () => {
+      $values.off(setValue);
+
+      $errorsInline.off(setOrDeleteError);
+      $errorsInline.off(setErrorsInlineState);
+
+      $form.off(setOrDeleteError);
+      $form.off(setSubmitted);
+      $form.off($errorsInline);
+    };
   }, []);
 
   const controller = useCallback<ControllerHof>(({
-    name,
+    name: nameProp,
     validate,
   }) => {
-    validateMapByName.current[name] = validate;
+    validateMapByNameRef.current[nameProp] = validate;
 
     return (): ControllerInjectedResult => {
-      const onChangeBrowser = useMemo(() => createEvent<any>(`hookForm_OnChange_${name}`), []);
+      const refName = useRef<string>(nameProp);
+      refName.current = nameProp;
+
+      const onChangeBrowser = useMemo(() => createEvent<any>(`hookForm_OnChange_${refName.current}`), []);
       const onChange = useMemo(() => onChangeBrowser.map((eventOrValue) => getValue(eventOrValue)), []);
-      const onFocusBrowser = useMemo(() => createEvent<any>(`hookForm_OnFocus_${name}`), []);
-      const onBlurBrowser = useMemo(() => createEvent<any>(`hookForm_OnBlur_${name}`), []);
+      const onFocusBrowser = useMemo(() => createEvent<any>(`hookForm_OnFocus_${refName.current}`), []);
+      const onBlurBrowser = useMemo(() => createEvent<any>(`hookForm_OnBlur_${refName.current}`), []);
 
       useEffect(() => {
-        $values.on(onChange, (state, value) => setIn(state, name, value));
+
+        $values.on(onChange, (state, value) => setIn(state, refName.current, value));
 
         $fieldsInline.on(onFocusBrowser, (state) => {
-          return {...state, [name]: {...state[name], touched: true, active: true}};
+          return {...state, [refName.current]: {...state[refName.current], touched: true, active: true}};
         });
         $fieldsInline.on(onChangeBrowser, (state) => {
-          return {...state, [name]: {...state[name], changed: true}};
+          return {...state, [refName.current]: {...state[refName.current], changed: true}};
         });
         $fieldsInline.on(onBlurBrowser, (state) => {
-          return {...state, [name]: {...state[name], blurred: true, active: false}};
+          return {...state, [refName.current]: {...state[refName.current], blurred: true, active: false}};
         });
 
-        setFieldState({field: name, state: initialFieldState});
+        setFieldState({field: refName.current, state: initialFieldState});
 
+        return () => {
+          $values.off(onChange);
+
+          $fieldsInline.off(onFocusBrowser);
+          $fieldsInline.off(onChangeBrowser);
+          $fieldsInline.off(onBlurBrowser);
+        };
       }, []);
 
       const values = useStore<Values>($values);
       const errorsInline = useStore<ErrorsInline>($errorsInline);
 
-      const value = getIn(values, name);
-      const error = errorsInline[name];
+      const value = getIn(values, nameProp);
+      const error = errorsInline[nameProp];
 
       const fieldsState = useStore<FieldsInline>($fieldsInline);
-      const fieldState = fieldsState[name] || initialFieldState;
+      const fieldState = fieldsState[nameProp] || initialFieldState;
 
       const formState = useStore<FormState>($form);
 
       return {
         input: {
-          name,
+          name: nameProp,
           value,
           onChange: onChangeBrowser,
           onFocus: onFocusBrowser,

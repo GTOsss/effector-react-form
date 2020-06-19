@@ -149,6 +149,17 @@ describe('UnmountField', () => {
     fireEvent.click(submit);
     expect($errorsInline.getState()).toMatchSnapshot();
   });
+
+  test('$values after removed > onChange("test")', () => {
+    const {$values} = renderForm();
+    const submit = screen.getByText('submit');
+    fireEvent.click(submit);
+    const remove = screen.getByText('remove first element');
+    fireEvent.click(remove);
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, {target: {value: 'test'}});
+    expect($values.getState()).toMatchSnapshot();
+  });
 });
 
 
