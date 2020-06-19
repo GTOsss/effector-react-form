@@ -72,6 +72,13 @@ describe('GlobalStore', () => {
     const inputs = screen.getAllByRole('textbox');
     expect(inputs).toMatchSnapshot();
   });
+
+  test('onChange username ($values)', () => {
+    render(<SimpleForm />);
+    const input = screen.getByPlaceholderText('Username');
+    fireEvent.change(input, {target: {value: 'test'}});
+    expect($values.getState()).toMatchSnapshot();
+  });
 });
 
 

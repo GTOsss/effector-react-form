@@ -16,7 +16,21 @@ interface InputProps {
   label: string,
 }
 
-const validateRequired = (value) => value ? undefined : 'Field is required';
+const formValidate = ({values}) => {
+  const errors = {};
+
+  if (!values.username) {
+    errors.username = 'Field is required';
+  } else if (values.username.length < 4) {
+    errors.username = 'Minimum of 4 characters';
+  }
+
+  if (!values.profile || !values.profile.fistName) {
+    errors['profile.fistName'] = 'Field is required'; // Field without nesting!
+  }
+
+  return errors;
+};
 
 const Input: React.FC<InputProps> = ({
   controller,
@@ -42,7 +56,7 @@ const Input: React.FC<InputProps> = ({
 };
 
 const FieldLevelValidation = () => {
-  const {handleSubmit, controller, setOrDeleteError} = useForm();
+  const {handleSubmit, controller, setOrDeleteError} = useForm({formValidate});
 
   const onSubmit: OnSubmit<Values> = () => {};
 
@@ -54,7 +68,7 @@ const FieldLevelValidation = () => {
       />
       <Input
         label="First name"
-        controller={controller({name: 'profile.firstName', validate: validateRequired})}
+        controller={controller({name: 'profile.firstName'})}
       />
       <Input
         label="Last name"
@@ -74,7 +88,7 @@ const FieldLevelValidation = () => {
   );
 }
 
-describe('FieldLevelValidation', () => {
+describe('FormLevelValidation', () => {
   test('submit', () => {
     render(<FieldLevelValidation />);
     const buttonSubmit = screen.getByText('submit');

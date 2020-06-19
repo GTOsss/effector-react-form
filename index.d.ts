@@ -7,7 +7,7 @@ export type ErrorsInline = Record<string, Message>;
 
 export type FieldsInline = Record<string, FieldState>
 
-export type Message = string | undefined;
+export type Message = string | null | undefined;
 
 type Messages<Values> = {
   [key in keyof Values]?: Values[key] extends AnyState
@@ -42,6 +42,12 @@ export type ControllerParams = {
   validate?: (value: any) => Message,
 };
 
+export type SetOrDeleteErrorParams = {
+  field: string,
+  error?: Message,
+  forced?: boolean,
+};
+
 export type ControllerInjectedResult = {
   input: {
     name: string,
@@ -66,7 +72,8 @@ type ResultHook<Values> = {
   controller: ControllerHof,
   handleSubmit: (onSubmit: OnSubmit<Values>) => (e: SyntheticEvent<HTMLFormElement>) => void,
   setValue: Event<{field: string, value: any}>,
-  setOrDeleteError: Event<{field: string, error: Message}>
+  setOrDeleteError: Event<SetOrDeleteErrorParams>,
+  setErrorsInlineState: (errorsInlineState: ErrorsInline) => void,
   $values: Store<Values>,
   $errorsInline: Store<Record<string, Message>>,
   $errors: Store<Messages<Values>>,
@@ -74,11 +81,14 @@ type ResultHook<Values> = {
   $fieldsInline: Store<Record<string, FieldState>>
 }
 
+export type FormValidate = ({values}) => Record<string, Message>;
+
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>
   $errorsInline?: Store<Record<string, Message>>,
   $fieldsInline?: Store<Record<string, FieldState>>,
   $form?: Store<FormState>,
+  validate?: FormValidate,
 }
 
 declare const useForm: <Values extends AnyState = AnyState>(

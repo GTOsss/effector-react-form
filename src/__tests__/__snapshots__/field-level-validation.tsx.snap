@@ -25,7 +25,7 @@ Array [
       First name
     </label>
     <input
-      class="input"
+      class="input input-error"
       name="profile.firstName"
       placeholder="First name"
       role="textbox"
@@ -128,7 +128,7 @@ Array [
       First name
     </label>
     <input
-      class="input"
+      class="input input-error"
       name="profile.firstName"
       placeholder="First name"
       role="textbox"
@@ -181,7 +181,7 @@ Array [
       First name
     </label>
     <input
-      class="input"
+      class="input input-error"
       name="profile.firstName"
       placeholder="First name"
       role="textbox"

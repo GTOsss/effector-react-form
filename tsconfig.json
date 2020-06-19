@@ -36,8 +36,9 @@
     "removeComments": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
+    "strict": false,
     "skipLibCheck": true
   }
 }

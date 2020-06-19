@@ -1,32 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GlobalStore onChange username 1`] = `
-Array [
-  <input
-    class="input"
-    name="username"
-    placeholder="Username"
-    role="textbox"
-    value="test"
-  />,
-  <input
-    class="input"
-    name="profile.firstName"
-    placeholder="First name"
-    role="textbox"
-    value=""
-  />,
-  <input
-    class="input"
-    name="profile.lastName"
-    placeholder="Last name"
-    role="textbox"
-    value=""
-  />,
-]
+exports[`GlobalStore onChange username ($values) 1`] = `
+Object {
+  "username": "test",
+}
 `;
 
-exports[`SimpleForm onChange username 1`] = `
+exports[`GlobalStore onChange username 1`] = `
 Array [
   <input
     class="input"

@@ -1,5 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`SimpleForm $fieldsInline after render 1`] = `
+Object {
+  "profile.firstName": Object {
+    "active": false,
+    "blurred": false,
+    "changed": false,
+    "touched": false,
+  },
+  "profile.lastName": Object {
+    "active": false,
+    "blurred": false,
+    "changed": false,
+    "touched": false,
+  },
+  "username": Object {
+    "active": false,
+    "blurred": false,
+    "changed": false,
+    "touched": false,
+  },
+}
+`;
+
 exports[`SimpleForm onChange profile.fistName 1`] = `
 Array [
   <input

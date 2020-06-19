@@ -1,16 +1,15 @@
-import {useCallback, useEffect, useMemo, SyntheticEvent} from 'react';
+import {useCallback, useEffect, useMemo, SyntheticEvent, useRef} from 'react';
 import {
   ControllerHof,
   OnSubmit,
   ControllerInjectedResult,
   FieldState,
   FormState,
-  Message,
   Messages,
   ResultHook,
-  UseFormParams, AnyState, ErrorsInline, FieldsInline,
+  UseFormParams, AnyState, ErrorsInline, FieldsInline, SetOrDeleteErrorParams,
 } from '../index';
-import {createStore, createEvent, restore} from 'effector';
+import {createStore, createEvent} from 'effector';
 import {useStore} from 'effector-react';
 import {getValue} from './utils/dom-helper';
 import {setIn, getIn, deleteIn, mapInlineToMapNested} from './utils/object-manager';
@@ -33,12 +32,16 @@ const useForm = <Values extends AnyState>({
   $errorsInline: $errorsInlineProp,
   $fieldsInline: $fieldsInlineProp,
   $form: $formProp,
+  // validate,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
-  const setIsMounted = useMemo(() => createEvent<boolean>(), []);
-  const $isMounted = useMemo(() => restore(setIsMounted, false), []);
-  const validateMapByName: Record<string, any> = useMemo(() => ({}), []);
+
+  const willMount = useRef(true);
+
+  const validateMapByName = useRef<Record<string, any>>({});
+  validateMapByName.current = {};
   const setValue = useMemo(() => createEvent<{field: string, value: any}>(`hookForm_SetValue`), []);
-  const setOrDeleteError = useMemo(() => createEvent<{field: string, error: Message, forced?: boolean}>(`hookForm_SetError`), []);
+  const setOrDeleteError = useMemo(() => createEvent<SetOrDeleteErrorParams>(`hookForm_SetError`), []);
+  const setErrorsInlineState = useMemo(() => createEvent<ErrorsInline>(`hookForm_SetErrorsInlineState`), []);
   const setFieldState = useMemo(() => createEvent<{field: string, state: FieldState}>(`hookForm_SetFieldState`), []);
   const setSubmitted = useMemo(() => createEvent<boolean>(`hookForm_SetSubmitted`), []);
 
@@ -48,15 +51,29 @@ const useForm = <Values extends AnyState>({
   const $fieldsInline = useMemo(() => $fieldsInlineProp || createStore<FieldsInline>({}), []);
   const $form = useMemo(() => $formProp || createStore<FormState>(initialFormState), []);
 
-  const formIsMounted = useStore($isMounted);
-
-  const validateForm = () => {
-    const values = $values.getState();
-    Object.entries(validateMapByName).forEach(([name, validate]) => {
-      const error = validate && validate(getIn(values, name));
-      setOrDeleteError({field: name, error, forced: false});
+  if (willMount.current) {
+    $fieldsInline.on(setFieldState, (state, {field, state: fieldState}) => {
+      return ({...state, [field]: fieldState});
     });
   }
+
+  const validateForm = useCallback(() => {
+    const values = $values.getState();
+    const errorsInlineState = {};
+    Object.entries(validateMapByName.current).forEach(([name, validate]) => {
+      const error = validate && validate(getIn(values, name));
+      if (error) {
+        errorsInlineState[name] = validate && validate(getIn(values, name));
+      }
+    });
+    setErrorsInlineState(errorsInlineState);
+  }, []);
+
+  const values = useStore<Values>($values);
+
+  useEffect(() => {
+    validateForm();
+  }, [values]);
 
   useEffect(() => {
     $values.on(setValue, (state, {field, value}) => setIn(state, field, value));
@@ -64,8 +81,7 @@ const useForm = <Values extends AnyState>({
     $errorsInline.on(setOrDeleteError, (state, {field, error}) =>
       error ? {...state, [field]: error} : deleteIn(state, field, false, false));
 
-    $fieldsInline.on(setFieldState, (state, {field, state: fieldState}) =>
-      ({...state, [field]: fieldState}));
+    $errorsInline.on(setErrorsInlineState, (_, errorsInline) => errorsInline);
 
     $form.on(setOrDeleteError, (state, {forced = true}) => ({...state, forcedError: forced}));
 
@@ -74,18 +90,14 @@ const useForm = <Values extends AnyState>({
     $form.on($errorsInline.updates, (state, errorsInline) =>
       setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)));
 
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
     validateForm();
-  }, [formIsMounted]);
+  }, []);
 
   const controller = useCallback<ControllerHof>(({
     name,
     validate,
   }) => {
-    validateMapByName[name] = validate;
+    validateMapByName.current[name] = validate;
 
     return (): ControllerInjectedResult => {
       const onChangeBrowser = useMemo(() => createEvent<any>(`hookForm_OnChange_${name}`), []);
@@ -93,30 +105,22 @@ const useForm = <Values extends AnyState>({
       const onFocusBrowser = useMemo(() => createEvent<any>(`hookForm_OnFocus_${name}`), []);
       const onBlurBrowser = useMemo(() => createEvent<any>(`hookForm_OnBlur_${name}`), []);
 
-      const formIsMounted = useStore($isMounted);
-
       useEffect(() => {
         $values.on(onChange, (state, value) => setIn(state, name, value));
-
-        $errorsInline.on(onChange, (state, value) => {
-          const error = validate && validate(value);
-          return error ? {...state, [name]: error} : deleteIn(state, name, false, false);
-        });
 
         $fieldsInline.on(onFocusBrowser, (state) => {
           return {...state, [name]: {...state[name], touched: true, active: true}};
         });
         $fieldsInline.on(onChangeBrowser, (state) => {
-          return {...state, [name]: {...state[name], changed: true}}
+          return {...state, [name]: {...state[name], changed: true}};
         });
         $fieldsInline.on(onBlurBrowser, (state) => {
           return {...state, [name]: {...state[name], blurred: true, active: false}};
         });
-      }, []);
 
-      useEffect(() => {
         setFieldState({field: name, state: initialFieldState});
-      }, [formIsMounted]);
+
+      }, []);
 
       const values = useStore<Values>($values);
       const errorsInline = useStore<ErrorsInline>($errorsInline);
@@ -125,7 +129,7 @@ const useForm = <Values extends AnyState>({
       const error = errorsInline[name];
 
       const fieldsState = useStore<FieldsInline>($fieldsInline);
-      const fieldState = fieldsState[name] ||  initialFieldState;
+      const fieldState = fieldsState[name] || initialFieldState;
 
       const formState = useStore<FormState>($form);
 
@@ -144,7 +148,7 @@ const useForm = <Values extends AnyState>({
         setFieldState,
         setOrDeleteError,
       };
-    }
+    };
   }, []);
 
   const handleSubmit = (onSubmit: OnSubmit<Values>) => (e: SyntheticEvent<HTMLFormElement>) => {
@@ -162,17 +166,20 @@ const useForm = <Values extends AnyState>({
     });
   };
 
+  willMount.current = false;
+
   return {
     controller,
     handleSubmit,
     setValue,
     setOrDeleteError,
+    setErrorsInlineState,
     $values,
     $errorsInline,
     $errors,
     $fieldsInline,
     $form,
-  }
+  };
 };
 
 export default useForm;
