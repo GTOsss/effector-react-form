@@ -16,12 +16,12 @@ interface InputProps {
   label: string,
 }
 
+const validateRequired = (value) => value ? undefined : 'Field is required';
+
 const formValidate = ({values}) => {
   const errors: Record<string, any> = {};
 
-  if (!values.username) {
-    errors.username = 'Field is required';
-  } else if (values.username.length < 4) {
+  if (values.username && (values.username.length < 4)) {
     errors.username = 'Minimum of 4 characters';
   }
 
@@ -64,11 +64,11 @@ const FieldLevelValidation = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Input
         label="Username"
-        controller={controller({name: 'username'})}
+        controller={controller({name: 'username', validate: validateRequired})}
       />
       <Input
         label="First name"
-        controller={controller({name: 'profile.firstName'})}
+        controller={controller({name: 'profile.firstName', validate: validateRequired})}
       />
       <Input
         label="Last name"
@@ -88,7 +88,7 @@ const FieldLevelValidation = () => {
   );
 }
 
-describe('FormLevelValidation', () => {
+describe('MixValidation', () => {
   test('submit', () => {
     render(<FieldLevelValidation />);
     const buttonSubmit = screen.getByText('submit');
@@ -123,6 +123,26 @@ describe('FormLevelValidation', () => {
     fireEvent.change(inputFirstName, {target: {value: 't'}});
     fireEvent.change(inputFirstName, {target: {value: ''}});
     fireEvent.blur(inputFirstName);
+    const inputs = screen.getAllByRole('wrapper-for-input');
+    expect(inputs).toMatchSnapshot();
+  });
+
+  test('onFocus, onChange: "t", onBlur', () => {
+    render(<FieldLevelValidation />);
+    const inputUsername = screen.getByPlaceholderText('Username');
+    fireEvent.focus(inputUsername);
+    fireEvent.change(inputUsername, {target: {value: 't'}});
+    fireEvent.blur(inputUsername);
+    const inputs = screen.getAllByRole('wrapper-for-input');
+    expect(inputs).toMatchSnapshot();
+  });
+
+  test('onFocus, onChange: "test", onBlur', () => {
+    render(<FieldLevelValidation />);
+    const inputUsername = screen.getByPlaceholderText('Username');
+    fireEvent.focus(inputUsername);
+    fireEvent.change(inputUsername, {target: {value: 'test'}});
+    fireEvent.blur(inputUsername);
     const inputs = screen.getAllByRole('wrapper-for-input');
     expect(inputs).toMatchSnapshot();
   });
