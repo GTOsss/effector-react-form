@@ -68,14 +68,16 @@ const useForm = <Values extends AnyState>({
       }
     });
 
-    const formLevelErrorsInlineState = validate({values, errorsInline: errorsInlineState});
-    Object.entries(formLevelErrorsInlineState).forEach(([name, error]) => {
-      if (error) {
-        errorsInlineState[name] = error;
-      } else {
-        delete errorsInlineState[name];
-      }
-    });
+    if (validate) {
+      const formLevelErrorsInlineState = validate({values, errorsInline: errorsInlineState});
+      Object.entries(formLevelErrorsInlineState).forEach(([name, error]) => {
+        if (error) {
+          errorsInlineState[name] = error;
+        } else {
+          delete errorsInlineState[name];
+        }
+      });
+    }
 
     setErrorsInlineState(errorsInlineState);
   }, []);
