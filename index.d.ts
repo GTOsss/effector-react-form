@@ -81,7 +81,7 @@ type ResultHook<Values> = {
   $fieldsInline: Store<Record<string, FieldState>>
 }
 
-export type FormValidate = ({values}) => Record<string, Message>;
+export type FormValidate<Values> = ({values: Values, errorsInline: ErrorsInline}) => ErrorsInline;
 
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>

@@ -32,7 +32,7 @@ const useForm = <Values extends AnyState>({
   $errorsInline: $errorsInlineProp,
   $fieldsInline: $fieldsInlineProp,
   $form: $formProp,
-  // validate,
+  validate,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
 
   const willMount = useRef(true);
@@ -60,12 +60,23 @@ const useForm = <Values extends AnyState>({
   const validateForm = useCallback(() => {
     const values = $values.getState();
     const errorsInlineState = {};
+
     Object.entries(validateMapByNameRef.current).forEach(([name, validate]) => {
       const error = validate && validate(getIn(values, name));
       if (error) {
         errorsInlineState[name] = validate && validate(getIn(values, name));
       }
     });
+
+    const formLevelErrorsInlineState = validate({values, errorsInline: errorsInlineState});
+    Object.entries(formLevelErrorsInlineState).forEach(([name, error]) => {
+      if (error) {
+        errorsInlineState[name] = error;
+      } else {
+        delete errorsInlineState[name];
+      }
+    });
+
     setErrorsInlineState(errorsInlineState);
   }, []);
 

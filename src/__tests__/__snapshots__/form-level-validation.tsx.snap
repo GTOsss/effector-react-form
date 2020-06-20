@@ -25,12 +25,15 @@ Array [
       First name
     </label>
     <input
-      class="input"
+      class="input input-error"
       name="profile.firstName"
       placeholder="First name"
       role="textbox"
       value=""
     />
+    <span>
+      Field is required
+    </span>
   </div>,
   <div
     class="input-wrap"
@@ -125,12 +128,15 @@ Array [
       First name
     </label>
     <input
-      class="input"
+      class="input input-error"
       name="profile.firstName"
       placeholder="First name"
       role="textbox"
       value=""
     />
+    <span>
+      Field is required
+    </span>
   </div>,
   <div
     class="input-wrap"
@@ -160,12 +166,15 @@ Array [
       Username
     </label>
     <input
-      class="input"
+      class="input input-error"
       name="username"
       placeholder="Username"
       role="textbox"
       value=""
     />
+    <span>
+      Field is required
+    </span>
   </div>,
   <div
     class="input-wrap"
@@ -175,12 +184,15 @@ Array [
       First name
     </label>
     <input
-      class="input"
+      class="input input-error"
       name="profile.firstName"
       placeholder="First name"
       role="textbox"
       value=""
     />
+    <span>
+      Field is required
+    </span>
   </div>,
   <div
     class="input-wrap"

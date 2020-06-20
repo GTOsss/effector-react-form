@@ -17,7 +17,7 @@ interface InputProps {
 }
 
 const formValidate = ({values}) => {
-  const errors = {};
+  const errors: Record<string, any> = {};
 
   if (!values.username) {
     errors.username = 'Field is required';
@@ -26,7 +26,7 @@ const formValidate = ({values}) => {
   }
 
   if (!values.profile || !values.profile.fistName) {
-    errors['profile.fistName'] = 'Field is required'; // Field without nesting!
+    errors['profile.firstName'] = 'Field is required'; // Field without nesting!
   }
 
   return errors;
@@ -56,7 +56,7 @@ const Input: React.FC<InputProps> = ({
 };
 
 const FieldLevelValidation = () => {
-  const {handleSubmit, controller, setOrDeleteError} = useForm({formValidate});
+  const {handleSubmit, controller, setOrDeleteError} = useForm({validate: formValidate});
 
   const onSubmit: OnSubmit<Values> = () => {};
 
