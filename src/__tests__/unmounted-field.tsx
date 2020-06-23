@@ -27,7 +27,7 @@ const renderForm = () => {
   const $form = createStore<FormState>({
     submitted: false,
     hasError: false,
-    forcedError: false,
+    hasOuterError: false,
   });
 
   const $errorsInline = createStore({});
@@ -43,7 +43,7 @@ const renderForm = () => {
   }) => {
     const {input, fieldState, form, error} = controller();
 
-    const isShowError = form.submitted || form.forcedError || fieldState.blurred;
+    const isShowError = form.submitted || form.hasOuterError || fieldState.blurred;
 
     return (
       <div role="wrapper-for-input" className="input-wrap">

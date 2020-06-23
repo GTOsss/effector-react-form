@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const {input, fieldState, form, error} = controller();
 
-  const isShowError = error && (form.submitted || form.forcedError || fieldState.blurred);
+  const isShowError = error && (form.submitted || form.hasOuterError || fieldState.blurred);
 
   return (
     <div role="wrapper-for-input" className="input-wrap">

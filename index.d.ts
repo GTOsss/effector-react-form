@@ -9,14 +9,13 @@ export type FieldsInline = Record<string, FieldState>
 
 export type Message = string | null | undefined;
 
-type Messages<Values> = {
+export type Messages<Values> = {
   [key in keyof Values]?: Values[key] extends AnyState
     ? Messages<Values[key]> : Message;
 };
 
 export type SubmitParams<Values> = {
   values: Values,
-  errors: Messages<Values>,
   errorsInline: ErrorsInline,
   fieldsInline: FieldsInline,
   form: FormState,
@@ -27,14 +26,17 @@ export type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 export type FormState = {
   submitted: boolean,
   hasError: boolean,
-  forcedError: boolean,
+  hasOuterError: boolean,
 }
 
 export type FieldState = {
+  active: boolean,
   touched: boolean,
   changed: boolean,
   blurred: boolean,
-  active: boolean,
+  touchedAfterOuterError: boolean,
+  changedAfterOuterError: boolean,
+  blurredAfterOuterError: boolean,
 };
 
 export type ControllerParams = {
@@ -45,7 +47,7 @@ export type ControllerParams = {
 export type SetOrDeleteErrorParams = {
   field: string,
   error?: Message,
-  forced?: boolean,
+  async?: boolean,
 };
 
 export type ControllerInjectedResult = {
@@ -57,10 +59,17 @@ export type ControllerInjectedResult = {
     onBlur: (event: any) => void,
   },
   error: Message,
+  innerError: Message,
+  outerError: Message,
+  isShowError: boolean,
+  isShowOuterError: boolean,
+  isShowInnerError: boolean,
   form: FormState,
   validate?: (value: any) => Message,
   setFieldState: ({field: string, state: FieldState}) => void;
   setOrDeleteError: ({field: string, error: Message}) => void;
+  setOrDeleteOuterError: ({field: string, error: Message}) => void;
+  setOuterErrorsInlineState: (errors: ErrorsInline) => void
   fieldState: FieldState,
 };
 
@@ -74,9 +83,10 @@ type ResultHook<Values> = {
   setValue: Event<{field: string, value: any}>,
   setOrDeleteError: Event<SetOrDeleteErrorParams>,
   setErrorsInlineState: (errorsInlineState: ErrorsInline) => void,
+  setOrDeleteOuterError: ({field: string, error: Message}) => void;
+  setOuterErrorsInlineState: (errors: ErrorsInline) => void
   $values: Store<Values>,
   $errorsInline: Store<Record<string, Message>>,
-  $errors: Store<Messages<Values>>,
   $form: Store<FormState>,
   $fieldsInline: Store<Record<string, FieldState>>
 }
@@ -85,6 +95,7 @@ export type FormValidate<Values> = ({values: Values, errorsInline: ErrorsInline}
 
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>
+  $outerErrorsInline?: Store<Record<string, Message>>,
   $errorsInline?: Store<Record<string, Message>>,
   $fieldsInline?: Store<Record<string, FieldState>>,
   $form?: Store<FormState>,

@@ -24,9 +24,7 @@ const renderForm = () => {
     controller,
     label,
   }) => {
-    const {input, fieldState, form, error} = controller();
-
-    const isShowError = error && (form.submitted || form.forcedError || fieldState.blurred);
+    const {input, error, isShowError} = controller();
 
     return (
       <div role="wrapper-for-input" className="input-wrap">
@@ -44,7 +42,7 @@ const renderForm = () => {
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller, setOrDeleteError} = useForm({$fieldsInline});
+    const {handleSubmit, controller, setOrDeleteOuterError} = useForm({$fieldsInline});
 
     const onSubmit: OnSubmit<Values> = () => {
     };
@@ -66,7 +64,7 @@ const renderForm = () => {
         <button type="submit">submit</button>
         <button
           type="button"
-          onClick={() => setOrDeleteError({
+          onClick={() => setOrDeleteOuterError({
             field: 'profile.firstName',
             error: 'First name is not valid',
           })}
@@ -122,6 +120,28 @@ describe('SimpleForm', () => {
     const inputs = screen.getAllByRole('wrapper-for-input');
     expect(inputs).toMatchSnapshot();
   });
+
+  test('setError profile.firstName, change and submit', () => {
+    renderForm();
+    const button = screen.getByText('set error for firstName');
+    fireEvent.click(button);
+    const buttonSubmit = screen.getByText('submit');
+    fireEvent.click(buttonSubmit);
+    const inputFirstName = screen.getByPlaceholderText('First name');
+    fireEvent.change(inputFirstName, {target: {value: 't'}});
+    const inputs = screen.getAllByRole('wrapper-for-input');
+    expect(inputs).toMatchSnapshot();
+  });
+
+  test('$fieldsInline after setError profile.firstName and focus firstName', () => {
+    const {$fieldsInline} = renderForm();
+    const button = screen.getByText('set error for firstName');
+    fireEvent.click(button);
+    const inputFirstName = screen.getByPlaceholderText('First name');
+    fireEvent.focus(inputFirstName);
+    expect($fieldsInline.getState()).toMatchSnapshot();
+  });
 });
+
 
 
