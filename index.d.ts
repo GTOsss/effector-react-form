@@ -86,7 +86,8 @@ type ResultHook<Values> = {
   setOrDeleteOuterError: ({field: string, error: Message}) => void;
   setOuterErrorsInlineState: (errors: ErrorsInline) => void
   $values: Store<Values>,
-  $errorsInline: Store<Record<string, Message>>,
+  $errorsInline: Store<ErrorsInline>,
+  $outerErrorsInline: Store<ErrorsInline>
   $form: Store<FormState>,
   $fieldsInline: Store<Record<string, FieldState>>
 }
@@ -95,8 +96,8 @@ export type FormValidate<Values> = ({values: Values, errorsInline: ErrorsInline}
 
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>
-  $outerErrorsInline?: Store<Record<string, Message>>,
-  $errorsInline?: Store<Record<string, Message>>,
+  $outerErrorsInline?: Store<ErrorsInline>,
+  $errorsInline?: Store<ErrorsInline>,
   $fieldsInline?: Store<Record<string, FieldState>>,
   $form?: Store<FormState>,
   validate?: FormValidate,

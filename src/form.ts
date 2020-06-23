@@ -297,6 +297,7 @@ const useForm = <Values extends AnyState>({
     setOuterErrorsInlineState,
     $values,
     $errorsInline,
+    $outerErrorsInline,
     $fieldsInline,
     $form,
   };
