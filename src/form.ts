@@ -107,6 +107,16 @@ const useForm = <Values extends AnyState>({
 
     $outerErrorsInline.on(setOuterErrorsInlineState, (_, errorsInline) => errorsInline);
 
+    $fieldsInline.on(setOrDeleteOuterError, (state, {field}) => ({
+      ...state,
+      [field]: {
+        ...state[field],
+        touchedAfterOuterError: false,
+        changedAfterOuterError: false,
+        blurredAfterOuterError: false,
+      }
+    }))
+
     $fieldsInline.on(resetOuterFieldStateFlags, (state) => {
       const newState = {};
       Object.entries(state).forEach(([field, state]) => (
