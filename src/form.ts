@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useMemo, SyntheticEvent, useRef} from 'react';
 import {
   ControllerHof,
-  OnSubmit,
   ControllerInjectedResult,
   FieldState,
   FormState,
@@ -36,7 +35,7 @@ const useForm = <Values extends AnyState>({
   $fieldsInline: $fieldsInlineProp,
   $form: $formProp,
   validate,
-  onSubmit: onSubmitFromHookParams,
+  onSubmit,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
 
   const willMount = useRef(true);
@@ -271,29 +270,20 @@ const useForm = <Values extends AnyState>({
     };
   }, []);
 
-  const handleSubmit = (onSubmitOrEvent: OnSubmit<Values> | SyntheticEvent<HTMLFormElement>) => (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setSubmitted(true);
 
     validateForm();
     resetOuterFieldStateFlags();
 
-    const submitData = {
+    onSubmit({
       values: $values.getState(),
       errorsInline: $errorsInline.getState(),
       fieldsInline: $fieldsInline.getState(),
       form: $form.getState(),
-    };
-
-
-    if (typeof onSubmitOrEvent === 'function') {
-      onSubmitOrEvent(submitData);
-    }
-
-    if (typeof onSubmitFromHookParams === 'function') {
-      onSubmitFromHookParams(submitData);
-    }
-  };
+    });
+  }
 
   willMount.current = false;
 

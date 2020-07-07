@@ -21,8 +21,6 @@ export type SubmitParams<Values> = {
   form: FormState,
 };
 
-export type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
-
 export type FormState = {
   submitted: boolean,
   hasError: boolean,
@@ -78,7 +76,7 @@ export type ControllerHof = (a: ControllerParams) => Controller;
 
 type ResultHook<Values> = {
   controller: ControllerHof,
-  handleSubmit: (onSubmit: OnSubmit<Values>) => (e: SyntheticEvent<HTMLFormElement>) => void,
+  handleSubmit: (e: SyntheticEvent<HTMLFormElement>) => void,
   setValue: Event<{field: string, value: any}>,
   setOrDeleteError: Event<SetOrDeleteErrorParams>,
   setErrorsInlineState: (errorsInlineState: ErrorsInline) => void,
