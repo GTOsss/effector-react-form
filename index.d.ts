@@ -99,7 +99,7 @@ type UseFormParams<Values> = undefined | {
   $errorsInline?: Store<ErrorsInline>,
   $fieldsInline?: Store<Record<string, FieldState>>,
   $form?: Store<FormState>,
-  validate?: FormValidate,
+  validate?: FormValidate<Values>,
   onSubmit?: OnSubmit<Values>,
 }
 
