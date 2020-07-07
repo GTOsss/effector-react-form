@@ -91,6 +91,8 @@ type ResultHook<Values> = {
 
 export type FormValidate<Values> = ({values: Values, errorsInline: ErrorsInline}) => ErrorsInline;
 
+type OnSubmit<Values> = (params: SubmitParams<Values>) => {};
+
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>
   $outerErrorsInline?: Store<ErrorsInline>,

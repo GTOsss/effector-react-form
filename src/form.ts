@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, SyntheticEvent, useRef} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
   ControllerHof,
   ControllerInjectedResult,
@@ -270,7 +270,7 @@ const useForm = <Values extends AnyState>({
     };
   }, []);
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setSubmitted(true);
 
