@@ -36,6 +36,7 @@ const useForm = <Values extends AnyState>({
   $fieldsInline: $fieldsInlineProp,
   $form: $formProp,
   validate,
+  onSubmit: onSubmitFromHookParams,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
 
   const willMount = useRef(true);
@@ -270,19 +271,28 @@ const useForm = <Values extends AnyState>({
     };
   }, []);
 
-  const handleSubmit = (onSubmit: OnSubmit<Values>) => (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (onSubmitOrEvent: OnSubmit<Values> | SyntheticEvent<HTMLFormElement>) => (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
 
     validateForm();
     resetOuterFieldStateFlags();
 
-    onSubmit({
+    const submitData = {
       values: $values.getState(),
       errorsInline: $errorsInline.getState(),
       fieldsInline: $fieldsInline.getState(),
       form: $form.getState(),
-    });
+    };
+
+
+    if (typeof onSubmitOrEvent === 'function') {
+      onSubmitOrEvent(submitData);
+    }
+
+    if (typeof onSubmitFromHookParams === 'function') {
+      onSubmitFromHookParams(submitData);
+    }
   };
 
   willMount.current = false;

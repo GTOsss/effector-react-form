@@ -47,7 +47,6 @@ export type ControllerParams = {
 export type SetOrDeleteErrorParams = {
   field: string,
   error?: Message,
-  async?: boolean,
 };
 
 export type ControllerInjectedResult = {
@@ -101,6 +100,7 @@ type UseFormParams<Values> = undefined | {
   $fieldsInline?: Store<Record<string, FieldState>>,
   $form?: Store<FormState>,
   validate?: FormValidate,
+  onSubmit?: OnSubmit<Values>,
 }
 
 declare const useForm: <Values extends AnyState = AnyState>(
