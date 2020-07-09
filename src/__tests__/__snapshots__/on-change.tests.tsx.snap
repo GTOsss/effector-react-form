@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`onChange onChange after change("t") 1`] = `
+Object {
+  "type": "return",
+  "value": Object {
+    "errorsInline": Object {},
+    "fieldsInline": Object {
+      "profile.firstName": Object {
+        "active": false,
+        "blurred": false,
+        "blurredAfterOuterError": false,
+        "changed": false,
+        "changedAfterOuterError": false,
+        "touched": false,
+        "touchedAfterOuterError": false,
+      },
+      "profile.lastName": Object {
+        "active": false,
+        "blurred": false,
+        "blurredAfterOuterError": false,
+        "changed": false,
+        "changedAfterOuterError": false,
+        "touched": false,
+        "touchedAfterOuterError": false,
+      },
+      "username": Object {
+        "active": false,
+        "blurred": false,
+        "blurredAfterOuterError": false,
+        "changed": false,
+        "changedAfterOuterError": false,
+        "touched": false,
+        "touchedAfterOuterError": false,
+      },
+    },
+    "form": Object {
+      "hasError": false,
+      "hasOuterError": false,
+      "submitted": false,
+    },
+    "outerErrorsInline": Object {},
+    "values": Object {
+      "username": "t",
+    },
+  },
+}
+`;
+
+exports[`onChange onChange after change("te") 1`] = `
+Object {
+  "type": "return",
+  "value": Object {
+    "errorsInline": Object {
+      "username": "error",
+    },
+    "fieldsInline": Object {
+      "profile.firstName": Object {
+        "active": false,
+        "blurred": false,
+        "blurredAfterOuterError": false,
+        "changed": false,
+        "changedAfterOuterError": false,
+        "touched": false,
+        "touchedAfterOuterError": false,
+      },
+      "profile.lastName": Object {
+        "active": false,
+        "blurred": false,
+        "blurredAfterOuterError": false,
+        "changed": false,
+        "changedAfterOuterError": false,
+        "touched": false,
+        "touchedAfterOuterError": false,
+      },
+      "username": Object {
+        "active": false,
+        "blurred": false,
+        "blurredAfterOuterError": false,
+        "changed": true,
+        "changedAfterOuterError": false,
+        "touched": false,
+        "touchedAfterOuterError": false,
+      },
+    },
+    "form": Object {
+      "hasError": true,
+      "hasOuterError": false,
+      "submitted": false,
+    },
+    "outerErrorsInline": Object {},
+    "values": Object {
+      "username": "te",
+    },
+  },
+}
+`;
