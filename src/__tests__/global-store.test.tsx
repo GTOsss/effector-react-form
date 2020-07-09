@@ -38,14 +38,10 @@ const Input = ({
 };
 
 const SimpleForm = () => {
-  const {handleSubmit, controller} = useForm<Values>({$values});
-
-  const onSubmit: OnSubmit<Values> = ({values}) => {
-    alert(JSON.stringify(values, null, '  '));
-  };
+  const {handleSubmit, controller} = useForm<Values>({$values, onSubmit: () => {}});
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit}>
       <Input
         label="Username"
         controller={controller({name: 'username'})}

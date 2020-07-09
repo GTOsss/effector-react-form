@@ -42,13 +42,10 @@ const renderForm = () => {
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller, setOrDeleteOuterError} = useForm({$fieldsInline});
-
-    const onSubmit: OnSubmit<Values> = () => {
-    };
+    const {handleSubmit, controller, setOrDeleteOuterError} = useForm({$fieldsInline, onSubmit: () => {}});
 
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit}>
         <Input
           label="Username"
           controller={controller({name: 'username'})}

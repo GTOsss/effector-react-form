@@ -3,7 +3,7 @@ import {render, fireEvent, screen} from '@testing-library/react';
 import {createStore, createEvent} from 'effector';
 import {useStore} from 'effector-react';
 import {useForm} from '../';
-import {Controller, OnSubmit, FormState} from '../../index';
+import {Controller, FormState} from '../../index';
 import {setIn} from '../utils/object-manager';
 
 const renderForm = () => {
@@ -61,15 +61,12 @@ const renderForm = () => {
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller} = useForm<Values>({$values, $form, $errorsInline});
+    const {handleSubmit, controller} = useForm<Values>({$values, $form, $errorsInline, onSubmit: () => {}});
 
     const {fields} = useStore($values);
 
-    const onSubmit: OnSubmit<Values> = () => {
-    };
-
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit}>
         {fields.map((el, i) => (
           <Input
             key={el.id}

@@ -1,8 +1,8 @@
 import React from 'react';
-import {render} from '@testing-library/react';
-import {createStore, createEvent} from 'effector';
+import {createStore} from 'effector';
+import {render, fireEvent, screen} from '@testing-library/react';
+import {useForm} from '../';
 import {Controller, OnSubmit} from '../../index';
-import {useForm} from '../index';
 
 interface Values {
   username?: string,
@@ -17,17 +17,14 @@ interface InputProps {
   label: string,
 }
 
-const renderForm = () => {
+const renderForm = (onChange) => {
   const $fieldsInline = createStore({});
 
   const Input: React.FC<InputProps> = ({
     controller,
     label,
   }) => {
-    const {input, fieldState, form, error} = controller();
-    const {changedAfterOuterError, blurred} = fieldState;
-
-    const isShowError = error && (form.submitted || !changedAfterOuterError || blurred);
+    const {input, error, isShowError} = controller();
 
     return (
       <div role="wrapper-for-input" className="input-wrap">
@@ -45,16 +42,13 @@ const renderForm = () => {
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller, setOrDeleteOuterError} = useForm({$fieldsInline});
-
-    const onSubmit: OnSubmit<Values> = () => {
-    };
+    const {handleSubmit, controller, setOrDeleteOuterError} = useForm({$fieldsInline, onChange});
 
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit}>
         <Input
           label="Username"
-          controller={controller({name: 'username'})}
+          controller={controller({name: 'username', validate: (value) => value === 't' ? 'error' : undefined})}
         />
         <Input
           label="First name"
@@ -83,13 +77,30 @@ const renderForm = () => {
   return {$fieldsInline};
 };
 
+describe('onChange', () => {
+  test('onChange after change("t")', () => {
+    const onChange = (values) => values;
+    const mockOnChange = jest.fn(onChange)
 
-describe('test', () => {
-  test('sss', () => {
-    const event = createEvent();
-    const nextEvent = event.map((value) => console.log('tesatgatb'));
-    const $store = createStore({});
-    $store.on(nextEvent, () => {});
-    expect($store).toMatchSnapshot();
+    renderForm(mockOnChange);
+    const input = screen.getByPlaceholderText('Username');
+    fireEvent.change(input, {target: {value: 't'}});
+    expect(mockOnChange.mock.calls.length).toBe(1);
+    expect(mockOnChange.mock.results[0]).toMatchSnapshot();
+  });
+
+  test('onChange after change("te")', () => {
+    const onChange = (values) => values;
+    const mockOnChange = jest.fn(onChange)
+
+    renderForm(mockOnChange);
+    const input = screen.getByPlaceholderText('Username');
+    fireEvent.change(input, {target: {value: 't'}});
+    fireEvent.change(input, {target: {value: 'te'}});
+    expect(mockOnChange.mock.calls.length).toBe(2);
+    expect(mockOnChange.mock.results[1]).toMatchSnapshot();
   });
 });
+
+
+

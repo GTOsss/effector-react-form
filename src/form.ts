@@ -36,6 +36,7 @@ const useForm = <Values extends AnyState>({
   $form: $formProp,
   validate,
   onSubmit,
+  onChange: onChangeForm,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
 
   const willMount = useRef(true);
@@ -168,6 +169,20 @@ const useForm = <Values extends AnyState>({
       const onBlurBrowser = useMemo(() => createEvent<any>(`hookForm_OnBlur_${refName.current}`), []);
 
       useEffect(() => {
+        if (onChangeForm) {
+          const $allFormState = sample({
+            source: {
+              values: $values,
+              errorsInline: $errorsInline,
+              outerErrorsInline: $outerErrorsInline,
+              fieldsInline: $fieldsInline,
+              form: $form,
+            },
+            clock: onChangeBrowser,
+          });
+
+          $allFormState.watch(onChangeForm)
+        }
 
         $values.on(onChange, (state, value) => setIn(state, refName.current, value));
 

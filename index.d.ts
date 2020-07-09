@@ -91,7 +91,9 @@ type ResultHook<Values> = {
 
 export type FormValidate<Values> = ({values: Values, errorsInline: ErrorsInline}) => ErrorsInline;
 
-type OnSubmit<Values> = (params: SubmitParams<Values>) => {};
+type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
+
+type OnChange<Values> = onSubmit<Values>;
 
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>
@@ -101,6 +103,7 @@ type UseFormParams<Values> = undefined | {
   $form?: Store<FormState>,
   validate?: FormValidate<Values>,
   onSubmit?: OnSubmit<Values>,
+  onChange?: OnChange<Values>
 }
 
 declare const useForm: <Values extends AnyState = AnyState>(

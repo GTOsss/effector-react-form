@@ -42,12 +42,10 @@ const Input: React.FC<InputProps> = ({
 };
 
 const FieldLevelValidation = () => {
-  const {handleSubmit, controller, setOrDeleteError} = useForm();
-
-  const onSubmit: OnSubmit<Values> = () => {};
+  const {handleSubmit, controller, setOrDeleteError} = useForm({onSubmit: () => {}});
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit}>
       <Input
         label="Username"
         controller={controller({name: 'username'})}
