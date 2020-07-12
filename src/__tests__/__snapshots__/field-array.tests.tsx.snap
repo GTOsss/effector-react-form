@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FieldArray add form item with values (x3) > $values 1`] = `
+Object {
+  "parents": Array [
+    Object {
+      "id": 1,
+      "username": "0",
+    },
+    Object {
+      "id": 2,
+      "username": "1",
+    },
+    Object {
+      "id": 3,
+      "username": "2",
+    },
+  ],
+}
+`;
+
+exports[`FieldArray add form item with values (x3) > remove(1) > $fieldsInline 1`] = `
+Object {
+  "parents.0.profile.firstName": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": [Function],
+  },
+  "parents.0.username": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": [Function],
+  },
+  "parents.1.profile.firstName": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": [Function],
+  },
+  "parents.1.username": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": [Function],
+  },
+}
+`;
+
+exports[`FieldArray add form item with values (x3) > remove(1) > $values 1`] = `
+Object {
+  "parents": Array [
+    Object {
+      "id": 1,
+      "username": "0",
+    },
+    Object {
+      "id": 3,
+      "username": "2",
+    },
+  ],
+}
+`;
+
+exports[`FieldArray add form item with values > render 1`] = `
+Array [
+  <div
+    class="formsItem"
+    role="formItem"
+  >
+    <div
+      class="formItem"
+    >
+      <div
+        class="input-wrap"
+        role="wrapper-for-input"
+      >
+        <label>
+          Username
+        </label>
+        <input
+          class="input"
+          name="parents.0.username"
+          placeholder="Username"
+          role="textbox"
+          value="gto"
+        />
+      </div>
+      <div
+        class="input-wrap"
+        role="wrapper-for-input"
+      >
+        <label>
+          First name
+        </label>
+        <input
+          class="input"
+          name="parents.0.profile.firstName"
+          placeholder="First name"
+          role="textbox"
+          value="Timofey"
+        />
+      </div>
+      <button
+        type="button"
+      >
+        remove form item
+      </button>
+    </div>
+    <button
+      type="button"
+    >
+      add form item with values
+    </button>
+  </div>,
+]
+`;
+
+exports[`FieldArray render 1`] = `
+Array [
+  <div
+    class="formsItem"
+    role="formItem"
+  >
+    <button
+      type="button"
+    >
+      add form item with values
+    </button>
+  </div>,
+]
+`;
