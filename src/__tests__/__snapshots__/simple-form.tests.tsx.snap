@@ -3,6 +3,7 @@
 exports[`SimpleForm $fieldsInline after render 1`] = `
 Object {
   "profile.firstName": Object {
+    "_type": "fieldMeta",
     "active": false,
     "blurred": false,
     "blurredAfterOuterError": false,
@@ -10,8 +11,10 @@ Object {
     "changedAfterOuterError": false,
     "touched": false,
     "touchedAfterOuterError": false,
+    "validate": undefined,
   },
   "profile.lastName": Object {
+    "_type": "fieldMeta",
     "active": false,
     "blurred": false,
     "blurredAfterOuterError": false,
@@ -19,8 +22,10 @@ Object {
     "changedAfterOuterError": false,
     "touched": false,
     "touchedAfterOuterError": false,
+    "validate": undefined,
   },
   "username": Object {
+    "_type": "fieldMeta",
     "active": false,
     "blurred": false,
     "blurredAfterOuterError": false,
@@ -28,6 +33,7 @@ Object {
     "changedAfterOuterError": false,
     "touched": false,
     "touchedAfterOuterError": false,
+    "validate": undefined,
   },
 }
 `;
@@ -35,6 +41,7 @@ Object {
 exports[`SimpleForm $fieldsInline after setError profile.firstName and focus firstName 1`] = `
 Object {
   "profile.firstName": Object {
+    "_type": "fieldMeta",
     "active": true,
     "blurred": false,
     "blurredAfterOuterError": false,
@@ -42,8 +49,10 @@ Object {
     "changedAfterOuterError": false,
     "touched": true,
     "touchedAfterOuterError": true,
+    "validate": undefined,
   },
   "profile.lastName": Object {
+    "_type": "fieldMeta",
     "active": false,
     "blurred": false,
     "blurredAfterOuterError": false,
@@ -51,8 +60,10 @@ Object {
     "changedAfterOuterError": false,
     "touched": false,
     "touchedAfterOuterError": false,
+    "validate": undefined,
   },
   "username": Object {
+    "_type": "fieldMeta",
     "active": false,
     "blurred": false,
     "blurredAfterOuterError": false,
@@ -60,6 +71,7 @@ Object {
     "changedAfterOuterError": false,
     "touched": false,
     "touchedAfterOuterError": false,
+    "validate": undefined,
   },
 }
 `;

@@ -1,10 +1,11 @@
 import useForm from './form';
-import {deleteIn, getIn, setIn, mapInlineToMapNested} from './utils/object-manager'
+import {deleteIn, getIn, setIn, makeNested, removeFromInlineMap} from './utils/object-manager'
 
 export {
   useForm,
   deleteIn,
   getIn,
   setIn,
-  mapInlineToMapNested,
+  makeNested,
+  removeFromInlineMap,
 }

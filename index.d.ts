@@ -28,6 +28,7 @@ export type FormState = {
 }
 
 export type FieldState = {
+  _type: 'fieldMeta',
   active: boolean,
   touched: boolean,
   changed: boolean,
@@ -35,6 +36,7 @@ export type FieldState = {
   touchedAfterOuterError: boolean,
   changedAfterOuterError: boolean,
   blurredAfterOuterError: boolean,
+  validate?: (value: any) => string | undefined;
 };
 
 export type ControllerParams = {
@@ -93,7 +95,7 @@ export type FormValidate<Values> = ({values: Values, errorsInline: ErrorsInline}
 
 type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 
-type OnChange<Values> = onSubmit<Values>;
+type OnChange<Values> = OnSubmit<Values>;
 
 type UseFormParams<Values> = undefined | {
   $values?: Store<Values>
@@ -130,6 +132,12 @@ declare const getIn: <O extends AnyState = AnyState, V = any>(
   inDeep: boolean = true,
 ) => V = any;
 
-declare const mapInlineToMapNested: <O extends AnyState = AnyState, R extends AnyState>(
+declare const makeNested: <O extends AnyState = AnyState, R extends AnyState>(
   inlineMap: O,
 ) => R;
+
+declare const removeFromInlineMap: <O extends FieldsInline = FieldsInline, R extends FieldsInline = FieldsInline>(
+  inlineMap: O,
+  key: string,
+) => R;
+

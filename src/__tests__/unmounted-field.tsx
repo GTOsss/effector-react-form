@@ -4,7 +4,7 @@ import {createStore, createEvent} from 'effector';
 import {useStore} from 'effector-react';
 import {useForm} from '../';
 import {Controller, FormState} from '../../index';
-import {setIn} from '../utils/object-manager';
+import {setIn, removeFromInlineMap} from '../utils/object-manager';
 
 const renderForm = () => {
   const validateRequired = (value) => value ? undefined : 'Field is required';
@@ -15,6 +15,7 @@ const renderForm = () => {
 
   const removeFirstElement = createEvent();
 
+  const $fieldsInline = createStore({});
   const $values = createStore<Values>({
     fields: [
       {value: '', id: 1},
@@ -22,6 +23,7 @@ const renderForm = () => {
     ],
   });
 
+  $fieldsInline.on(removeFirstElement, (inlineState) => removeFromInlineMap(inlineState, 'fields[0]'));
   $values.on(removeFirstElement, (state) => setIn(state, 'fields', state.fields.slice(1)));
 
   const $form = createStore<FormState>({
@@ -61,7 +63,7 @@ const renderForm = () => {
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller} = useForm<Values>({$values, $form, $errorsInline, onSubmit: () => {}});
+    const {handleSubmit, controller} = useForm<Values>({$values, $fieldsInline, $form, $errorsInline, onSubmit: () => {}});
 
     const {fields} = useStore($values);
 
@@ -145,6 +147,16 @@ describe('UnmountField', () => {
     fireEvent.click(remove);
     fireEvent.click(submit);
     expect($errorsInline.getState()).toMatchSnapshot();
+  });
+
+  test('$values after change 1,2 > removed', () => {
+    const {$values} = renderForm();
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], {target: {value: 'value 1'}});
+    fireEvent.change(inputs[1], {target: {value: 'value 2'}});
+    const remove = screen.getByText('remove first element');
+    fireEvent.click(remove);
+    expect($values.getState()).toMatchSnapshot();
   });
 
   test('$values after removed > onChange("test")', () => {

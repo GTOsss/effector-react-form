@@ -10,9 +10,10 @@ import {
 import {createStore, createEvent, sample, combine} from 'effector';
 import {useStore} from 'effector-react';
 import {getValue} from './utils/dom-helper';
-import {setIn, getIn, deleteIn} from './utils/object-manager';
+import {setIn, getIn, deleteIn, makeConsistentKey} from './utils/object-manager';
 
 const initialFieldState: FieldState = {
+  _type: 'fieldMeta',
   active: false,
   touched: false,
   changed: false,
@@ -41,8 +42,6 @@ const useForm = <Values extends AnyState>({
 
   const willMount = useRef(true);
 
-  const validateMapByNameRef = useRef<Record<string, any>>({});
-  validateMapByNameRef.current = {};
   const setValue = useMemo(() => createEvent<{field: string, value: any}>(`hookForm_SetValue`), []);
   const setOrDeleteError = useMemo(() => createEvent<SetOrDeleteErrorParams>(`hookForm_SetOrDeleteError`), []);
   const setErrorsInlineState = useMemo(() => createEvent<ErrorsInline>(`hookForm_SetErrorsInlineState`), []);
@@ -51,6 +50,7 @@ const useForm = <Values extends AnyState>({
   const resetOuterFieldStateFlags = useMemo(() => createEvent('hookForm_ResetOuterFieldStateFlags'), []);
   const setOrDeleteOuterError = useMemo(() => createEvent<{field: string, error: Message}>('hookForm_SetOrDeleteOuterError'), []);
   const setOuterErrorsInlineState = useMemo(() => createEvent<ErrorsInline>('hookForm_SetOuterErrorsInlineState'), []);
+  const validateForm = useMemo(() => createEvent('hookForm_ValidateForm'), []);
 
   const $values = useMemo(() => $valuesProp || createStore<Values>({} as Values), []);
   const $errorsInline = useMemo(() => $errorsInlineProp || createStore<ErrorsInline>({}), []);
@@ -64,11 +64,10 @@ const useForm = <Values extends AnyState>({
     });
   }
 
-  const validateForm = useCallback(() => {
-    const values = $values.getState();
+  const validateByValues = useCallback((values) => {
     const errorsInlineState = {};
 
-    Object.entries(validateMapByNameRef.current).forEach(([name, validate]) => {
+    Object.entries($fieldsInline.getState()).forEach(([name, {validate}]) => {
       const error = validate && validate(getIn(values, name));
       if (error) {
         errorsInlineState[name] = validate && validate(getIn(values, name));
@@ -86,16 +85,22 @@ const useForm = <Values extends AnyState>({
       });
     }
 
-    setErrorsInlineState(errorsInlineState);
+    return errorsInlineState;
   }, []);
 
-  const values = useStore<Values>($values);
-
   useEffect(() => {
-    validateForm();
-  }, [values]);
+    sample({
+      source: $values,
+      clock: validateForm,
+      fn: (values) => validateByValues(values),
+      target: $errorsInline,
+    });
+    sample({
+      source: $values,
+      fn: (values) => validateByValues(values),
+      target: $errorsInline,
+    });
 
-  useEffect(() => {
     $values.on(setValue, (state, {field, value}) => setIn(state, field, value));
 
     $errorsInline.on(setOrDeleteError, (state, {field, error}) =>
@@ -157,11 +162,10 @@ const useForm = <Values extends AnyState>({
     name: nameProp,
     validate,
   }) => {
-    validateMapByNameRef.current[nameProp] = validate;
 
     return (): ControllerInjectedResult => {
-      const refName = useRef<string>(nameProp);
-      refName.current = nameProp;
+      const refName = useRef<string>(makeConsistentKey(nameProp));
+      refName.current = makeConsistentKey(nameProp);
 
       const onChangeBrowser = useMemo(() => createEvent<any>(`hookForm_OnChange_${refName.current}`), []);
       const onChange = useMemo(() => onChangeBrowser.map((eventOrValue) => getValue(eventOrValue)), []);
@@ -235,7 +239,7 @@ const useForm = <Values extends AnyState>({
           target: $fieldsInline
         });
 
-        setFieldState({field: refName.current, state: initialFieldState});
+        setFieldState({field: refName.current, state: {...initialFieldState, validate}});
 
         return () => {
           $values.off(onChange);

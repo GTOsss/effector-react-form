@@ -137,5 +137,31 @@ export const getIn = (state, field, defaultValue?) => {
   return result;
 };
 
-export const mapInlineToMapNested = <Result>(inlineMap: Record<string, any>): Result =>
+export const makeNested = <Result = Record<string, any>>(inlineMap: Record<string, any>): Result =>
   Object.entries(inlineMap).reduce((acc, [key, value]) => setIn(acc, key, value), {} as Result);
+
+const isFieldMeta = (value) => (typeof value === 'object') && value._type === 'fieldMeta'
+
+export const removeFromInlineMap = (map: Record<string, any>, key: string) => {
+  const nestedMap = deleteIn(makeNested(map), key);
+  const nodes = [{node: nestedMap, path: []}];
+  const newInlineMap = {};
+
+  while (nodes.length) {
+    const currentNode = nodes.pop();
+    Object.entries(currentNode.node).forEach(([k, v]) => {
+      if (isFieldMeta(v)) {
+        newInlineMap[currentNode.path.concat(k).join('.')] = v;
+      } else {
+        nodes.push({
+          node: v,
+          path: currentNode.path.concat(k),
+        });
+      }
+    });
+  }
+
+  return newInlineMap;
+}
+
+export const makeConsistentKey = (key) => stringToPath(key).join('.');
