@@ -141,3 +141,8 @@ declare const removeFromInlineMap: <O extends FieldsInline = FieldsInline, R ext
   key: string,
 ) => R;
 
+type FieldArrayParams<Values> = {
+  name: string,
+  $values: Store<Values>,
+  $fieldsInline: Store<Record<string, FieldState>>,
+}

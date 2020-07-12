@@ -162,7 +162,6 @@ const useForm = <Values extends AnyState>({
     name: nameProp,
     validate,
   }) => {
-
     return (): ControllerInjectedResult => {
       const refName = useRef<string>(makeConsistentKey(nameProp));
       refName.current = makeConsistentKey(nameProp);
