@@ -1,12 +1,10 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {useStore} from 'effector-react';
 import {
-  FieldArrayParams,
+  FieldArrayParams, MapFieldArrayCallback,
 } from '../index';
 import {getIn, setIn, removeFromInlineMap} from './utils/object-manager';
 import {createEvent} from 'effector';
-
-type MapCallback = ({fieldName: string, field: any, index: number}) => React.ReactNode;
 
 const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<Values>) => {
   const remove = useMemo(() => createEvent<number>('hookForm_fieldArray_Remove'), []);
@@ -18,7 +16,7 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
 
   const values = useStore($values);
 
-  const map = useCallback((callback: MapCallback) => {
+  const map = useCallback((callback: MapFieldArrayCallback) => {
     const results = [];
     const fields = getIn(values, name, []);
     fields.forEach((field, index) => {

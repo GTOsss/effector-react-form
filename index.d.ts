@@ -1,5 +1,5 @@
 import {Store, Event} from 'effector';
-import {SyntheticEvent} from 'react';
+import React, {SyntheticEvent} from 'react';
 
 type AnyState = Record<string, any>;
 
@@ -112,6 +112,25 @@ declare const useForm: <Values extends AnyState = AnyState>(
   params?: UseFormParams<Values>,
 ) => ResultHook<Values>;
 
+
+type FieldArrayParams<Values> = {
+  name: string,
+  $values: Store<Values>,
+  $fieldsInline: Store<Record<string, FieldState>>,
+}
+
+type MapFieldArrayCallback = ({fieldName: string, field: any, index: number}) => React.ReactNode;
+
+type ResultUseFieldArray = {
+  map: MapFieldArrayCallback,
+  remove: (index: number) => void,
+  push: (value: any) => void,
+};
+
+declare const useFieldArray: <Values extends AnyState = AnyState>(
+  paramsFieldArray: ParamsFieldArray,
+) => ResultUseFieldArray<Values>;
+
 declare const setIn: <O extends AnyState = AnyState, V = any>(
   object: O,
   path: string,
@@ -140,9 +159,3 @@ declare const removeFromInlineMap: <O extends FieldsInline = FieldsInline, R ext
   inlineMap: O,
   key: string,
 ) => R;
-
-type FieldArrayParams<Values> = {
-  name: string,
-  $values: Store<Values>,
-  $fieldsInline: Store<Record<string, FieldState>>,
-}
