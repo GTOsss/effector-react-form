@@ -21,7 +21,7 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
     const fields = getIn(values, name, []);
     fields.forEach((field, index) => {
       const callbackResult = callback({
-        fieldName: `${name}.${index}`,
+        formItemName: `${name}.${index}`,
         fields,
         field,
         index,

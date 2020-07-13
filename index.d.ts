@@ -120,7 +120,7 @@ type FieldArrayParams<Values> = {
 }
 
 type MapFieldsArrayCallbackParams = {
-  fieldName: string,
+  formItemName: string,
   field: any,
   fields: Array<any>,
   index: number,
