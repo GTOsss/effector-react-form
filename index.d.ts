@@ -119,7 +119,14 @@ type FieldArrayParams<Values> = {
   $fieldsInline: Store<Record<string, FieldState>>,
 }
 
-type MapFieldArrayCallback = ({fieldName: string, field: any, index: number}) => React.ReactNode;
+type MapFieldsArrayCallbackParams = {
+  fieldName: string,
+  field: any,
+  fields: Array<any>,
+  index: number,
+}
+
+type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
 
 type ResultUseFieldArray = {
   map: MapFieldArrayCallback,
@@ -128,7 +135,7 @@ type ResultUseFieldArray = {
 };
 
 declare const useFieldArray: <Values extends AnyState = AnyState>(
-  paramsFieldArray: ParamsFieldArray,
+  paramsFieldArray: FieldArrayParams,
 ) => ResultUseFieldArray<Values>;
 
 declare const setIn: <O extends AnyState = AnyState, V = any>(
