@@ -11,7 +11,7 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
   refName.current = name;
 
   const remove = useMemo(() => createEvent<number>('hookForm_fieldArray_Remove'), []);
-  const push = useMemo(() => createEvent<any>('hookForm_fieldArray_Push'), []);
+  const push = useMemo(() => createEvent<any | Array<any>>('hookForm_fieldArray_Push'), []);
   const unshift = useMemo(() => createEvent<any>('hookForm_fieldArray_Unshift'), []);
   const move = useMemo(() => createEvent<{from: number, to: number}>('hookForm_fieldArray_Move'), []);
   const insert = useMemo(() => createEvent<{value: any, index: number}>('hookForm_fieldArray_Insert'), []);
@@ -43,7 +43,13 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
 
     // $fieldsInline will be initialize automatically because it's new field
     $values.on(push, (values, value) => {
-      const newFields = [...getIn(values, refName.current, []), value];
+      let newFields = [...getIn(values, refName.current, [])];
+
+      if (Array.isArray(value)) {
+        newFields.push(...value)
+      } else {
+        newFields.push(value)
+      }
       return setIn(values, refName.current, newFields);
     });
 

@@ -131,7 +131,7 @@ type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.Rea
 type ResultUseFieldArray = {
   map: MapFieldArrayCallback,
   remove: (index: number) => void,
-  push: (value: any) => void,
+  push: (value: any | Array<any>) => void,
 };
 
 declare const useFieldArray: <Values extends AnyState = AnyState>(
