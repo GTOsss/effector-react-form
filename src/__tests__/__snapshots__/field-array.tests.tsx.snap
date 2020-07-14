@@ -19,6 +19,546 @@ Object {
 }
 `;
 
+exports[`FieldArray add form item with values (x3) > add inner (x3) > $values 1`] = `
+Object {
+  "parents": Array [
+    Object {
+      "id": 1,
+      "inners": Array [
+        Object {
+          "id": 4,
+          "username": "inner 0",
+        },
+      ],
+      "username": "0",
+    },
+    Object {
+      "id": 2,
+      "inners": Array [
+        Object {
+          "id": 5,
+          "username": "inner 1",
+        },
+      ],
+      "username": "1",
+    },
+    Object {
+      "id": 3,
+      "inners": Array [
+        Object {
+          "id": 6,
+          "username": "inner 2",
+        },
+      ],
+      "username": "2",
+    },
+  ],
+}
+`;
+
+exports[`FieldArray add form item with values (x3) > add inner (x3) > remove form item 1 > $values 1`] = `
+Object {
+  "parents": Array [
+    Object {
+      "id": 1,
+      "inners": Array [
+        Object {
+          "id": 4,
+          "username": "inner 0",
+        },
+      ],
+      "username": "0",
+    },
+    Object {
+      "id": 3,
+      "inners": Array [
+        Object {
+          "id": 6,
+          "username": "inner 2",
+        },
+      ],
+      "username": "2",
+    },
+  ],
+}
+`;
+
+exports[`FieldArray add form item with values (x3) > add inner (x3) > remove form item 1 > render 1`] = `
+<div
+  class="formItems"
+  role="formItems"
+>
+  <div
+    class="formItem"
+    role="formItem"
+  >
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        Username
+      </label>
+      <input
+        class="input"
+        name="parents.0.username"
+        placeholder="Username"
+        role="textbox"
+        value="0"
+      />
+    </div>
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        First name
+      </label>
+      <input
+        class="input"
+        name="parents.0.profile.firstName"
+        placeholder="First name"
+        role="textbox"
+        value=""
+      />
+    </div>
+    <div
+      class="formItemsInner"
+      role="formItemsInner"
+    >
+      <div
+        class="formItem"
+        role="formItemInner"
+      >
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            Username
+          </label>
+          <input
+            class="input"
+            name="parents.0.inners.0.username"
+            placeholder="Username"
+            role="textbox"
+            value="inner 0"
+          />
+        </div>
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            First name
+          </label>
+          <input
+            class="input"
+            name="parents.0.inners.0.profile.firstName"
+            placeholder="First name"
+            role="textbox"
+            value=""
+          />
+        </div>
+        <button
+          type="button"
+        >
+          remove form item inner
+        </button>
+      </div>
+      <button
+        type="button"
+      >
+        add inner form item
+      </button>
+    </div>
+    <button
+      type="button"
+    >
+      remove form item
+    </button>
+  </div>
+  <div
+    class="formItem"
+    role="formItem"
+  >
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        Username
+      </label>
+      <input
+        class="input"
+        name="parents.1.username"
+        placeholder="Username"
+        role="textbox"
+        value="2"
+      />
+    </div>
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        First name
+      </label>
+      <input
+        class="input"
+        name="parents.1.profile.firstName"
+        placeholder="First name"
+        role="textbox"
+        value=""
+      />
+    </div>
+    <div
+      class="formItemsInner"
+      role="formItemsInner"
+    >
+      <div
+        class="formItem"
+        role="formItemInner"
+      >
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            Username
+          </label>
+          <input
+            class="input"
+            name="parents.1.inners.0.username"
+            placeholder="Username"
+            role="textbox"
+            value="inner 2"
+          />
+        </div>
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            First name
+          </label>
+          <input
+            class="input"
+            name="parents.1.inners.0.profile.firstName"
+            placeholder="First name"
+            role="textbox"
+            value=""
+          />
+        </div>
+        <button
+          type="button"
+        >
+          remove form item inner
+        </button>
+      </div>
+      <button
+        type="button"
+      >
+        add inner form item
+      </button>
+    </div>
+    <button
+      type="button"
+    >
+      remove form item
+    </button>
+  </div>
+  <button
+    type="button"
+  >
+    add form item with values
+  </button>
+</div>
+`;
+
+exports[`FieldArray add form item with values (x3) > add inner (x3) > render 1`] = `
+<div
+  class="formItems"
+  role="formItems"
+>
+  <div
+    class="formItem"
+    role="formItem"
+  >
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        Username
+      </label>
+      <input
+        class="input"
+        name="parents.0.username"
+        placeholder="Username"
+        role="textbox"
+        value="0"
+      />
+    </div>
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        First name
+      </label>
+      <input
+        class="input"
+        name="parents.0.profile.firstName"
+        placeholder="First name"
+        role="textbox"
+        value=""
+      />
+    </div>
+    <div
+      class="formItemsInner"
+      role="formItemsInner"
+    >
+      <div
+        class="formItem"
+        role="formItemInner"
+      >
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            Username
+          </label>
+          <input
+            class="input"
+            name="parents.0.inners.0.username"
+            placeholder="Username"
+            role="textbox"
+            value="inner 0"
+          />
+        </div>
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            First name
+          </label>
+          <input
+            class="input"
+            name="parents.0.inners.0.profile.firstName"
+            placeholder="First name"
+            role="textbox"
+            value=""
+          />
+        </div>
+        <button
+          type="button"
+        >
+          remove form item inner
+        </button>
+      </div>
+      <button
+        type="button"
+      >
+        add inner form item
+      </button>
+    </div>
+    <button
+      type="button"
+    >
+      remove form item
+    </button>
+  </div>
+  <div
+    class="formItem"
+    role="formItem"
+  >
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        Username
+      </label>
+      <input
+        class="input"
+        name="parents.1.username"
+        placeholder="Username"
+        role="textbox"
+        value="1"
+      />
+    </div>
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        First name
+      </label>
+      <input
+        class="input"
+        name="parents.1.profile.firstName"
+        placeholder="First name"
+        role="textbox"
+        value=""
+      />
+    </div>
+    <div
+      class="formItemsInner"
+      role="formItemsInner"
+    >
+      <div
+        class="formItem"
+        role="formItemInner"
+      >
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            Username
+          </label>
+          <input
+            class="input"
+            name="parents.1.inners.0.username"
+            placeholder="Username"
+            role="textbox"
+            value="inner 1"
+          />
+        </div>
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            First name
+          </label>
+          <input
+            class="input"
+            name="parents.1.inners.0.profile.firstName"
+            placeholder="First name"
+            role="textbox"
+            value=""
+          />
+        </div>
+        <button
+          type="button"
+        >
+          remove form item inner
+        </button>
+      </div>
+      <button
+        type="button"
+      >
+        add inner form item
+      </button>
+    </div>
+    <button
+      type="button"
+    >
+      remove form item
+    </button>
+  </div>
+  <div
+    class="formItem"
+    role="formItem"
+  >
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        Username
+      </label>
+      <input
+        class="input"
+        name="parents.2.username"
+        placeholder="Username"
+        role="textbox"
+        value="2"
+      />
+    </div>
+    <div
+      class="input-wrap"
+      role="wrapper-for-input"
+    >
+      <label>
+        First name
+      </label>
+      <input
+        class="input"
+        name="parents.2.profile.firstName"
+        placeholder="First name"
+        role="textbox"
+        value=""
+      />
+    </div>
+    <div
+      class="formItemsInner"
+      role="formItemsInner"
+    >
+      <div
+        class="formItem"
+        role="formItemInner"
+      >
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            Username
+          </label>
+          <input
+            class="input"
+            name="parents.2.inners.0.username"
+            placeholder="Username"
+            role="textbox"
+            value="inner 2"
+          />
+        </div>
+        <div
+          class="input-wrap"
+          role="wrapper-for-input"
+        >
+          <label>
+            First name
+          </label>
+          <input
+            class="input"
+            name="parents.2.inners.0.profile.firstName"
+            placeholder="First name"
+            role="textbox"
+            value=""
+          />
+        </div>
+        <button
+          type="button"
+        >
+          remove form item inner
+        </button>
+      </div>
+      <button
+        type="button"
+      >
+        add inner form item
+      </button>
+    </div>
+    <button
+      type="button"
+    >
+      remove form item
+    </button>
+  </div>
+  <button
+    type="button"
+  >
+    add form item with values
+  </button>
+</div>
+`;
+
 exports[`FieldArray add form item with values (x3) > remove(1) > $fieldsInline 1`] = `
 Object {
   "parents.0.profile.firstName": Object {
@@ -83,14 +623,29 @@ Object {
 }
 `;
 
+exports[`FieldArray add form item with values > $values 1`] = `
+Object {
+  "parents": Array [
+    Object {
+      "id": 1,
+      "profile": Object {
+        "firstName": "Timofey",
+      },
+      "username": "gto",
+    },
+  ],
+}
+`;
+
 exports[`FieldArray add form item with values > render 1`] = `
 Array [
   <div
-    class="formsItem"
-    role="formItem"
+    class="formItems"
+    role="formItems"
   >
     <div
       class="formItem"
+      role="formItem"
     >
       <div
         class="input-wrap"
@@ -122,6 +677,16 @@ Array [
           value="Timofey"
         />
       </div>
+      <div
+        class="formItemsInner"
+        role="formItemsInner"
+      >
+        <button
+          type="button"
+        >
+          add inner form item
+        </button>
+      </div>
       <button
         type="button"
       >
@@ -140,8 +705,8 @@ Array [
 exports[`FieldArray render 1`] = `
 Array [
   <div
-    class="formsItem"
-    role="formItem"
+    class="formItems"
+    role="formItems"
   >
     <button
       type="button"
