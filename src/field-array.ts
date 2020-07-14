@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useStore} from 'effector-react';
 import {
   FieldArrayParams, MapFieldArrayCallback,
@@ -7,6 +7,9 @@ import {getIn, setIn, removeFromInlineMap} from './utils/object-manager';
 import {createEvent} from 'effector';
 
 const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<Values>) => {
+  const refName = useRef(name);
+  refName.current = name;
+
   const remove = useMemo(() => createEvent<number>('hookForm_fieldArray_Remove'), []);
   const push = useMemo(() => createEvent<any>('hookForm_fieldArray_Push'), []);
   const unshift = useMemo(() => createEvent<any>('hookForm_fieldArray_Unshift'), []);
@@ -18,10 +21,10 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
 
   const map = useCallback((callback: MapFieldArrayCallback) => {
     const results = [];
-    const fields = getIn(values, name, []);
+    const fields = getIn(values, refName.current, []);
     fields.forEach((field, index) => {
       const callbackResult = callback({
-        formItemName: `${name}.${index}`,
+        formItemName: `${refName.current}.${index}`,
         fields,
         field,
         index,
@@ -32,25 +35,25 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
   }, [values]);
 
   useEffect(() => {
-    $fieldsInline.on(remove, (fieldsInline, index) => removeFromInlineMap(fieldsInline, `${name}.${index}`));
+    $fieldsInline.on(remove, (fieldsInline, index) => removeFromInlineMap(fieldsInline, `${refName.current}.${index}`));
     $values.on(remove, (values, index) => {
-      const newFields = getIn(values, name, []).filter((_, i) => i !== index);
-      return setIn(values, name, newFields);
+      const newFields = getIn(values, refName.current, []).filter((_, i) => i !== index);
+      return setIn(values, refName.current, newFields);
     });
 
     // $fieldsInline will be initialize automatically because it's new field
     $values.on(push, (values, value) => {
-      const newFields = [...getIn(values, name, []), value];
-      return setIn(values, name, newFields);
+      const newFields = [...getIn(values, refName.current, []), value];
+      return setIn(values, refName.current, newFields);
     });
 
     $values.on(unshift, (values, value) => { // todo implement for fieldsInline
-      const newFields = [value, ...getIn(values, name, [])];
-      return setIn(values, name, newFields);
+      const newFields = [value, ...getIn(values, refName.current, [])];
+      return setIn(values, refName.current, newFields);
     });
 
     $values.on(move, (values, {from, to}) => { // todo implement for fieldsInline
-      const fields = getIn(values, name, []);
+      const fields = getIn(values, refName.current, []);
       const newFields = [];
       let movingField = {};
       fields.forEach((field, i) => {
@@ -63,11 +66,11 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
           newFields.push(field);
         }
       });
-      return setIn(values, name, newFields);
+      return setIn(values, refName.current, newFields);
     });
 
     $values.on(insert, (values, {index, value}) => { // todo implement for fieldsInline
-      const fields = getIn(values, name);
+      const fields = getIn(values, refName.current);
       const newFields = [];
       fields.forEach((field, i) => {
         if (index === i) {
@@ -77,11 +80,11 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
           newFields.push(field);
         }
       });
-      return setIn(values, name, newFields);
+      return setIn(values, refName.current, newFields);
     });
 
     $values.on(swap, (values, {from, to}) => { // todo implement for fieldsInline
-      const fields = getIn(values, name);
+      const fields = getIn(values, refName.current);
       const newFields = [];
       fields.forEach((field, i) => {
         if (from === i) {
@@ -92,7 +95,7 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
           newFields.push(field);
         }
       });
-      return setIn(values, name, newFields);
+      return setIn(values, refName.current, newFields);
     });
 
     return () => {

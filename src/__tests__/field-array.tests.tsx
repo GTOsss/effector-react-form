@@ -345,4 +345,67 @@ describe('FieldArray', () => {
     const formItemsDom = screen.getByRole('formItems');
     expect(formItemsDom).toMatchSnapshot();
   });
+
+  test('add form item with values (x2) > remove 1 > add inner 0 (x1) > $values', () => {
+    reset();
+    const formItems = [
+      {id: getId(), username: '0'},
+      {id: getId(), username: '1'},
+    ];
+    let counter = 0;
+    const onPush = (push) => {
+      push(formItems[counter++]);
+    };
+
+    const formItemsInner = [
+      {id: getId(), username: 'inner 0'},
+      {id: getId(), username: 'inner 1'},
+    ];
+    let counterInner = 0;
+    const onPushInner = (push) => {
+      push(formItemsInner[counterInner++]);
+    };
+
+    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    const addFormItem = screen.getByText('add form item with values');
+    fireEvent.click(addFormItem);
+    fireEvent.click(addFormItem);
+    const removeFormItem = screen.getAllByText('remove form item');
+    fireEvent.click(removeFormItem[0]);
+    const addFormItemInner = screen.getAllByText('add inner form item');
+    fireEvent.click(addFormItemInner[0]);
+    expect($values.getState()).toMatchSnapshot();
+  });
+
+  test('add form item with values (x2) > remove 1 > add inner 0 (x1) > render', () => {
+    reset();
+    const formItems = [
+      {id: getId(), username: '0'},
+      {id: getId(), username: '1'},
+    ];
+    let counter = 0;
+    const onPush = (push) => {
+      push(formItems[counter++]);
+    };
+
+    const formItemsInner = [
+      {id: getId(), username: 'inner 0'},
+      {id: getId(), username: 'inner 1'},
+    ];
+    let counterInner = 0;
+    const onPushInner = (push) => {
+      push(formItemsInner[counterInner++]);
+    };
+
+    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    const addFormItem = screen.getByText('add form item with values');
+    fireEvent.click(addFormItem);
+    fireEvent.click(addFormItem);
+    const removeFormItem = screen.getAllByText('remove form item');
+    fireEvent.click(removeFormItem[0]);
+    const addFormItemInner = screen.getAllByText('add inner form item');
+    fireEvent.click(addFormItemInner[0]);
+    const formItemsDom = screen.getByRole('formItems');
+    expect(formItemsDom).toMatchSnapshot();
+  });
 });
