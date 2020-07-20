@@ -121,7 +121,19 @@ type UseErrorParams = {
   $form?: Store<FormState>,
 }
 
-declare const useError: <Values extends AnyState = AnyState>(params: UseErrorParams) => Message;
+type UseErrorResult = {
+  inputValue: any;
+  form: FormState,
+  fieldState: FieldState,
+  error: Message,
+  innerError: Message,
+  outerError: Message,
+  isShowError: boolean,
+  isShowOuterError: boolean,
+  isShowInnerError: boolean,
+}
+
+declare const useError: <Values extends AnyState = AnyState>(params: UseErrorParams) => UseErrorResult<Values>;
 
 type FieldArrayParams<Values> = {
   name: string,
