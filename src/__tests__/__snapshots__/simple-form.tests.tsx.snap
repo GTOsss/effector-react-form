@@ -128,6 +128,14 @@ Array [
 ]
 `;
 
+exports[`SimpleForm onChange username, test performance 1`] = `
+Object {
+  "profile.firstName": 2,
+  "profile.lastName": 2,
+  "username": 7,
+}
+`;
+
 exports[`SimpleForm setError profile.firstName 1`] = `
 Array [
   <div

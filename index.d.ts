@@ -98,7 +98,7 @@ type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 type OnChange<Values> = OnSubmit<Values>;
 
 type UseFormParams<Values> = undefined | {
-  $values?: Store<Values>
+  $values?: Store<Values>,
   $outerErrorsInline?: Store<ErrorsInline>,
   $errorsInline?: Store<ErrorsInline>,
   $fieldsInline?: Store<Record<string, FieldState>>,
@@ -112,6 +112,16 @@ declare const useForm: <Values extends AnyState = AnyState>(
   params?: UseFormParams<Values>,
 ) => ResultHook<Values>;
 
+type UseErrorParams = {
+  name: string,
+  $values?: Store<Values>,
+  $errorsInline?: Store<ErrorsInline>,
+  $outerErrorsInline?: Store<ErrorsInline>,
+  $fieldsInline?: Store<Record<string, FieldState>>,
+  $form?: Store<FormState>,
+}
+
+declare const useError: <Values extends AnyState = AnyState>(params: UseErrorParams) => Message;
 
 type FieldArrayParams<Values> = {
   name: string,

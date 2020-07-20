@@ -8,11 +8,11 @@ import {
   UseFormParams, AnyState, ErrorsInline, FieldsInline, SetOrDeleteErrorParams, Message,
 } from '../index';
 import {createStore, createEvent, sample, combine} from 'effector';
-import {useStore} from 'effector-react';
+import {useStoreMap} from 'effector-react';
 import {getValue} from './utils/dom-helper';
 import {setIn, getIn, deleteIn, makeConsistentKey} from './utils/object-manager';
 
-const initialFieldState: FieldState = {
+export const initialFieldState: FieldState = {
   _type: 'fieldMeta',
   active: false,
   touched: false,
@@ -245,19 +245,50 @@ const useForm = <Values extends AnyState>({
         };
       }, []);
 
-      const values = useStore<Values>($values);
-      const errorsInline = useStore<ErrorsInline>($errorsInline);
-      const outerErrorsInline = useStore<ErrorsInline>($outerErrorsInline);
+      const value = useStoreMap<Values, any, [string]>({
+        store: $values,
+        keys: [nameProp],
+        fn: (values, [field]) => getIn(values, field) || null,
+      });
 
-      const value = getIn(values, nameProp);
-      const innerError = errorsInline[nameProp];
-      const outerError = outerErrorsInline[nameProp];
+      const innerError = useStoreMap<ErrorsInline, Message, [string]>({
+        store: $errorsInline,
+        keys: [nameProp],
+        fn: (errorsInline, [field]) => errorsInline[field] || null,
+      });
+      const outerError = useStoreMap<ErrorsInline, Message, [string]>({
+        store: $outerErrorsInline,
+        keys: [nameProp],
+        fn: (outerErrorsInline, [field]) => outerErrorsInline[field] || null,
+      });
       const error = innerError || outerError;
 
-      const fieldsState = useStore<FieldsInline>($fieldsInline);
-      const fieldState = fieldsState[nameProp] || initialFieldState;
+      const fieldState = useStoreMap<FieldsInline, FieldState, [string]>({
+        store: $fieldsInline,
+        keys: [nameProp],
+        fn: (fieldsInline, [field]) => fieldsInline[field] || initialFieldState,
+      });
 
-      const formState = useStore<FormState>($form);
+      const formSubmitted = useStoreMap<FormState, boolean, []>({
+        store: $form,
+        keys: [],
+        fn: (formState) => formState.submitted,
+      });
+      const formHasError = useStoreMap<FormState, boolean, []>({
+        store: $form,
+        keys: [],
+        fn: (formState) => formState.hasError,
+      });
+      const formHasOuterError = useStoreMap<FormState, boolean, []>({
+        store: $form,
+        keys: [],
+        fn: (formState) => formState.hasOuterError,
+      });
+      const formState: FormState = {
+        submitted: formSubmitted,
+        hasError: formHasError,
+        hasOuterError: formHasOuterError,
+      };
 
       const isShowInnerError = (formState.submitted || fieldState.blurred) && Boolean(innerError);
       const isShowOuterError = (!fieldState.changedAfterOuterError) && Boolean(outerError);

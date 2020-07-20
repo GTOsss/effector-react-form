@@ -2,7 +2,7 @@ import React from 'react';
 import {createStore} from 'effector';
 import {render, fireEvent, screen} from '@testing-library/react';
 import {useForm} from '../';
-import {Controller, OnSubmit} from '../../index';
+import {Controller} from '../../index';
 
 interface Values {
   username?: string,
@@ -17,7 +17,7 @@ interface InputProps {
   label: string,
 }
 
-const renderForm = () => {
+const renderForm = (inputRender?) => {
   const $fieldsInline = createStore({});
 
   const Input: React.FC<InputProps> = ({
@@ -25,6 +25,10 @@ const renderForm = () => {
     label,
   }) => {
     const {input, error, isShowError} = controller();
+
+    if (inputRender) {
+      inputRender(input.name);
+    }
 
     return (
       <div role="wrapper-for-input" className="input-wrap">
@@ -78,6 +82,24 @@ const renderForm = () => {
 };
 
 describe('SimpleForm', () => {
+  test('onChange username, test performance', () => {
+    const mapRenders = {
+      'username': 0,
+      'profile.firstName': 0,
+      'profile.lastName': 0,
+    };
+    const renderCallback = (name) => {
+      mapRenders[name] += 1;
+    };
+    renderForm(renderCallback);
+    const input = screen.getByPlaceholderText('Username');
+    fireEvent.change(input, {target: {value: 't'}});
+    fireEvent.change(input, {target: {value: 'te'}});
+    fireEvent.change(input, {target: {value: 'tes'}});
+    fireEvent.change(input, {target: {value: 'test'}});
+    fireEvent.change(input, {target: {value: 'tests'}});
+    expect(mapRenders).toMatchSnapshot();
+  });
 
   test('$fieldsInline after render', () => {
     const {$fieldsInline} = renderForm();
