@@ -91,7 +91,12 @@ type ResultHook<Values> = {
   $fieldsInline: Store<Record<string, FieldState>>
 }
 
-export type FormValidate<Values> = ({values: Values, errorsInline: ErrorsInline}) => ErrorsInline;
+export type FormValidateParams<Values> = {
+  values: Values,
+  errorsInline: ErrorsInline,
+};
+
+export type FormValidate<Values> = (params: FormValidateParams) => ErrorsInline;
 
 type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 
