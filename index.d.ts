@@ -88,7 +88,8 @@ type ResultHook<Values> = {
   $errorsInline: Store<ErrorsInline>,
   $outerErrorsInline: Store<ErrorsInline>
   $form: Store<FormState>,
-  $fieldsInline: Store<Record<string, FieldState>>
+  $fieldsInline: Store<Record<string, FieldState>>,
+  submit: Event,
 }
 
 export type FormValidateParams<Values> = {
@@ -110,7 +111,8 @@ type UseFormParams<Values> = undefined | {
   $form?: Store<FormState>,
   validate?: FormValidate<Values>,
   onSubmit?: OnSubmit<Values>,
-  onChange?: OnChange<Values>
+  onChange?: OnChange<Values>,
+  submit?: Event,
 }
 
 declare const useForm: <Values extends AnyState = AnyState>(

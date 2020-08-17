@@ -38,6 +38,7 @@ const useForm = <Values extends AnyState>({
   validate,
   onSubmit,
   onChange: onChangeForm,
+  submit: submitProp,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
 
   const willMount = useRef(true);
@@ -51,6 +52,7 @@ const useForm = <Values extends AnyState>({
   const setOrDeleteOuterError = useMemo(() => createEvent<{field: string, error: Message}>('hookForm_SetOrDeleteOuterError'), []);
   const setOuterErrorsInlineState = useMemo(() => createEvent<ErrorsInline>('hookForm_SetOuterErrorsInlineState'), []);
   const validateForm = useMemo(() => createEvent('hookForm_ValidateForm'), []);
+  const submit = useMemo(() => submitProp || createEvent('hookForm_Submit'), []);
 
   const $values = useMemo(() => $valuesProp || createStore<Values>({} as Values), []);
   const $errorsInline = useMemo(() => $errorsInlineProp || createStore<ErrorsInline>({}), []);
@@ -145,6 +147,20 @@ const useForm = <Values extends AnyState>({
       setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)));
 
     validateForm();
+
+    submit.watch(() => {
+      setSubmitted(true);
+
+      validateForm();
+      resetOuterFieldStateFlags();
+
+      onSubmit({
+        values: $values.getState(),
+        errorsInline: $errorsInline.getState(),
+        fieldsInline: $fieldsInline.getState(),
+        form: $form.getState(),
+      });
+    });
 
     return () => {
       $values.off(setValue);
@@ -319,20 +335,10 @@ const useForm = <Values extends AnyState>({
     };
   }, []);
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>): void => {
+  const handleSubmit = useCallback((e: React.SyntheticEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    setSubmitted(true);
-
-    validateForm();
-    resetOuterFieldStateFlags();
-
-    onSubmit({
-      values: $values.getState(),
-      errorsInline: $errorsInline.getState(),
-      fieldsInline: $fieldsInline.getState(),
-      form: $form.getState(),
-    });
-  }
+    submit();
+  }, []);
 
   willMount.current = false;
 
@@ -349,6 +355,7 @@ const useForm = <Values extends AnyState>({
     $outerErrorsInline,
     $fieldsInline,
     $form,
+    submit,
   };
 };
 
