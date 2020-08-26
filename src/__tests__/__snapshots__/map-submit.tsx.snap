@@ -1,0 +1,171 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MapSubmit onChange form with mapSubmit 1`] = `
+Object {
+  "errorsInline": Object {},
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": true,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": false,
+    "hasOuterError": false,
+    "submitted": false,
+  },
+  "outerErrorsInline": Object {},
+  "values": Object {
+    "info": Object {
+      "username": "test username",
+    },
+    "profile": Object {
+      "firstName": "test first name",
+    },
+  },
+}
+`;
+
+exports[`MapSubmit onChange form without mapSubmit 1`] = `
+Object {
+  "errorsInline": Object {},
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": true,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": false,
+    "hasOuterError": false,
+    "submitted": false,
+  },
+  "outerErrorsInline": Object {},
+  "values": Object {
+    "profile": Object {
+      "firstName": "test first name",
+    },
+    "username": "test username",
+  },
+}
+`;
+
+exports[`MapSubmit onSubmit form with mapSubmit 1`] = `
+Object {
+  "errorsInline": Object {},
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": true,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": true,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": false,
+    "hasOuterError": false,
+    "submitted": true,
+  },
+  "values": Object {
+    "info": Object {
+      "username": "test username",
+    },
+    "profile": Object {
+      "firstName": "test first name",
+    },
+  },
+}
+`;
+
+exports[`MapSubmit onSubmit form without mapSubmit 1`] = `
+Object {
+  "errorsInline": Object {},
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": true,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": true,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": false,
+    "hasOuterError": false,
+    "submitted": true,
+  },
+  "values": Object {
+    "profile": Object {
+      "firstName": "test first name",
+    },
+    "username": "test username",
+  },
+}
+`;

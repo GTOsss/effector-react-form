@@ -99,11 +99,13 @@ export type FormValidateParams<Values> = {
 
 export type FormValidate<Values> = (params: FormValidateParams) => ErrorsInline;
 
+export type MapSubmit<Values, ResultValues> = (params: SubmitParams<Values>) => SubmitParams<ResultValues>
+
 type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 
 type OnChange<Values> = OnSubmit<Values>;
 
-type UseFormParams<Values> = undefined | {
+type UseFormParams<Values = any, MappedValues = any> = undefined | {
   $values?: Store<Values>,
   $outerErrorsInline?: Store<ErrorsInline>,
   $errorsInline?: Store<ErrorsInline>,
@@ -113,6 +115,7 @@ type UseFormParams<Values> = undefined | {
   onSubmit?: OnSubmit<Values>,
   onChange?: OnChange<Values>,
   submit?: Event,
+  mapSubmit?: MapSubmit<Values, MappedValues>
 }
 
 declare const useForm: <Values extends AnyState = AnyState>(

@@ -39,6 +39,7 @@ const useForm = <Values extends AnyState>({
   onSubmit,
   onChange: onChangeForm,
   submit: submitProp,
+  mapSubmit,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
 
   const willMount = useRef(true);
@@ -154,12 +155,14 @@ const useForm = <Values extends AnyState>({
       validateForm();
       resetOuterFieldStateFlags();
 
-      onSubmit({
+      const submitParams = {
         values: $values.getState(),
         errorsInline: $errorsInline.getState(),
         fieldsInline: $fieldsInline.getState(),
         form: $form.getState(),
-      });
+      };
+
+      onSubmit(mapSubmit ? mapSubmit(submitParams) : submitParams);
     });
 
     return () => {
@@ -200,7 +203,12 @@ const useForm = <Values extends AnyState>({
             clock: onChangeBrowser,
           });
 
-          $allFormState.watch(onChangeForm)
+          if (mapSubmit) {
+            const $mappedAllFormState = $allFormState.map(mapSubmit);
+            $mappedAllFormState.watch(onChangeForm)
+          } else {
+            $allFormState.watch(onChangeForm)
+          }
         }
 
         $values.on(onChange, (state, value) => setIn(state, refName.current, value));
