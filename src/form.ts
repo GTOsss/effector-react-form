@@ -262,7 +262,9 @@ const useForm = <Values extends AnyState>({
           target: $fieldsInline
         });
 
-        setFieldState({field: refName.current, state: {...initialFieldState, validate}});
+        if (!$fieldsInline.getState()[refName.current]) {
+          setFieldState({field: refName.current, state: {...initialFieldState, validate}});
+        }
 
         return () => {
           $values.off(onChange);

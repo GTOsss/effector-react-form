@@ -1,15 +1,18 @@
-import {Controller, OnSubmit} from '../../index';
+import {
+  Controller,
+  // OnSubmit,
+} from '../../index';
 import React from 'react';
 import {useForm} from '../index';
 import {render, screen, fireEvent} from '@testing-library/react';
 
-interface Values {
-  username?: string,
-  profile?: {
-    firstName?: string,
-    lastName?: string,
-  }
-}
+// interface Values {
+//   username?: string,
+//   profile?: {
+//     firstName?: string,
+//     lastName?: string,
+//   }
+// }
 
 interface InputProps {
   controller: Controller,

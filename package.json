@@ -1,6 +1,6 @@
 {
   "name": "effector-react-form",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
