@@ -97,7 +97,7 @@ export type FormValidateParams<Values> = {
   errorsInline: ErrorsInline,
 };
 
-export type FormValidate<Values> = (params: FormValidateParams) => ErrorsInline;
+export type FormValidate<Values> = (params: FormValidateParams<Values>) => ErrorsInline;
 
 export type MapSubmit<Values, ResultValues> = (params: SubmitParams<Values>) => SubmitParams<ResultValues>
 
