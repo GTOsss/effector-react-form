@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SeveralUseForm change and submit 1`] = `
+<form
+  role="form"
+>
+  form 2
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Name
+    </label>
+    <input
+      class="input"
+      name="name"
+      placeholder="Name"
+      role="textbox"
+      value="t"
+    />
+  </div>
+  <button
+    type="submit"
+  >
+    submit
+  </button>
+</form>
+`;
