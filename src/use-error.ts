@@ -1,7 +1,7 @@
 import {useStoreMap} from 'effector-react';
 import {ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams} from '../index';
 import {getIn} from './utils/object-manager';
-import {initialFieldState} from './form';
+import {initialFieldState} from './use-form';
 
 const useError = <Values>({
   name,
