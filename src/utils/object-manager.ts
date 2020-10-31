@@ -26,11 +26,11 @@ export const deleteIn = (
     return state;
   }
 
-  const isEndPoint = (pathArray.length - 1) === index;
+  const isEndPoint = pathArray.length - 1 === index;
   const isArray = Array.isArray(state);
-  const isObject = !isArray && (typeof state === 'object');
+  const isObject = !isArray && typeof state === 'object';
   // @ts-ignore
-  const newState = isArray ? [...state] : {...state};
+  const newState = isArray ? [...state] : { ...state };
 
   if (isObject) {
     if (isEndPoint) {
@@ -85,7 +85,7 @@ export const setIn = (state, path, value, pathIndex = 0) => {
 
   if (!state) {
     if (isNaN(first)) {
-      return {[first]: next};
+      return { [first]: next };
     }
     const initialized = [];
     // @ts-ignore
@@ -120,7 +120,7 @@ export const getIn = (state, field, defaultValue?) => {
   }
 
   const path = stringToPath(field);
-  const {length} = path;
+  const { length } = path;
   if (!length) {
     return defaultValue;
   }
@@ -140,11 +140,11 @@ export const getIn = (state, field, defaultValue?) => {
 export const makeNested = <Result = Record<string, any>>(inlineMap: Record<string, any>): Result =>
   Object.entries(inlineMap).reduce((acc, [key, value]) => setIn(acc, key, value), {} as Result);
 
-const isFieldMeta = (value) => (typeof value === 'object') && value._type === 'fieldMeta'
+const isFieldMeta = (value) => typeof value === 'object' && value._type === 'fieldMeta';
 
 export const removeFromInlineMap = (map: Record<string, any>, key: string) => {
   const nestedMap = deleteIn(makeNested(map), key);
-  const nodes = [{node: nestedMap, path: []}];
+  const nodes = [{ node: nestedMap, path: [] }];
   const newInlineMap = {};
 
   while (nodes.length) {
@@ -162,6 +162,6 @@ export const removeFromInlineMap = (map: Record<string, any>, key: string) => {
   }
 
   return newInlineMap;
-}
+};
 
 export const makeConsistentKey = (key) => stringToPath(key).join('.');

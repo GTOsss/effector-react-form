@@ -1,8 +1,8 @@
-import {Controller} from '../../index';
+import { Controller } from '../../index';
 import React from 'react';
-import {useForm} from '../index';
-import {render, screen, fireEvent} from '@testing-library/react';
-import {createEvent} from 'effector';
+import { useForm } from '../index';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { createEvent } from 'effector';
 
 const submit = createEvent();
 
@@ -15,17 +15,14 @@ const submit = createEvent();
 // }
 
 interface InputProps {
-  controller: Controller,
-  label: string,
+  controller: Controller;
+  label: string;
 }
 
-const validateRequired = (value) => value ? undefined : 'Field is required';
+const validateRequired = (value) => (value ? undefined : 'Field is required');
 
-const Input: React.FC<InputProps> = ({
-  controller,
-  label,
-}) => {
-  const {input, fieldState, form, error} = controller();
+const Input: React.FC<InputProps> = ({ controller, label }) => {
+  const { input, fieldState, form, error } = controller();
 
   const isShowError = error && (form.submitted || form.hasOuterError || fieldState.blurred);
 
@@ -39,36 +36,29 @@ const Input: React.FC<InputProps> = ({
         className={`input${isShowError ? ' input-error' : ''}`}
         placeholder={label}
       />
-      {isShowError && (<span>{error}</span>)}
+      {isShowError && <span>{error}</span>}
     </div>
   );
 };
 
-const RemoteSubmit = ({onSubmit}) => {
-  const {handleSubmit, controller, setOrDeleteError} = useForm({onSubmit, submit});
+const RemoteSubmit = ({ onSubmit }) => {
+  const { handleSubmit, controller, setOrDeleteError } = useForm({ onSubmit, submit });
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <Input
-          label="Username"
-          controller={controller({name: 'username'})}
-        />
-        <Input
-          label="First name"
-          controller={controller({name: 'profile.firstName', validate: validateRequired})}
-        />
-        <Input
-          label="Last name"
-          controller={controller({name: 'profile.lastName'})}
-        />
+        <Input label="Username" controller={controller({ name: 'username' })} />
+        <Input label="First name" controller={controller({ name: 'profile.firstName', validate: validateRequired })} />
+        <Input label="Last name" controller={controller({ name: 'profile.lastName' })} />
         <button type="submit">submit</button>
         <button
           type="button"
-          onClick={() => setOrDeleteError({
-            field: 'profile.firstName',
-            error: 'First name is not valid',
-          })}
+          onClick={() =>
+            setOrDeleteError({
+              field: 'profile.firstName',
+              error: 'First name is not valid',
+            })
+          }
         >
           set error for firstName
         </button>

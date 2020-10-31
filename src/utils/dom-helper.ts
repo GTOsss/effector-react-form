@@ -1,6 +1,4 @@
-const isEvent = (candidate) => !!(candidate
-  && candidate.stopPropagation
-  && candidate.preventDefault);
+const isEvent = (candidate) => !!(candidate && candidate.stopPropagation && candidate.preventDefault);
 
 const getSelectedValues = (options) => {
   const result = [];
@@ -17,11 +15,7 @@ const getSelectedValues = (options) => {
 
 export const getValue = (event, isReactNative?) => {
   if (isEvent(event)) {
-    if (
-      !isReactNative
-      && event.nativeEvent
-      && event.nativeEvent.text !== undefined
-    ) {
+    if (!isReactNative && event.nativeEvent && event.nativeEvent.text !== undefined) {
       return event.nativeEvent.text;
     }
     if (isReactNative && event.nativeEvent !== undefined) {

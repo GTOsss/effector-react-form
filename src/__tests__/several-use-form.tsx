@@ -1,21 +1,18 @@
-import {Controller} from '../../index';
-import React, {useState} from 'react';
-import {useForm} from '../index';
-import {render, screen, fireEvent} from '@testing-library/react';
-import {createStore} from 'effector';
+import { Controller } from '../../index';
+import React, { useState } from 'react';
+import { useForm } from '../index';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { createStore } from 'effector';
 
 interface InputProps {
-  controller: Controller,
-  label: string,
+  controller: Controller;
+  label: string;
 }
 
 // const validateRequired = (value) => value ? undefined : 'Field is required';
 
-const Input: React.FC<InputProps> = ({
-  controller,
-  label,
-}) => {
-  const {input, fieldState, form, error} = controller();
+const Input: React.FC<InputProps> = ({ controller, label }) => {
+  const { input, fieldState, form, error } = controller();
 
   const isShowError = error && (form.submitted || form.hasOuterError || fieldState.blurred);
 
@@ -29,7 +26,7 @@ const Input: React.FC<InputProps> = ({
         className={`input${isShowError ? ' input-error' : ''}`}
         placeholder={label}
       />
-      {isShowError && (<span>{error}</span>)}
+      {isShowError && <span>{error}</span>}
     </div>
   );
 };
@@ -37,9 +34,9 @@ const Input: React.FC<InputProps> = ({
 const $values1 = createStore({});
 const $values2 = createStore({});
 
-const RemoteSubmit = ({onSubmit}) => {
-  const {handleSubmit: handleSubmit1, controller: controller1} = useForm({onSubmit, $values: $values1});
-  const {handleSubmit: handleSubmit2, controller: controller2} = useForm({onSubmit, $values: $values2});
+const RemoteSubmit = ({ onSubmit }) => {
+  const { handleSubmit: handleSubmit1, controller: controller1 } = useForm({ onSubmit, $values: $values1 });
+  const { handleSubmit: handleSubmit2, controller: controller2 } = useForm({ onSubmit, $values: $values2 });
   const [formValue, setFormValue] = useState(true);
 
   const onClickToggle = () => {
@@ -52,19 +49,13 @@ const RemoteSubmit = ({onSubmit}) => {
       {formValue ? (
         <form onSubmit={handleSubmit1} role="form" key={1}>
           form 1
-          <Input
-            label="Name"
-            controller={controller1({name: 'name'})}
-          />
+          <Input label="Name" controller={controller1({ name: 'name' })} />
           <button type="submit">submit</button>
         </form>
       ) : (
         <form onSubmit={handleSubmit2} role="form" key={2}>
           form 2
-          <Input
-            label="Name"
-            controller={controller2({name: 'name'})}
-          />
+          <Input label="Name" controller={controller2({ name: 'name' })} />
           <button type="submit">submit</button>
         </form>
       )}
@@ -77,15 +68,15 @@ describe('SeveralUseForm', () => {
     render(<RemoteSubmit onSubmit={() => {}} />);
     const toggleForm = screen.getByText('toggle form');
     let input = screen.getByPlaceholderText('Name');
-    fireEvent.change(input, {target: {value: 'test'}});
+    fireEvent.change(input, { target: { value: 'test' } });
     fireEvent.click(toggleForm);
     input = screen.getByPlaceholderText('Name');
-    fireEvent.change(input, {target: {value: 't'}});
+    fireEvent.change(input, { target: { value: 't' } });
     const values1 = $values1.getState();
     const values2 = $values2.getState();
     const form = screen.getByRole('form');
-    expect(values1).toStrictEqual({name: 'test'});
-    expect(values2).toStrictEqual({name: 't'});
+    expect(values1).toStrictEqual({ name: 'test' });
+    expect(values2).toStrictEqual({ name: 't' });
     expect(form).toMatchSnapshot();
   });
 });

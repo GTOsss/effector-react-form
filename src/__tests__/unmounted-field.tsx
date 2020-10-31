@@ -1,16 +1,16 @@
 import React from 'react';
-import {render, fireEvent, screen} from '@testing-library/react';
-import {createStore, createEvent} from 'effector';
-import {useStore} from 'effector-react';
-import {useForm} from '../';
-import {Controller, FormState} from '../../index';
-import {setIn, removeFromInlineMap} from '../utils/object-manager';
+import { render, fireEvent, screen } from '@testing-library/react';
+import { createStore, createEvent } from 'effector';
+import { useStore } from 'effector-react';
+import { useForm } from '../';
+import { Controller, FormState } from '../../index';
+import { setIn, removeFromInlineMap } from '../utils/object-manager';
 
 const renderForm = () => {
-  const validateRequired = (value) => value ? undefined : 'Field is required';
+  const validateRequired = (value) => (value ? undefined : 'Field is required');
 
   type Values = {
-    fields: Array<{value: string, id: number | string}>,
+    fields: Array<{ value: string; id: number | string }>;
   };
 
   const removeFirstElement = createEvent();
@@ -18,8 +18,8 @@ const renderForm = () => {
   const $fieldsInline = createStore({});
   const $values = createStore<Values>({
     fields: [
-      {value: '', id: 1},
-      {value: '', id: 2},
+      { value: '', id: 1 },
+      { value: '', id: 2 },
     ],
   });
 
@@ -35,52 +35,46 @@ const renderForm = () => {
   const $errorsInline = createStore({});
 
   interface InputProps {
-    controller: Controller,
-    label: string,
+    controller: Controller;
+    label: string;
   }
 
-  const Input: React.FC<InputProps> = ({
-    controller,
-    label,
-  }) => {
-    const {input, fieldState, form, error} = controller();
+  const Input: React.FC<InputProps> = ({ controller, label }) => {
+    const { input, fieldState, form, error } = controller();
 
     const isShowError = form.submitted || form.hasOuterError || fieldState.blurred;
 
     return (
       <div role="wrapper-for-input" className="input-wrap">
         <label>{label}</label>
-        <input
-          {...input}
-          value={input.value || ''}
-          role="textbox"
-          className="input"
-          placeholder={label}
-        />
-        {isShowError && error && (<span>{error}</span>)}
+        <input {...input} value={input.value || ''} role="textbox" className="input" placeholder={label} />
+        {isShowError && error && <span>{error}</span>}
       </div>
     );
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller} = useForm<Values>({$values, $fieldsInline, $form, $errorsInline, onSubmit: () => {}});
+    const { handleSubmit, controller } = useForm<Values>({
+      $values,
+      $fieldsInline,
+      $form,
+      $errorsInline,
+      onSubmit: () => {},
+    });
 
-    const {fields} = useStore($values);
+    const { fields } = useStore($values);
 
     return (
       <form onSubmit={handleSubmit}>
         {fields.map((el, i) => (
           <Input
             key={el.id}
-            controller={controller({name: `fields[${i}].value`, validate: validateRequired})}
+            controller={controller({ name: `fields[${i}].value`, validate: validateRequired })}
             label={`value № ${i}`}
           />
         ))}
         <button type="submit">submit</button>
-        <button
-          type="button"
-          onClick={() => removeFirstElement()}
-        >
+        <button type="button" onClick={() => removeFirstElement()}>
           remove first element
         </button>
       </form>
@@ -122,7 +116,7 @@ describe('UnmountField', () => {
   });
 
   test('$form after submit and removed', () => {
-    const {$form} = renderForm();
+    const { $form } = renderForm();
     const submit = screen.getByText('submit');
     fireEvent.click(submit);
     const remove = screen.getByText('remove first element');
@@ -131,7 +125,7 @@ describe('UnmountField', () => {
   });
 
   test('$errorsInline after submit > removed', () => {
-    const {$errorsInline} = renderForm();
+    const { $errorsInline } = renderForm();
     const submit = screen.getByText('submit');
     fireEvent.click(submit);
     const remove = screen.getByText('remove first element');
@@ -140,7 +134,7 @@ describe('UnmountField', () => {
   });
 
   test('$errorsInline after submit > removed > submit', () => {
-    const {$errorsInline} = renderForm();
+    const { $errorsInline } = renderForm();
     const submit = screen.getByText('submit');
     fireEvent.click(submit);
     const remove = screen.getByText('remove first element');
@@ -150,25 +144,23 @@ describe('UnmountField', () => {
   });
 
   test('$values after change 1,2 > removed', () => {
-    const {$values} = renderForm();
+    const { $values } = renderForm();
     const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[0], {target: {value: 'value 1'}});
-    fireEvent.change(inputs[1], {target: {value: 'value 2'}});
+    fireEvent.change(inputs[0], { target: { value: 'value 1' } });
+    fireEvent.change(inputs[1], { target: { value: 'value 2' } });
     const remove = screen.getByText('remove first element');
     fireEvent.click(remove);
     expect($values.getState()).toMatchSnapshot();
   });
 
   test('$values after removed > onChange("test")', () => {
-    const {$values} = renderForm();
+    const { $values } = renderForm();
     const submit = screen.getByText('submit');
     fireEvent.click(submit);
     const remove = screen.getByText('remove first element');
     fireEvent.click(remove);
     const input = screen.getByRole('textbox');
-    fireEvent.change(input, {target: {value: 'test'}});
+    fireEvent.change(input, { target: { value: 'test' } });
     expect($values.getState()).toMatchSnapshot();
   });
 });
-
-

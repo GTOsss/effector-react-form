@@ -1,16 +1,21 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   ControllerHof,
   ControllerInjectedResult,
   FieldState,
   FormState,
   ResultHook,
-  UseFormParams, AnyState, ErrorsInline, FieldsInline, SetOrDeleteErrorParams, Message,
+  UseFormParams,
+  AnyState,
+  ErrorsInline,
+  FieldsInline,
+  SetOrDeleteErrorParams,
+  Message,
 } from '../index';
-import {createStore, createEvent, sample, combine} from 'effector';
-import {useStoreMap} from 'effector-react';
-import {getValue} from './utils/dom-helper';
-import {setIn, getIn, deleteIn, makeConsistentKey} from './utils/object-manager';
+import { createStore, createEvent, sample, combine } from 'effector';
+import { useStoreMap } from 'effector-react';
+import { getValue } from './utils/dom-helper';
+import { setIn, getIn, deleteIn, makeConsistentKey } from './utils/object-manager';
 
 export const initialFieldState: FieldState = {
   _type: 'fieldMeta',
@@ -41,16 +46,18 @@ const useForm = <Values extends AnyState>({
   submit: submitProp,
   mapSubmit,
 }: UseFormParams<Values> = {}): ResultHook<Values> => {
-
   const willMount = useRef(true);
 
-  const setValue = useMemo(() => createEvent<{field: string, value: any}>(`hookForm_SetValue`), []);
+  const setValue = useMemo(() => createEvent<{ field: string; value: any }>(`hookForm_SetValue`), []);
   const setOrDeleteError = useMemo(() => createEvent<SetOrDeleteErrorParams>(`hookForm_SetOrDeleteError`), []);
   const setErrorsInlineState = useMemo(() => createEvent<ErrorsInline>(`hookForm_SetErrorsInlineState`), []);
-  const setFieldState = useMemo(() => createEvent<{field: string, state: FieldState}>(`hookForm_SetFieldState`), []);
+  const setFieldState = useMemo(() => createEvent<{ field: string; state: FieldState }>(`hookForm_SetFieldState`), []);
   const setSubmitted = useMemo(() => createEvent<boolean>(`hookForm_SetSubmitted`), []);
   const resetOuterFieldStateFlags = useMemo(() => createEvent('hookForm_ResetOuterFieldStateFlags'), []);
-  const setOrDeleteOuterError = useMemo(() => createEvent<{field: string, error: Message}>('hookForm_SetOrDeleteOuterError'), []);
+  const setOrDeleteOuterError = useMemo(
+    () => createEvent<{ field: string; error: Message }>('hookForm_SetOrDeleteOuterError'),
+    [],
+  );
   const setOuterErrorsInlineState = useMemo(() => createEvent<ErrorsInline>('hookForm_SetOuterErrorsInlineState'), []);
   const validateForm = useMemo(() => createEvent('hookForm_ValidateForm'), []);
   const submit = useMemo(() => submitProp || createEvent('hookForm_Submit'), []);
@@ -62,15 +69,15 @@ const useForm = <Values extends AnyState>({
   const $form = useMemo(() => $formProp || createStore<FormState>(initialFormState), []);
 
   if (willMount.current) {
-    $fieldsInline.on(setFieldState, (state, {field, state: fieldState}) => {
-      return ({...state, [field]: fieldState});
+    $fieldsInline.on(setFieldState, (state, { field, state: fieldState }) => {
+      return { ...state, [field]: fieldState };
     });
   }
 
   const validateByValues = useCallback((values) => {
     const errorsInlineState = {};
 
-    Object.entries($fieldsInline.getState()).forEach(([name, {validate}]) => {
+    Object.entries($fieldsInline.getState()).forEach(([name, { validate }]) => {
       const error = validate && validate(getIn(values, name));
       if (error) {
         errorsInlineState[name] = validate && validate(getIn(values, name));
@@ -78,7 +85,7 @@ const useForm = <Values extends AnyState>({
     });
 
     if (validate) {
-      const formLevelErrorsInlineState = validate({values, errorsInline: errorsInlineState});
+      const formLevelErrorsInlineState = validate({ values, errorsInline: errorsInlineState });
       Object.entries(formLevelErrorsInlineState).forEach(([name, error]) => {
         if (error) {
           errorsInlineState[name] = error;
@@ -104,48 +111,54 @@ const useForm = <Values extends AnyState>({
       target: $errorsInline,
     });
 
-    $values.on(setValue, (state, {field, value}) => setIn(state, field, value));
+    $values.on(setValue, (state, { field, value }) => setIn(state, field, value));
 
-    $errorsInline.on(setOrDeleteError, (state, {field, error}) =>
-      error ? {...state, [field]: error} : deleteIn(state, field, false, false));
+    $errorsInline.on(setOrDeleteError, (state, { field, error }) =>
+      error ? { ...state, [field]: error } : deleteIn(state, field, false, false),
+    );
 
     $errorsInline.on(setErrorsInlineState, (_, errorsInline) => errorsInline);
 
-    $outerErrorsInline.on(setOrDeleteOuterError, (state, {field, error}) =>
-      error ? {...state, [field]: error} : deleteIn(state, field, false, false));
+    $outerErrorsInline.on(setOrDeleteOuterError, (state, { field, error }) =>
+      error ? { ...state, [field]: error } : deleteIn(state, field, false, false),
+    );
 
     $outerErrorsInline.on(setOuterErrorsInlineState, (_, errorsInline) => errorsInline);
 
-    $fieldsInline.on(setOrDeleteOuterError, (state, {field}) => ({
+    $fieldsInline.on(setOrDeleteOuterError, (state, { field }) => ({
       ...state,
       [field]: {
         ...state[field],
         touchedAfterOuterError: false,
         changedAfterOuterError: false,
         blurredAfterOuterError: false,
-      }
-    }))
+      },
+    }));
 
     $fieldsInline.on(resetOuterFieldStateFlags, (state) => {
       const newState = {};
-      Object.entries(state).forEach(([field, state]) => (
-        newState[field] = {
-          ...state,
-          touchedAfterOuterError: false,
-          changedAfterOuterError: false,
-          blurredAfterOuterError: false,
-        }
-      ));
+      Object.entries(state).forEach(
+        ([field, state]) =>
+          (newState[field] = {
+            ...state,
+            touchedAfterOuterError: false,
+            changedAfterOuterError: false,
+            blurredAfterOuterError: false,
+          }),
+      );
       return newState;
     });
 
-    $form.on($outerErrorsInline.updates, (state, outerErrors) =>
-      ({...state, hasOuterError: Boolean(Object.keys(outerErrors).length)}));
+    $form.on($outerErrorsInline.updates, (state, outerErrors) => ({
+      ...state,
+      hasOuterError: Boolean(Object.keys(outerErrors).length),
+    }));
 
     $form.on(setSubmitted, (state, value) => setIn(state, 'submitted', value));
 
     $form.on($errorsInline.updates, (state, errorsInline) =>
-      setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)));
+      setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)),
+    );
 
     validateForm();
 
@@ -177,10 +190,7 @@ const useForm = <Values extends AnyState>({
     };
   }, []);
 
-  const controller = useCallback<ControllerHof>(({
-    name: nameProp,
-    validate,
-  }) => {
+  const controller = useCallback<ControllerHof>(({ name: nameProp, validate }) => {
     return (): ControllerInjectedResult => {
       const refName = useRef<string>(makeConsistentKey(nameProp));
       refName.current = makeConsistentKey(nameProp);
@@ -205,9 +215,9 @@ const useForm = <Values extends AnyState>({
 
           if (mapSubmit) {
             const $mappedAllFormState = $allFormState.map(mapSubmit);
-            $mappedAllFormState.watch(onChangeForm)
+            $mappedAllFormState.watch(onChangeForm);
           } else {
-            $allFormState.watch(onChangeForm)
+            $allFormState.watch(onChangeForm);
           }
         }
 
@@ -219,15 +229,16 @@ const useForm = <Values extends AnyState>({
             outerErrorsInline: $outerErrorsInline,
           }),
           clock: onFocusBrowser,
-          fn: ({fieldsInline, outerErrorsInline}) => ({
-            ...fieldsInline, [refName.current]: {
+          fn: ({ fieldsInline, outerErrorsInline }) => ({
+            ...fieldsInline,
+            [refName.current]: {
               ...fieldsInline[refName.current],
               active: true,
               touched: true,
               touchedAfterOuterError: Boolean(outerErrorsInline[refName.current]),
             },
           }),
-          target: $fieldsInline
+          target: $fieldsInline,
         });
         sample({
           source: combine({
@@ -235,15 +246,15 @@ const useForm = <Values extends AnyState>({
             outerErrorsInline: $outerErrorsInline,
           }),
           clock: onChangeBrowser,
-          fn: ({fieldsInline, outerErrorsInline}) => ({
+          fn: ({ fieldsInline, outerErrorsInline }) => ({
             ...fieldsInline,
             [refName.current]: {
               ...fieldsInline[refName.current],
               changed: true,
-              changedAfterOuterError: Boolean(outerErrorsInline[refName.current])
+              changedAfterOuterError: Boolean(outerErrorsInline[refName.current]),
             },
           }),
-          target: $fieldsInline
+          target: $fieldsInline,
         });
         sample({
           source: combine({
@@ -251,19 +262,20 @@ const useForm = <Values extends AnyState>({
             outerErrorsInline: $outerErrorsInline,
           }),
           clock: onBlurBrowser,
-          fn: ({fieldsInline, outerErrorsInline}) => ({
-            ...fieldsInline, [refName.current]: {
+          fn: ({ fieldsInline, outerErrorsInline }) => ({
+            ...fieldsInline,
+            [refName.current]: {
               ...fieldsInline[refName.current],
               active: false,
               blurred: true,
-              blurredAfterOuterError: Boolean(outerErrorsInline[refName.current])
+              blurredAfterOuterError: Boolean(outerErrorsInline[refName.current]),
             },
           }),
-          target: $fieldsInline
+          target: $fieldsInline,
         });
 
         if (!$fieldsInline.getState()[refName.current]) {
-          setFieldState({field: refName.current, state: {...initialFieldState, validate}});
+          setFieldState({ field: refName.current, state: { ...initialFieldState, validate } });
         }
 
         return () => {
@@ -317,7 +329,7 @@ const useForm = <Values extends AnyState>({
       };
 
       const isShowInnerError = (formState.submitted || fieldState.blurred) && Boolean(innerError);
-      const isShowOuterError = (!fieldState.changedAfterOuterError) && Boolean(outerError);
+      const isShowOuterError = !fieldState.changedAfterOuterError && Boolean(outerError);
       const isShowError = isShowInnerError || isShowOuterError;
 
       return {

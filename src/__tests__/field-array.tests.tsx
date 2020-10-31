@@ -1,31 +1,28 @@
-import {Controller} from '../../index';
+import { Controller } from '../../index';
 import React from 'react';
-import {useForm, useFieldArray} from '../index';
-import {render, screen, fireEvent} from '@testing-library/react';
-import {createEvent, createStore} from 'effector';
+import { useForm, useFieldArray } from '../index';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { createEvent, createStore } from 'effector';
 
 let counterGlobal = 0;
-const getId = () => counterGlobal += 1;
+const getId = () => (counterGlobal += 1);
 
 const reset = createEvent();
 
-reset.watch(() => counterGlobal = 0);
+reset.watch(() => (counterGlobal = 0));
 
 const $values = createStore({}).reset(reset);
 const $fieldsInline = createStore({}).reset(reset);
 
 interface InputProps {
-  controller: Controller,
-  label: string,
+  controller: Controller;
+  label: string;
 }
 
-const validateRequired = (value) => value ? undefined : 'Field is required';
+const validateRequired = (value) => (value ? undefined : 'Field is required');
 
-const Input: React.FC<InputProps> = ({
-  controller,
-  label,
-}) => {
-  const {input, fieldState, form, error} = controller();
+const Input: React.FC<InputProps> = ({ controller, label }) => {
+  const { input, fieldState, form, error } = controller();
 
   const isShowError = error && (form.submitted || form.hasOuterError || fieldState.blurred);
 
@@ -39,25 +36,25 @@ const Input: React.FC<InputProps> = ({
         className={`input${isShowError ? ' input-error' : ''}`}
         placeholder={label}
       />
-      {isShowError && (<span>{error}</span>)}
+      {isShowError && <span>{error}</span>}
     </div>
   );
 };
 
-const FormItemsInner = ({controller, name, onPushInner}) => {
-  const {map, push, remove} = useFieldArray({name, $values, $fieldsInline});
+const FormItemsInner = ({ controller, name, onPushInner }) => {
+  const { map, push, remove } = useFieldArray({ name, $values, $fieldsInline });
 
   return (
     <div className="formItemsInner" role="formItemsInner">
-      {map(({formItemName, index, field}) => (
+      {map(({ formItemName, index, field }) => (
         <div key={field.id} className="formItem" role="formItemInner">
           <Input
             label="Username"
-            controller={controller({name: `${formItemName}.username`, validate: validateRequired})}
+            controller={controller({ name: `${formItemName}.username`, validate: validateRequired })}
           />
           <Input
             label="First name"
-            controller={controller({name: `${formItemName}.profile.firstName`, validate: validateRequired})}
+            controller={controller({ name: `${formItemName}.profile.firstName`, validate: validateRequired })}
           />
           <button type="button" onClick={() => remove(index)}>
             remove form item inner
@@ -71,20 +68,20 @@ const FormItemsInner = ({controller, name, onPushInner}) => {
   );
 };
 
-const FormItems = ({controller, name, onPush, onPushInner}) => {
-  const {map, push, remove} = useFieldArray({name, $values, $fieldsInline});
+const FormItems = ({ controller, name, onPush, onPushInner }) => {
+  const { map, push, remove } = useFieldArray({ name, $values, $fieldsInline });
 
   return (
     <div className="formItems" role="formItems">
-      {map(({formItemName, index, field}) => (
+      {map(({ formItemName, index, field }) => (
         <div key={field.id} className="formItem" role="formItem">
           <Input
             label="Username"
-            controller={controller({name: `${formItemName}.username`, validate: validateRequired})}
+            controller={controller({ name: `${formItemName}.username`, validate: validateRequired })}
           />
           <Input
             label="First name"
-            controller={controller({name: `${formItemName}.profile.firstName`, validate: validateRequired})}
+            controller={controller({ name: `${formItemName}.profile.firstName`, validate: validateRequired })}
           />
 
           <FormItemsInner controller={controller} name={`${formItemName}.inners`} onPushInner={onPushInner} />
@@ -100,8 +97,8 @@ const FormItems = ({controller, name, onPush, onPushInner}) => {
   );
 };
 
-const FieldArray = ({onPush, onPushInner}) => {
-  const {handleSubmit, controller} = useForm({
+const FieldArray = ({ onPush, onPushInner }) => {
+  const { handleSubmit, controller } = useForm({
     onSubmit: () => null,
     $values,
     $fieldsInline,
@@ -125,7 +122,7 @@ describe('FieldArray', () => {
 
   test('add form item with values > render', () => {
     reset();
-    render(<FieldArray onPush={(push) => push({id: getId(), username: 'gto', profile: {firstName: 'Timofey'}})} />);
+    render(<FieldArray onPush={(push) => push({ id: getId(), username: 'gto', profile: { firstName: 'Timofey' } })} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     const formItems = screen.getAllByRole('formItems');
@@ -134,7 +131,7 @@ describe('FieldArray', () => {
 
   test('add form item with values > $values', () => {
     reset();
-    render(<FieldArray onPush={(push) => push({id: getId(), username: 'gto', profile: {firstName: 'Timofey'}})} />);
+    render(<FieldArray onPush={(push) => push({ id: getId(), username: 'gto', profile: { firstName: 'Timofey' } })} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     expect($values.getState()).toMatchSnapshot();
@@ -143,9 +140,9 @@ describe('FieldArray', () => {
   test('add form item with values (x3) > $values', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
-      {id: getId(), username: '2'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
+      { id: getId(), username: '2' },
     ];
 
     let counter = 0;
@@ -163,9 +160,9 @@ describe('FieldArray', () => {
   test('add form item with values (x3) > remove(1) > $values', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
-      {id: getId(), username: '2'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
+      { id: getId(), username: '2' },
     ];
 
     let counter = 0;
@@ -185,9 +182,9 @@ describe('FieldArray', () => {
   test('add form item with values (x3) > remove(1) > $fieldsInline', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
-      {id: getId(), username: '2'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
+      { id: getId(), username: '2' },
     ];
 
     let counter = 0;
@@ -207,9 +204,9 @@ describe('FieldArray', () => {
   test('add form item with values (x3) > add inner (x3) > $values', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
-      {id: getId(), username: '2'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
+      { id: getId(), username: '2' },
     ];
     let counter = 0;
     const onPush = (push) => {
@@ -217,9 +214,9 @@ describe('FieldArray', () => {
     };
 
     const formItemsInner = [
-      {id: getId(), username: 'inner 0'},
-      {id: getId(), username: 'inner 1'},
-      {id: getId(), username: 'inner 2'},
+      { id: getId(), username: 'inner 0' },
+      { id: getId(), username: 'inner 1' },
+      { id: getId(), username: 'inner 2' },
     ];
     let counterInner = 0;
     const onPushInner = (push) => {
@@ -241,9 +238,9 @@ describe('FieldArray', () => {
   test('add form item with values (x3) > add inner (x3) > render', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
-      {id: getId(), username: '2'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
+      { id: getId(), username: '2' },
     ];
     let counter = 0;
     const onPush = (push) => {
@@ -251,9 +248,9 @@ describe('FieldArray', () => {
     };
 
     const formItemsInner = [
-      {id: getId(), username: 'inner 0'},
-      {id: getId(), username: 'inner 1'},
-      {id: getId(), username: 'inner 2'},
+      { id: getId(), username: 'inner 0' },
+      { id: getId(), username: 'inner 1' },
+      { id: getId(), username: 'inner 2' },
     ];
     let counterInner = 0;
     const onPushInner = (push) => {
@@ -276,9 +273,9 @@ describe('FieldArray', () => {
   test('add form item with values (x3) > add inner (x3) > remove form item 1 > $values', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
-      {id: getId(), username: '2'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
+      { id: getId(), username: '2' },
     ];
     let counter = 0;
     const onPush = (push) => {
@@ -286,9 +283,9 @@ describe('FieldArray', () => {
     };
 
     const formItemsInner = [
-      {id: getId(), username: 'inner 0'},
-      {id: getId(), username: 'inner 1'},
-      {id: getId(), username: 'inner 2'},
+      { id: getId(), username: 'inner 0' },
+      { id: getId(), username: 'inner 1' },
+      { id: getId(), username: 'inner 2' },
     ];
     let counterInner = 0;
     const onPushInner = (push) => {
@@ -312,9 +309,9 @@ describe('FieldArray', () => {
   test('add form item with values (x3) > add inner (x3) > remove form item 1 > render', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
-      {id: getId(), username: '2'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
+      { id: getId(), username: '2' },
     ];
     let counter = 0;
     const onPush = (push) => {
@@ -322,9 +319,9 @@ describe('FieldArray', () => {
     };
 
     const formItemsInner = [
-      {id: getId(), username: 'inner 0'},
-      {id: getId(), username: 'inner 1'},
-      {id: getId(), username: 'inner 2'},
+      { id: getId(), username: 'inner 0' },
+      { id: getId(), username: 'inner 1' },
+      { id: getId(), username: 'inner 2' },
     ];
     let counterInner = 0;
     const onPushInner = (push) => {
@@ -349,8 +346,8 @@ describe('FieldArray', () => {
   test('add form item with values (x2) > remove 1 > add inner 0 (x1) > $values', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
     ];
     let counter = 0;
     const onPush = (push) => {
@@ -358,8 +355,8 @@ describe('FieldArray', () => {
     };
 
     const formItemsInner = [
-      {id: getId(), username: 'inner 0'},
-      {id: getId(), username: 'inner 1'},
+      { id: getId(), username: 'inner 0' },
+      { id: getId(), username: 'inner 1' },
     ];
     let counterInner = 0;
     const onPushInner = (push) => {
@@ -380,8 +377,8 @@ describe('FieldArray', () => {
   test('add form item with values (x2) > remove 1 > add inner 0 (x1) > render', () => {
     reset();
     const formItems = [
-      {id: getId(), username: '0'},
-      {id: getId(), username: '1'},
+      { id: getId(), username: '0' },
+      { id: getId(), username: '1' },
     ];
     let counter = 0;
     const onPush = (push) => {
@@ -389,8 +386,8 @@ describe('FieldArray', () => {
     };
 
     const formItemsInner = [
-      {id: getId(), username: 'inner 0'},
-      {id: getId(), username: 'inner 1'},
+      { id: getId(), username: 'inner 0' },
+      { id: getId(), username: 'inner 1' },
     ];
     let counterInner = 0;
     const onPushInner = (push) => {

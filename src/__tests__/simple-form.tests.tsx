@@ -1,30 +1,27 @@
 import React from 'react';
-import {createStore} from 'effector';
-import {render, fireEvent, screen} from '@testing-library/react';
-import {useForm} from '../';
-import {Controller} from '../../index';
+import { createStore } from 'effector';
+import { render, fireEvent, screen } from '@testing-library/react';
+import { useForm } from '../';
+import { Controller } from '../../index';
 
 interface Values {
-  username?: string,
+  username?: string;
   profile?: {
-    firstName?: string,
-    lastName?: string,
-  }
+    firstName?: string;
+    lastName?: string;
+  };
 }
 
 interface InputProps {
-  controller: Controller,
-  label: string,
+  controller: Controller;
+  label: string;
 }
 
 const renderForm = (inputRender?) => {
   const $fieldsInline = createStore({});
 
-  const Input: React.FC<InputProps> = ({
-    controller,
-    label,
-  }) => {
-    const {input, error, isShowError} = controller();
+  const Input: React.FC<InputProps> = ({ controller, label }) => {
+    const { input, error, isShowError } = controller();
 
     if (inputRender) {
       inputRender(input.name);
@@ -33,42 +30,29 @@ const renderForm = (inputRender?) => {
     return (
       <div role="wrapper-for-input" className="input-wrap">
         <label>{label}</label>
-        <input
-          {...input}
-          value={input.value || ''}
-          role="textbox"
-          className="input"
-          placeholder={label}
-        />
-        {isShowError && (<span>{error}</span>)}
+        <input {...input} value={input.value || ''} role="textbox" className="input" placeholder={label} />
+        {isShowError && <span>{error}</span>}
       </div>
     );
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller, setOrDeleteOuterError} = useForm({$fieldsInline, onSubmit: () => {}});
+    const { handleSubmit, controller, setOrDeleteOuterError } = useForm({ $fieldsInline, onSubmit: () => {} });
 
     return (
       <form onSubmit={handleSubmit}>
-        <Input
-          label="Username"
-          controller={controller({name: 'username'})}
-        />
-        <Input
-          label="First name"
-          controller={controller({name: 'profile.firstName'})}
-        />
-        <Input
-          label="Last name"
-          controller={controller({name: 'profile.lastName'})}
-        />
+        <Input label="Username" controller={controller({ name: 'username' })} />
+        <Input label="First name" controller={controller({ name: 'profile.firstName' })} />
+        <Input label="Last name" controller={controller({ name: 'profile.lastName' })} />
         <button type="submit">submit</button>
         <button
           type="button"
-          onClick={() => setOrDeleteOuterError({
-            field: 'profile.firstName',
-            error: 'First name is not valid',
-          })}
+          onClick={() =>
+            setOrDeleteOuterError({
+              field: 'profile.firstName',
+              error: 'First name is not valid',
+            })
+          }
         >
           set error for firstName
         </button>
@@ -78,13 +62,13 @@ const renderForm = (inputRender?) => {
 
   render(<SimpleForm />);
 
-  return {$fieldsInline};
+  return { $fieldsInline };
 };
 
 describe('SimpleForm', () => {
   test('onChange username, test performance', () => {
     const mapRenders = {
-      'username': 0,
+      username: 0,
       'profile.firstName': 0,
       'profile.lastName': 0,
     };
@@ -93,23 +77,23 @@ describe('SimpleForm', () => {
     };
     renderForm(renderCallback);
     const input = screen.getByPlaceholderText('Username');
-    fireEvent.change(input, {target: {value: 't'}});
-    fireEvent.change(input, {target: {value: 'te'}});
-    fireEvent.change(input, {target: {value: 'tes'}});
-    fireEvent.change(input, {target: {value: 'test'}});
-    fireEvent.change(input, {target: {value: 'tests'}});
+    fireEvent.change(input, { target: { value: 't' } });
+    fireEvent.change(input, { target: { value: 'te' } });
+    fireEvent.change(input, { target: { value: 'tes' } });
+    fireEvent.change(input, { target: { value: 'test' } });
+    fireEvent.change(input, { target: { value: 'tests' } });
     expect(mapRenders).toMatchSnapshot();
   });
 
   test('$fieldsInline after render', () => {
-    const {$fieldsInline} = renderForm();
+    const { $fieldsInline } = renderForm();
     expect($fieldsInline.getState()).toMatchSnapshot();
   });
 
   test('onChange username', () => {
     renderForm();
     const input = screen.getByPlaceholderText('Username');
-    fireEvent.change(input, {target: {value: 'test'}});
+    fireEvent.change(input, { target: { value: 'test' } });
     const inputs = screen.getAllByRole('textbox');
     expect(inputs).toMatchSnapshot();
   });
@@ -117,7 +101,7 @@ describe('SimpleForm', () => {
   test('onChange profile.fistName', () => {
     renderForm();
     const input = screen.getByPlaceholderText('First name');
-    fireEvent.change(input, {target: {value: 'test'}});
+    fireEvent.change(input, { target: { value: 'test' } });
     const inputs = screen.getAllByRole('textbox');
     expect(inputs).toMatchSnapshot();
   });
@@ -147,13 +131,13 @@ describe('SimpleForm', () => {
     const buttonSubmit = screen.getByText('submit');
     fireEvent.click(buttonSubmit);
     const inputFirstName = screen.getByPlaceholderText('First name');
-    fireEvent.change(inputFirstName, {target: {value: 't'}});
+    fireEvent.change(inputFirstName, { target: { value: 't' } });
     const inputs = screen.getAllByRole('wrapper-for-input');
     expect(inputs).toMatchSnapshot();
   });
 
   test('$fieldsInline after setError profile.firstName and focus firstName', () => {
-    const {$fieldsInline} = renderForm();
+    const { $fieldsInline } = renderForm();
     const button = screen.getByText('set error for firstName');
     fireEvent.click(button);
     const inputFirstName = screen.getByPlaceholderText('First name');
@@ -161,6 +145,3 @@ describe('SimpleForm', () => {
     expect($fieldsInline.getState()).toMatchSnapshot();
   });
 });
-
-
-

@@ -1,7 +1,7 @@
-import {useStoreMap} from 'effector-react';
-import {ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams} from '../index';
-import {getIn} from './utils/object-manager';
-import {initialFieldState} from './use-form';
+import { useStoreMap } from 'effector-react';
+import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams } from '../index';
+import { getIn } from './utils/object-manager';
+import { initialFieldState } from './use-form';
 
 const useError = <Values>({
   name,
@@ -57,7 +57,7 @@ const useError = <Values>({
   };
 
   const isShowInnerError = (formState.submitted || fieldState.blurred) && Boolean(innerError);
-  const isShowOuterError = (!fieldState.changedAfterOuterError) && Boolean(outerError);
+  const isShowOuterError = !fieldState.changedAfterOuterError && Boolean(outerError);
   const isShowError = isShowInnerError || isShowOuterError;
 
   return {

@@ -1,70 +1,57 @@
 import React from 'react';
-import {createStore} from 'effector';
-import {render, fireEvent, screen} from '@testing-library/react';
-import {useForm} from '../';
-import {Controller, OnSubmit} from '../../index';
+import { createStore } from 'effector';
+import { render, fireEvent, screen } from '@testing-library/react';
+import { useForm } from '../';
+import { Controller, OnSubmit } from '../../index';
 
 interface Values {
-  username?: string,
+  username?: string;
   profile?: {
-    firstName?: string,
-    lastName?: string,
-  }
+    firstName?: string;
+    lastName?: string;
+  };
 }
 
 interface InputProps {
-  controller: Controller,
-  label: string,
+  controller: Controller;
+  label: string;
 }
 
 const renderForm = (onChange) => {
   const $fieldsInline = createStore({});
 
-  const Input: React.FC<InputProps> = ({
-    controller,
-    label,
-  }) => {
-    const {input, error, isShowError} = controller();
+  const Input: React.FC<InputProps> = ({ controller, label }) => {
+    const { input, error, isShowError } = controller();
 
     return (
       <div role="wrapper-for-input" className="input-wrap">
         <label>{label}</label>
-        <input
-          {...input}
-          value={input.value || ''}
-          role="textbox"
-          className="input"
-          placeholder={label}
-        />
-        {isShowError && (<span>{error}</span>)}
+        <input {...input} value={input.value || ''} role="textbox" className="input" placeholder={label} />
+        {isShowError && <span>{error}</span>}
       </div>
     );
   };
 
   const SimpleForm = () => {
-    const {handleSubmit, controller, setOrDeleteOuterError} = useForm({$fieldsInline, onChange});
+    const { handleSubmit, controller, setOrDeleteOuterError } = useForm({ $fieldsInline, onChange });
 
     return (
       <form onSubmit={handleSubmit}>
         <Input
           label="Username"
-          controller={controller({name: 'username', validate: (value) => value === 't' ? 'error' : undefined})}
+          controller={controller({ name: 'username', validate: (value) => (value === 't' ? 'error' : undefined) })}
         />
-        <Input
-          label="First name"
-          controller={controller({name: 'profile.firstName'})}
-        />
-        <Input
-          label="Last name"
-          controller={controller({name: 'profile.lastName'})}
-        />
+        <Input label="First name" controller={controller({ name: 'profile.firstName' })} />
+        <Input label="Last name" controller={controller({ name: 'profile.lastName' })} />
         <button type="submit">submit</button>
         <button
           type="button"
-          onClick={() => setOrDeleteOuterError({
-            field: 'profile.firstName',
-            error: 'First name is not valid',
-          })}
+          onClick={() =>
+            setOrDeleteOuterError({
+              field: 'profile.firstName',
+              error: 'First name is not valid',
+            })
+          }
         >
           set error for firstName
         </button>
@@ -74,33 +61,30 @@ const renderForm = (onChange) => {
 
   render(<SimpleForm />);
 
-  return {$fieldsInline};
+  return { $fieldsInline };
 };
 
 describe('onChange', () => {
   test('onChange after change("t")', () => {
     const onChange = (values) => values;
-    const mockOnChange = jest.fn(onChange)
+    const mockOnChange = jest.fn(onChange);
 
     renderForm(mockOnChange);
     const input = screen.getByPlaceholderText('Username');
-    fireEvent.change(input, {target: {value: 't'}});
+    fireEvent.change(input, { target: { value: 't' } });
     expect(mockOnChange.mock.calls.length).toBe(1);
     expect(mockOnChange.mock.results[0]).toMatchSnapshot();
   });
 
   test('onChange after change("te")', () => {
     const onChange = (values) => values;
-    const mockOnChange = jest.fn(onChange)
+    const mockOnChange = jest.fn(onChange);
 
     renderForm(mockOnChange);
     const input = screen.getByPlaceholderText('Username');
-    fireEvent.change(input, {target: {value: 't'}});
-    fireEvent.change(input, {target: {value: 'te'}});
+    fireEvent.change(input, { target: { value: 't' } });
+    fireEvent.change(input, { target: { value: 'te' } });
     expect(mockOnChange.mock.calls.length).toBe(2);
     expect(mockOnChange.mock.results[1]).toMatchSnapshot();
   });
 });
-
-
-

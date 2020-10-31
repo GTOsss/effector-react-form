@@ -1,22 +1,22 @@
-import {Controller, OnSubmit} from '../../index';
+import { Controller, OnSubmit } from '../../index';
 import React from 'react';
-import {useForm} from '../index';
-import {render, screen, fireEvent} from '@testing-library/react';
+import { useForm } from '../index';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 interface Values {
-  username?: string,
+  username?: string;
   profile?: {
-    firstName?: string,
-    lastName?: string,
-  }
+    firstName?: string;
+    lastName?: string;
+  };
 }
 
 interface InputProps {
-  controller: Controller,
-  label: string,
+  controller: Controller;
+  label: string;
 }
 
-const formValidate = ({values}) => {
+const formValidate = ({ values }) => {
   const errors: Record<string, any> = {};
 
   if (!values.username) {
@@ -32,11 +32,8 @@ const formValidate = ({values}) => {
   return errors;
 };
 
-const Input: React.FC<InputProps> = ({
-  controller,
-  label,
-}) => {
-  const {input, fieldState, form, error} = controller();
+const Input: React.FC<InputProps> = ({ controller, label }) => {
+  const { input, fieldState, form, error } = controller();
 
   const isShowError = error && (form.submitted || form.hasOuterError || fieldState.blurred);
 
@@ -50,41 +47,34 @@ const Input: React.FC<InputProps> = ({
         className={`input${isShowError ? ' input-error' : ''}`}
         placeholder={label}
       />
-      {isShowError && (<span>{error}</span>)}
+      {isShowError && <span>{error}</span>}
     </div>
   );
 };
 
 const FieldLevelValidation = () => {
-  const {handleSubmit, controller, setOrDeleteError} = useForm({validate: formValidate, onSubmit: () => {}});
+  const { handleSubmit, controller, setOrDeleteError } = useForm({ validate: formValidate, onSubmit: () => {} });
 
   return (
     <form onSubmit={handleSubmit}>
-      <Input
-        label="Username"
-        controller={controller({name: 'username'})}
-      />
-      <Input
-        label="First name"
-        controller={controller({name: 'profile.firstName'})}
-      />
-      <Input
-        label="Last name"
-        controller={controller({name: 'profile.lastName'})}
-      />
+      <Input label="Username" controller={controller({ name: 'username' })} />
+      <Input label="First name" controller={controller({ name: 'profile.firstName' })} />
+      <Input label="Last name" controller={controller({ name: 'profile.lastName' })} />
       <button type="submit">submit</button>
       <button
         type="button"
-        onClick={() => setOrDeleteError({
-          field: 'profile.firstName',
-          error: 'First name is not valid',
-        })}
+        onClick={() =>
+          setOrDeleteError({
+            field: 'profile.firstName',
+            error: 'First name is not valid',
+          })
+        }
       >
         set error for firstName
       </button>
     </form>
   );
-}
+};
 
 describe('FormLevelValidation', () => {
   test('submit', () => {
@@ -108,8 +98,8 @@ describe('FormLevelValidation', () => {
     render(<FieldLevelValidation />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
-    fireEvent.change(inputFirstName, {target: {value: 't'}});
-    fireEvent.change(inputFirstName, {target: {value: ''}});
+    fireEvent.change(inputFirstName, { target: { value: 't' } });
+    fireEvent.change(inputFirstName, { target: { value: '' } });
     const inputs = screen.getAllByRole('wrapper-for-input');
     expect(inputs).toMatchSnapshot();
   });
@@ -118,8 +108,8 @@ describe('FormLevelValidation', () => {
     render(<FieldLevelValidation />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
-    fireEvent.change(inputFirstName, {target: {value: 't'}});
-    fireEvent.change(inputFirstName, {target: {value: ''}});
+    fireEvent.change(inputFirstName, { target: { value: 't' } });
+    fireEvent.change(inputFirstName, { target: { value: '' } });
     fireEvent.blur(inputFirstName);
     const inputs = screen.getAllByRole('wrapper-for-input');
     expect(inputs).toMatchSnapshot();

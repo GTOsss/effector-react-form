@@ -1,38 +1,39 @@
-import {useCallback, useEffect, useMemo, useRef} from 'react';
-import {useStore} from 'effector-react';
-import {
-  FieldArrayParams, MapFieldArrayCallback,
-} from '../index';
-import {getIn, setIn, removeFromInlineMap} from './utils/object-manager';
-import {createEvent} from 'effector';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useStore } from 'effector-react';
+import { FieldArrayParams, MapFieldArrayCallback } from '../index';
+import { getIn, setIn, removeFromInlineMap } from './utils/object-manager';
+import { createEvent } from 'effector';
 
-const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<Values>) => {
+const useFieldArray = <Values>({ $fieldsInline, $values, name }: FieldArrayParams<Values>) => {
   const refName = useRef(name);
   refName.current = name;
 
   const remove = useMemo(() => createEvent<number>('hookForm_fieldArray_Remove'), []);
   const push = useMemo(() => createEvent<any | Array<any>>('hookForm_fieldArray_Push'), []);
   const unshift = useMemo(() => createEvent<any>('hookForm_fieldArray_Unshift'), []);
-  const move = useMemo(() => createEvent<{from: number, to: number}>('hookForm_fieldArray_Move'), []);
-  const insert = useMemo(() => createEvent<{value: any, index: number}>('hookForm_fieldArray_Insert'), []);
-  const swap = useMemo(() => createEvent<{from: number, to: number}>('hookForm_fieldArray_Swap'), []);
+  const move = useMemo(() => createEvent<{ from: number; to: number }>('hookForm_fieldArray_Move'), []);
+  const insert = useMemo(() => createEvent<{ value: any; index: number }>('hookForm_fieldArray_Insert'), []);
+  const swap = useMemo(() => createEvent<{ from: number; to: number }>('hookForm_fieldArray_Swap'), []);
 
   const values = useStore($values);
 
-  const map = useCallback((callback: MapFieldArrayCallback) => {
-    const results = [];
-    const fields = getIn(values, refName.current, []);
-    fields.forEach((field, index) => {
-      const callbackResult = callback({
-        formItemName: `${refName.current}.${index}`,
-        fields,
-        field,
-        index,
+  const map = useCallback(
+    (callback: MapFieldArrayCallback) => {
+      const results = [];
+      const fields = getIn(values, refName.current, []);
+      fields.forEach((field, index) => {
+        const callbackResult = callback({
+          formItemName: `${refName.current}.${index}`,
+          fields,
+          field,
+          index,
+        });
+        results.push(callbackResult);
       });
-      results.push(callbackResult);
-    });
-    return results;
-  }, [values]);
+      return results;
+    },
+    [values],
+  );
 
   useEffect(() => {
     $fieldsInline.on(remove, (fieldsInline, index) => removeFromInlineMap(fieldsInline, `${refName.current}.${index}`));
@@ -43,22 +44,24 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
 
     // $fieldsInline will be initialize automatically because it's new field
     $values.on(push, (values, value) => {
-      let newFields = [...getIn(values, refName.current, [])];
+      const newFields = [...getIn(values, refName.current, [])];
 
       if (Array.isArray(value)) {
-        newFields.push(...value)
+        newFields.push(...value);
       } else {
-        newFields.push(value)
+        newFields.push(value);
       }
       return setIn(values, refName.current, newFields);
     });
 
-    $values.on(unshift, (values, value) => { // todo implement for fieldsInline
+    $values.on(unshift, (values, value) => {
+      // todo implement for fieldsInline
       const newFields = [value, ...getIn(values, refName.current, [])];
       return setIn(values, refName.current, newFields);
     });
 
-    $values.on(move, (values, {from, to}) => { // todo implement for fieldsInline
+    $values.on(move, (values, { from, to }) => {
+      // todo implement for fieldsInline
       const fields = getIn(values, refName.current, []);
       const newFields = [];
       let movingField = {};
@@ -75,7 +78,8 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
       return setIn(values, refName.current, newFields);
     });
 
-    $values.on(insert, (values, {index, value}) => { // todo implement for fieldsInline
+    $values.on(insert, (values, { index, value }) => {
+      // todo implement for fieldsInline
       const fields = getIn(values, refName.current);
       const newFields = [];
       fields.forEach((field, i) => {
@@ -89,7 +93,8 @@ const useFieldArray = <Values>({$fieldsInline, $values, name}: FieldArrayParams<
       return setIn(values, refName.current, newFields);
     });
 
-    $values.on(swap, (values, {from, to}) => { // todo implement for fieldsInline
+    $values.on(swap, (values, { from, to }) => {
+      // todo implement for fieldsInline
       const fields = getIn(values, refName.current);
       const newFields = [];
       fields.forEach((field, i) => {
