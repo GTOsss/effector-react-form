@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ComponentSettings" COMPONENT_TEMPLATE_KEY="templates/component/{{componentName}}.tsx.mustache" SASS_TEMPLATE_KEY="templates/component/{{componentName}}.module.scss.mustache" SPEC_TEMPLATE_KEY="templates/component/{{componentName}}.spec.tsx.mustache" STORY_TEMPLATE_KEY="templates/component/{{componentName}}.stories.tsx.mustache" MD_TEMPLATE_KEY="templates/component/{{componentName}}.md.mustache" INDEX_TEMPLATE_KEY="templates/component/index.tsx.mustache" MD_CHECKBOX_KEY="false" STORY_CHECKBOX_KEY="false" SCSS_CHECKBOX_KEY="true" SPEC_CHECKBOX_KEY="false" INDEX_CHECKBOX_KEY="true" />
+</project>
