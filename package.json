@@ -8,6 +8,7 @@
     "build": "npm run clean && npm run build:cjs && npm run build:es",
     "build:cjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --extensions '.ts','.tsx'",
     "build:es": "cross-env babel src --out-dir es --extensions '.ts','.tsx'",
+    "pretty": "cross-env prettier --write '**/*.{j,t}{s,sx}'",
     "lint": "cross-env eslint . --ext .js,.jsx,.ts,.tsx --fix.",
     "test": "cross-env NODE_ENV=test jest",
     "clean": "rimraf dist lib es"
