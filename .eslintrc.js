@@ -14,7 +14,6 @@ module.exports = {
     },
     ecmaVersion: 2020,
     sourceType: 'module',
-    project: ['./tsconfig.json'],
   },
   settings: {
     react: {
@@ -41,5 +40,6 @@ module.exports = {
     'no-useless-computed-key': 'off',
     'no-plusplus': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    '@typescript-eslint/no-empty-function': 0,
   },
 };
