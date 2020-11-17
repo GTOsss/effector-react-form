@@ -1,5 +1,5 @@
 import { useStoreMap } from 'effector-react';
-import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams } from '../index';
+import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams, UseErrorResult } from './ts';
 import { getIn } from './utils/object-manager';
 import { initialFieldState } from './use-form';
 
@@ -10,7 +10,7 @@ const useError = <Values>({
   $outerErrorsInline,
   $form,
   $fieldsInline,
-}: UseErrorParams) => {
+}: UseErrorParams<Values>): UseErrorResult => {
   const value = useStoreMap<Values, any, [string]>({
     store: $values,
     keys: [name],

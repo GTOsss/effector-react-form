@@ -11,7 +11,7 @@ import {
   FieldsInline,
   SetOrDeleteErrorParams,
   Message,
-} from '../index';
+} from './ts';
 import { createStore, createEvent, sample, combine } from 'effector';
 import { useStoreMap } from 'effector-react';
 import { getValue } from './utils/dom-helper';
@@ -34,7 +34,7 @@ const initialFormState: FormState = {
   hasOuterError: false,
 };
 
-const useForm = <Values extends AnyState>({
+const useForm = <Values extends AnyState = AnyState>({
   $values: $valuesProp,
   $errorsInline: $errorsInlineProp,
   $outerErrorsInline: $outerErrorsInlineProp,
@@ -77,7 +77,7 @@ const useForm = <Values extends AnyState>({
   const validateByValues = useCallback((values) => {
     const errorsInlineState = {};
 
-    Object.entries($fieldsInline.getState()).forEach(([name, { validate }]) => {
+    Object.entries<FieldState>($fieldsInline.getState()).forEach(([name, { validate }]) => {
       const error = validate && validate(getIn(values, name));
       if (error) {
         errorsInlineState[name] = validate && validate(getIn(values, name));
@@ -137,7 +137,7 @@ const useForm = <Values extends AnyState>({
 
     $fieldsInline.on(resetOuterFieldStateFlags, (state) => {
       const newState = {};
-      Object.entries(state).forEach(
+      Object.entries<FieldState>(state).forEach(
         ([field, state]) =>
           (newState[field] = {
             ...state,

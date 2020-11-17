@@ -1,7 +1,7 @@
 import { Store, Event } from 'effector';
 import React, { SyntheticEvent } from 'react';
 
-type AnyState = Record<string, any>;
+export type AnyState = Record<string, any>;
 
 export type ErrorsInline = Record<string, Message>;
 
@@ -75,7 +75,7 @@ export type Controller = () => ControllerInjectedResult;
 
 export type ControllerHof = (a: ControllerParams) => Controller;
 
-type ResultHook<Values> = {
+export type ResultHook<Values> = {
   controller: ControllerHof;
   handleSubmit: (e: SyntheticEvent<HTMLFormElement>) => void;
   setValue: Event<{ field: string; value: any }>;
@@ -88,7 +88,7 @@ type ResultHook<Values> = {
   $outerErrorsInline: Store<ErrorsInline>;
   $form: Store<FormState>;
   $fieldsInline: Store<Record<string, FieldState>>;
-  submit: Event;
+  submit: Event<any>;
 };
 
 export type FormValidateParams<Values> = {
@@ -104,7 +104,7 @@ type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 
 type OnChange<Values> = OnSubmit<Values>;
 
-type UseFormParams<Values = any, MappedValues = any> =
+export type UseFormParams<Values = any, MappedValues = any> =
   | undefined
   | {
       $values?: Store<Values>;
@@ -115,13 +115,11 @@ type UseFormParams<Values = any, MappedValues = any> =
       validate?: FormValidate<Values>;
       onSubmit?: OnSubmit<Values>;
       onChange?: OnChange<Values>;
-      submit?: Event;
+      submit?: Event<any>;
       mapSubmit?: MapSubmit<Values, MappedValues>;
     };
 
-declare const useForm: <Values extends AnyState = AnyState>(params?: UseFormParams<Values>) => ResultHook<Values>;
-
-type UseErrorParams = {
+export type UseErrorParams<Values> = {
   name: string;
   $values?: Store<Values>;
   $errorsInline?: Store<ErrorsInline>;
@@ -130,7 +128,7 @@ type UseErrorParams = {
   $form?: Store<FormState>;
 };
 
-type UseErrorResult = {
+export type UseErrorResult = {
   inputValue: any;
   form: FormState;
   fieldState: FieldState;
@@ -142,9 +140,7 @@ type UseErrorResult = {
   isShowInnerError: boolean;
 };
 
-declare const useError: <Values extends AnyState = AnyState>(params: UseErrorParams) => UseErrorResult<Values>;
-
-type FieldArrayParams<Values> = {
+export type FieldArrayParams<Values> = {
   name: string;
   $values: Store<Values>;
   $fieldsInline: Store<Record<string, FieldState>>;
@@ -157,37 +153,43 @@ type MapFieldsArrayCallbackParams = {
   index: number;
 };
 
-type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
+export type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
 
-type ResultUseFieldArray = {
+export type ResultUseFieldArray = {
   map: MapFieldArrayCallback;
   remove: (index: number) => void;
   push: (value: any | Array<any>) => void;
 };
 
-declare const useFieldArray: <Values extends AnyState = AnyState>(
-  paramsFieldArray: FieldArrayParams,
-) => ResultUseFieldArray<Values>;
-
-declare const setIn: <O extends AnyState = AnyState, V = any>(object: O, path: string, value: V) => O;
-
-declare const deleteIn: <O extends AnyState = AnyState>(
-  object: O,
-  path: string,
-  removeEmpty: boolean = false,
-  inDeep: boolean = true,
-) => O;
-
-declare const getIn: <O extends AnyState = AnyState, V = any>(
-  object: O,
-  path: string,
-  removeEmpty: boolean = false,
-  inDeep: boolean = true,
-) => V = any;
-
-declare const makeNested: <O extends AnyState = AnyState, R extends AnyState>(inlineMap: O) => R;
-
-declare const removeFromInlineMap: <O extends FieldsInline = FieldsInline, R extends FieldsInline = FieldsInline>(
-  inlineMap: O,
-  key: string,
-) => R;
+// declare const useFieldArray: <Values extends AnyState = AnyState>(
+//   paramsFieldArray: FieldArrayParams,
+// ) => ResultUseFieldArray<Values>;
+//
+// declare const setIn: <O extends AnyState = AnyState, V = any>(
+//   object: O,
+//   path: string,
+//   value: V,
+// ) => O;
+//
+// declare const deleteIn: <O extends AnyState = AnyState>(
+//   object: O,
+//   path: string,
+//   removeEmpty: boolean = false,
+//   inDeep: boolean = true,
+// ) => O;
+//
+// declare const getIn: <O extends AnyState = AnyState, V = any>(
+//   object: O,
+//   path: string,
+//   removeEmpty: boolean = false,
+//   inDeep: boolean = true,
+// ) => V = any;
+//
+// declare const makeNested: <O extends AnyState = AnyState, R extends AnyState>(
+//   inlineMap: O,
+// ) => R;
+//
+// declare const removeFromInlineMap: <O extends FieldsInline = FieldsInline, R extends FieldsInline = FieldsInline>(
+//   inlineMap: O,
+//   key: string,
+// ) => R;
