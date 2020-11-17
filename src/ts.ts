@@ -100,9 +100,9 @@ export type FormValidate<Values> = (params: FormValidateParams<Values>) => Error
 
 export type MapSubmit<Values, ResultValues> = (params: SubmitParams<Values>) => SubmitParams<ResultValues>;
 
-type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
+export type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
 
-type OnChange<Values> = OnSubmit<Values>;
+export type OnChange<Values> = OnSubmit<Values>;
 
 export type UseFormParams<Values = any, MappedValues = any> =
   | undefined
@@ -146,7 +146,7 @@ export type FieldArrayParams<Values> = {
   $fieldsInline: Store<Record<string, FieldState>>;
 };
 
-type MapFieldsArrayCallbackParams = {
+export type MapFieldsArrayCallbackParams = {
   formItemName: string;
   field: any;
   fields: Array<any>;
