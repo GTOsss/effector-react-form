@@ -161,6 +161,38 @@ export type ResultUseFieldArray = {
   push: (value: any | Array<any>) => void;
 };
 
+export type CreateFormParams<Values = any, MappedValues = any> = {
+  validate?: FormValidate<Values>;
+  mapSubmit?: MapSubmit<Values, MappedValues>;
+  onSubmit?: OnSubmit<Values>;
+  onChange?: OnChange<Values>;
+};
+
+export type FormFactory<Values> = {
+  $values: Store<Values>;
+  $errorsInline: Store<ErrorsInline>;
+  $outerErrorsInline: Store<ErrorsInline>;
+  $form: Store<FormState>;
+  $fieldsInline: Store<Record<string, FieldState>>;
+
+  setValue: Event<any>;
+  setOrDeleteError: Event<any>;
+  setErrorsInlineState: Event<any>;
+  setFieldState: Event<any>;
+  setSubmitted: Event<any>;
+  resetOuterFieldStateFlags: Event<any>;
+  setOrDeleteOuterError: Event<any>;
+
+  setOuterErrorsInlineState: Event<any>;
+  validateForm: Event<any>;
+  submit: Event<any>;
+
+  onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  fieldInit: Event<{ name: string }>;
+};
+
 // declare const useFieldArray: <Values extends AnyState = AnyState>(
 //   paramsFieldArray: FieldArrayParams,
 // ) => ResultUseFieldArray<Values>;

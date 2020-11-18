@@ -16,23 +16,7 @@ import { createStore, createEvent, sample, combine } from 'effector';
 import { useStoreMap } from 'effector-react';
 import { getValue } from './utils/dom-helper';
 import { setIn, getIn, deleteIn, makeConsistentKey } from './utils/object-manager';
-
-export const initialFieldState: FieldState = {
-  _type: 'fieldMeta',
-  active: false,
-  touched: false,
-  changed: false,
-  blurred: false,
-  touchedAfterOuterError: false,
-  changedAfterOuterError: false,
-  blurredAfterOuterError: false,
-};
-
-const initialFormState: FormState = {
-  submitted: false,
-  hasError: false,
-  hasOuterError: false,
-};
+import { initialFieldState, initialFormState } from './default-states';
 
 const useForm = <Values extends AnyState = AnyState>({
   $values: $valuesProp,
