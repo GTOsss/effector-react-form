@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
+import { useEvent } from 'effector-react';
 import {
   ControllerHof,
   ControllerInjectedResult,
@@ -26,26 +27,20 @@ type UseFormResultWithFactory = {
 const useForm = <Values extends AnyState = AnyState>({
   form,
 }: UseFormParamsWithFactory<Values>): UseFormResultWithFactory => {
-  const {
-    $values,
-    $form,
-    $fieldsInline,
-    $errorsInline,
-    $outerErrorsInline,
+  const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
 
-    setOrDeleteError,
-    setFieldState,
-    setOrDeleteOuterError,
+  const setOrDeleteError = useEvent(form.setOrDeleteError);
+  const setFieldState = useEvent(form.setFieldState);
+  const setOrDeleteOuterError = useEvent(form.setOrDeleteOuterError);
 
-    setOuterErrorsInlineState,
-    validateForm,
-    submit,
+  const setOuterErrorsInlineState = useEvent(form.setOuterErrorsInlineState);
+  const validateForm = useEvent(form.validateForm) as any;
+  const submit = useEvent(form.submit) as any;
 
-    onChangeFieldBrowser,
-    onFocusFieldBrowser,
-    onBlurFieldBrowser,
-    fieldInit,
-  } = form;
+  const onChangeFieldBrowser = useEvent(form.onChangeFieldBrowser);
+  const onFocusFieldBrowser = useEvent(form.onFocusFieldBrowser);
+  const onBlurFieldBrowser = useEvent(form.onBlurFieldBrowser);
+  const fieldInit = useEvent(form.fieldInit);
 
   useEffect(() => {
     validateForm();

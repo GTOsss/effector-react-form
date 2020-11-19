@@ -76,6 +76,7 @@ describe('MapSubmit', () => {
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
     const buttonSubmit = screen.getByText('submit');
     fireEvent.click(buttonSubmit);
+    // @ts-ignore
     expect(onSubmit.mock.calls[0][0]).toMatchSnapshot();
   });
 
@@ -87,6 +88,7 @@ describe('MapSubmit', () => {
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
     const buttonSubmit = screen.getByText('submit');
     fireEvent.click(buttonSubmit);
+    // @ts-ignore
     expect(onSubmit.mock.calls[0][0]).toMatchSnapshot();
   });
 
@@ -96,6 +98,7 @@ describe('MapSubmit', () => {
     renderForm({ form });
     fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'test username' } });
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
+    // @ts-ignore
     expect(onChange.mock.calls[1][0]).toMatchSnapshot();
   });
 
@@ -105,6 +108,7 @@ describe('MapSubmit', () => {
     renderForm({ form });
     fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'test username' } });
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
+    // @ts-ignore
     expect(onChange.mock.calls[1][0]).toMatchSnapshot();
   });
 });

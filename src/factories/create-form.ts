@@ -9,7 +9,7 @@ import {
   Message,
   SetOrDeleteErrorParams,
 } from '../ts';
-import { combine, createEvent, createStore, sample } from 'effector';
+import { combine, createEvent as createEventNative, createStore as createStoreNative, sample } from 'effector';
 import { initialFieldState, initialFormState } from '../default-states';
 import { SyntheticEvent } from 'react';
 import { getValue } from '../utils/dom-helper';
@@ -21,7 +21,11 @@ const createForm = <Values>({
   onSubmit,
   onChange: onChangeForm,
   initialValues,
+  domain,
 }: CreateFormParams<Values> = {}): Form<Values> => {
+  const createEvent = domain ? domain.createEvent : createEventNative;
+  const createStore = domain ? domain.createStore : createStoreNative;
+
   const setValue = createEvent<{ field: string; value: any }>(`hookForm_SetValue`);
   const setOrDeleteError = createEvent<SetOrDeleteErrorParams>(`hookForm_SetOrDeleteError`);
   const setErrorsInlineState = createEvent<ErrorsInline>(`hookForm_SetErrorsInlineState`);
@@ -86,7 +90,9 @@ const createForm = <Values>({
       form: $form.getState(),
     };
 
-    onSubmit(mapSubmit ? mapSubmit(submitParams) : submitParams);
+    if (onSubmit) {
+      onSubmit(mapSubmit ? mapSubmit(submitParams) : submitParams);
+    }
   });
 
   sample({

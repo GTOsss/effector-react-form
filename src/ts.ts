@@ -1,4 +1,4 @@
-import { Store, Event } from 'effector';
+import { Store, Event, Domain } from 'effector';
 import React, { SyntheticEvent } from 'react';
 
 export type AnyState = Record<string, any>;
@@ -162,6 +162,7 @@ export type CreateFormParams<Values = any, MappedValues = any> = {
   onSubmit?: OnSubmit<Values>;
   onChange?: OnChange<Values>;
   initialValues?: Values;
+  domain?: Domain;
 };
 
 export type Form<Values> = {
@@ -197,6 +198,7 @@ export type FieldArray<Values> = {
 
 export type CreateFieldArrayParams<Values> = {
   form: Form<Values>;
+  domain?: Domain;
 };
 
 // declare const useFieldArray: <Values extends AnyState = AnyState>(
