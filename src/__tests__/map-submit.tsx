@@ -4,6 +4,7 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import { useForm } from '../';
 import { getIn } from '../utils/object-manager';
 import { Controller, MapSubmit } from '../../index';
+import createForm from '../factories/create-form';
 
 interface MappedValues {
   profile: {
@@ -35,7 +36,7 @@ interface InputProps {
   label: string;
 }
 
-const renderForm = ({ onSubmit, onChange, mapSubmit }) => {
+const renderForm = ({ form }) => {
   const $fieldsInline = createStore({});
 
   const Input: React.FC<InputProps> = ({ controller, label }) => {
@@ -50,7 +51,7 @@ const renderForm = ({ onSubmit, onChange, mapSubmit }) => {
   };
 
   const SimpleForm = () => {
-    const { handleSubmit, controller } = useForm({ onSubmit, onChange, mapSubmit });
+    const { handleSubmit, controller } = useForm({ form });
 
     return (
       <form onSubmit={handleSubmit}>
@@ -69,7 +70,8 @@ const renderForm = ({ onSubmit, onChange, mapSubmit }) => {
 describe('MapSubmit', () => {
   test('onSubmit form without mapSubmit', () => {
     const onSubmit = jest.fn(() => null);
-    renderForm({ onSubmit });
+    const form = createForm({ onSubmit });
+    renderForm({ form });
     fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'test username' } });
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
     const buttonSubmit = screen.getByText('submit');
@@ -79,7 +81,8 @@ describe('MapSubmit', () => {
 
   test('onSubmit form with mapSubmit', () => {
     const onSubmit = jest.fn(() => null);
-    renderForm({ onSubmit, mapSubmit });
+    const form = createForm({ onSubmit, mapSubmit });
+    renderForm({ form });
     fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'test username' } });
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
     const buttonSubmit = screen.getByText('submit');
@@ -89,7 +92,8 @@ describe('MapSubmit', () => {
 
   test('onChange form without mapSubmit', () => {
     const onChange = jest.fn(() => null);
-    renderForm({ onChange, onSubmit: () => null });
+    const form = createForm({ onChange });
+    renderForm({ form });
     fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'test username' } });
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
     expect(onChange.mock.calls[1][0]).toMatchSnapshot();
@@ -97,7 +101,8 @@ describe('MapSubmit', () => {
 
   test('onChange form with mapSubmit', () => {
     const onChange = jest.fn(() => null);
-    renderForm({ onChange, mapSubmit, onSubmit: () => null });
+    const form = createForm({ onChange, mapSubmit });
+    renderForm({ form });
     fireEvent.change(screen.getByPlaceholderText('Username'), { target: { value: 'test username' } });
     fireEvent.change(screen.getByPlaceholderText('First name'), { target: { value: 'test first name' } });
     expect(onChange.mock.calls[1][0]).toMatchSnapshot();

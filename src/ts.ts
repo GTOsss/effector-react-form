@@ -121,11 +121,7 @@ export type UseFormParams<Values = any, MappedValues = any> =
 
 export type UseErrorParams<Values> = {
   name: string;
-  $values?: Store<Values>;
-  $errorsInline?: Store<ErrorsInline>;
-  $outerErrorsInline?: Store<ErrorsInline>;
-  $fieldsInline?: Store<Record<string, FieldState>>;
-  $form?: Store<FormState>;
+  form: Form<Values>;
 };
 
 export type UseErrorResult = {
@@ -142,8 +138,7 @@ export type UseErrorResult = {
 
 export type FieldArrayParams<Values> = {
   name: string;
-  $values: Store<Values>;
-  $fieldsInline: Store<Record<string, FieldState>>;
+  fieldArray: FieldArray<Values>;
 };
 
 export type MapFieldsArrayCallbackParams = {
@@ -156,7 +151,7 @@ export type MapFieldsArrayCallbackParams = {
 export type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
 
 export type ResultUseFieldArray = {
-  map: MapFieldArrayCallback;
+  map: (fn: MapFieldArrayCallback) => React.ReactNode[];
   remove: (index: number) => void;
   push: (value: any | Array<any>) => void;
 };
@@ -166,9 +161,10 @@ export type CreateFormParams<Values = any, MappedValues = any> = {
   mapSubmit?: MapSubmit<Values, MappedValues>;
   onSubmit?: OnSubmit<Values>;
   onChange?: OnChange<Values>;
+  initialValues?: Values;
 };
 
-export type FormFactory<Values> = {
+export type Form<Values> = {
   $values: Store<Values>;
   $errorsInline: Store<ErrorsInline>;
   $outerErrorsInline: Store<ErrorsInline>;
@@ -190,7 +186,17 @@ export type FormFactory<Values> = {
   onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
-  fieldInit: Event<{ name: string }>;
+  fieldInit: Event<{ name: string; validate?: ControllerParams['validate'] }>;
+};
+
+export type FieldArray<Values> = {
+  form: Form<Values>;
+  push: Event<{ fieldName: string; value: any | any[] }>;
+  remove: Event<{ fieldName: string; index: number }>;
+};
+
+export type CreateFieldArrayParams<Values> = {
+  form: Form<Values>;
 };
 
 // declare const useFieldArray: <Values extends AnyState = AnyState>(

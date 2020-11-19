@@ -2,17 +2,7 @@ import { Controller } from '../../index';
 import React from 'react';
 import { useForm } from '../index';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { createEvent } from 'effector';
-
-const submit = createEvent();
-
-// interface Values {
-//   username?: string,
-//   profile?: {
-//     firstName?: string,
-//     lastName?: string,
-//   }
-// }
+import createForm from '../factories/create-form';
 
 interface InputProps {
   controller: Controller;
@@ -41,8 +31,8 @@ const Input: React.FC<InputProps> = ({ controller, label }) => {
   );
 };
 
-const RemoteSubmit = ({ onSubmit }) => {
-  const { handleSubmit, controller, setOrDeleteError } = useForm({ onSubmit, submit });
+const RemoteSubmit = ({ form }) => {
+  const { handleSubmit, controller } = useForm({ form });
 
   return (
     <div>
@@ -54,7 +44,7 @@ const RemoteSubmit = ({ onSubmit }) => {
         <button
           type="button"
           onClick={() =>
-            setOrDeleteError({
+            form.setOrDeleteError({
               field: 'profile.firstName',
               error: 'First name is not valid',
             })
@@ -64,14 +54,15 @@ const RemoteSubmit = ({ onSubmit }) => {
         </button>
       </form>
 
-      <button onClick={submit as any}>remote submit</button>
+      <button onClick={form.submit}>remote submit</button>
     </div>
   );
 };
 
 describe('RemoteSubmit', () => {
   test('remoteSubmit', () => {
-    render(<RemoteSubmit onSubmit={() => {}} />);
+    const form = createForm();
+    render(<RemoteSubmit form={form} />);
     const remoteSubmitButton = screen.getByText('remote submit');
     fireEvent.click(remoteSubmitButton);
     const inputs = screen.getAllByRole('wrapper-for-input');
@@ -80,9 +71,11 @@ describe('RemoteSubmit', () => {
 
   test('remoteSubmit mockSubmit', () => {
     const mockSubmit = jest.fn(() => {});
-    render(<RemoteSubmit onSubmit={mockSubmit} />);
+    const form = createForm({ onSubmit: mockSubmit });
+    render(<RemoteSubmit form={form} />);
     const remoteSubmitButton = screen.getByText('remote submit');
     fireEvent.click(remoteSubmitButton);
+    // @ts-ignore
     expect(mockSubmit.mock.calls[0][0]).toMatchSnapshot();
   });
 });

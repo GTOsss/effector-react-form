@@ -41,5 +41,6 @@ module.exports = {
     'no-useless-computed-key': 'off',
     'no-plusplus': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
 };

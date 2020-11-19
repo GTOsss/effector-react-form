@@ -2,7 +2,9 @@ import { Controller } from '../../index';
 import React from 'react';
 import { useForm, useFieldArray } from '../index';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { createEvent, createStore } from 'effector';
+import { createEvent } from 'effector';
+import createForm from '../factories/create-form';
+import createFieldArray from '../factories/create-field-array';
 
 let counterGlobal = 0;
 const getId = () => (counterGlobal += 1);
@@ -10,9 +12,6 @@ const getId = () => (counterGlobal += 1);
 const reset = createEvent();
 
 reset.watch(() => (counterGlobal = 0));
-
-const $values = createStore({}).reset(reset);
-const $fieldsInline = createStore({}).reset(reset);
 
 interface InputProps {
   controller: Controller;
@@ -41,8 +40,8 @@ const Input: React.FC<InputProps> = ({ controller, label }) => {
   );
 };
 
-const FormItemsInner = ({ controller, name, onPushInner }) => {
-  const { map, push, remove } = useFieldArray({ name, $values, $fieldsInline });
+const FormItemsInner = ({ controller, name, onPushInner, fieldArray }) => {
+  const { map, push, remove } = useFieldArray({ name, fieldArray });
 
   return (
     <div className="formItemsInner" role="formItemsInner">
@@ -68,8 +67,8 @@ const FormItemsInner = ({ controller, name, onPushInner }) => {
   );
 };
 
-const FormItems = ({ controller, name, onPush, onPushInner }) => {
-  const { map, push, remove } = useFieldArray({ name, $values, $fieldsInline });
+const FormItems = ({ controller, name, onPush, onPushInner, fieldArray }) => {
+  const { map, push, remove } = useFieldArray({ name, fieldArray });
 
   return (
     <div className="formItems" role="formItems">
@@ -84,7 +83,12 @@ const FormItems = ({ controller, name, onPush, onPushInner }) => {
             controller={controller({ name: `${formItemName}.profile.firstName`, validate: validateRequired })}
           />
 
-          <FormItemsInner controller={controller} name={`${formItemName}.inners`} onPushInner={onPushInner} />
+          <FormItemsInner
+            controller={controller}
+            name={`${formItemName}.inners`}
+            onPushInner={onPushInner}
+            fieldArray={fieldArray}
+          />
           <button type="button" onClick={() => remove(index)}>
             remove form item
           </button>
@@ -97,16 +101,18 @@ const FormItems = ({ controller, name, onPush, onPushInner }) => {
   );
 };
 
-const FieldArray = ({ onPush, onPushInner }) => {
-  const { handleSubmit, controller } = useForm({
-    onSubmit: () => null,
-    $values,
-    $fieldsInline,
-  });
+const FieldArray = ({ form, fieldArray, onPush, onPushInner }: any) => {
+  const { handleSubmit, controller } = useForm({ form: form });
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormItems name="parents" controller={controller} onPush={onPush} onPushInner={onPushInner} />
+      <FormItems
+        name="parents"
+        fieldArray={fieldArray}
+        controller={controller}
+        onPush={onPush}
+        onPushInner={onPushInner}
+      />
       <button type="submit">submit</button>
     </form>
   );
@@ -115,14 +121,24 @@ const FieldArray = ({ onPush, onPushInner }) => {
 describe('FieldArray', () => {
   test('render', () => {
     reset();
-    render(<FieldArray onPush={() => null} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={() => null} />);
     const formItems = screen.getAllByRole('formItems');
     expect(formItems).toMatchSnapshot();
   });
 
   test('add form item with values > render', () => {
     reset();
-    render(<FieldArray onPush={(push) => push({ id: getId(), username: 'gto', profile: { firstName: 'Timofey' } })} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(
+      <FieldArray
+        form={form}
+        fieldArray={fieldArray}
+        onPush={(push) => push({ id: getId(), username: 'gto', profile: { firstName: 'Timofey' } })}
+      />,
+    );
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     const formItems = screen.getAllByRole('formItems');
@@ -131,10 +147,18 @@ describe('FieldArray', () => {
 
   test('add form item with values > $values', () => {
     reset();
-    render(<FieldArray onPush={(push) => push({ id: getId(), username: 'gto', profile: { firstName: 'Timofey' } })} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(
+      <FieldArray
+        form={form}
+        fieldArray={fieldArray}
+        onPush={(push) => push({ id: getId(), username: 'gto', profile: { firstName: 'Timofey' } })}
+      />,
+    );
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
-    expect($values.getState()).toMatchSnapshot();
+    expect(form.$values.getState()).toMatchSnapshot();
   });
 
   test('add form item with values (x3) > $values', () => {
@@ -144,17 +168,19 @@ describe('FieldArray', () => {
       { id: getId(), username: '1' },
       { id: getId(), username: '2' },
     ];
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
 
     let counter = 0;
     const onPush = (push) => {
       push(formItems[counter++]);
     };
-    render(<FieldArray onPush={onPush} />);
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
-    expect($values.getState()).toMatchSnapshot();
+    expect(form.$values.getState()).toMatchSnapshot();
   });
 
   test('add form item with values (x3) > remove(1) > $values', () => {
@@ -164,19 +190,21 @@ describe('FieldArray', () => {
       { id: getId(), username: '1' },
       { id: getId(), username: '2' },
     ];
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
 
     let counter = 0;
     const onPush = (push) => {
       push(formItems[counter++]);
     };
-    render(<FieldArray onPush={onPush} />);
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
     const removeFormItem = screen.getAllByText('remove form item');
     fireEvent.click(removeFormItem[1]);
-    expect($values.getState()).toMatchSnapshot();
+    expect(form.$values.getState()).toMatchSnapshot();
   });
 
   test('add form item with values (x3) > remove(1) > $fieldsInline', () => {
@@ -186,19 +214,21 @@ describe('FieldArray', () => {
       { id: getId(), username: '1' },
       { id: getId(), username: '2' },
     ];
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
 
     let counter = 0;
     const onPush = (push) => {
       push(formItems[counter++]);
     };
-    render(<FieldArray onPush={onPush} />);
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
     const removeFormItem = screen.getAllByText('remove form item');
     fireEvent.click(removeFormItem[1]);
-    expect($fieldsInline.getState()).toMatchSnapshot();
+    expect(form.$fieldsInline.getState()).toMatchSnapshot();
   });
 
   test('add form item with values (x3) > add inner (x3) > $values', () => {
@@ -208,6 +238,9 @@ describe('FieldArray', () => {
       { id: getId(), username: '1' },
       { id: getId(), username: '2' },
     ];
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+
     let counter = 0;
     const onPush = (push) => {
       push(formItems[counter++]);
@@ -223,7 +256,7 @@ describe('FieldArray', () => {
       push(formItemsInner[counterInner++]);
     };
 
-    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} onPushInner={onPushInner} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
@@ -232,7 +265,7 @@ describe('FieldArray', () => {
     fireEvent.click(addFormItemInner[0]);
     fireEvent.click(addFormItemInner[1]);
     fireEvent.click(addFormItemInner[2]);
-    expect($values.getState()).toMatchSnapshot();
+    expect(form.$values.getState()).toMatchSnapshot();
   });
 
   test('add form item with values (x3) > add inner (x3) > render', () => {
@@ -257,7 +290,9 @@ describe('FieldArray', () => {
       push(formItemsInner[counterInner++]);
     };
 
-    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} onPushInner={onPushInner} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
@@ -292,7 +327,9 @@ describe('FieldArray', () => {
       push(formItemsInner[counterInner++]);
     };
 
-    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} onPushInner={onPushInner} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
@@ -303,7 +340,7 @@ describe('FieldArray', () => {
     fireEvent.click(addFormItemInner[2]);
     const removeFormItem = screen.getAllByText('remove form item');
     fireEvent.click(removeFormItem[1]);
-    expect($values.getState()).toMatchSnapshot();
+    expect(form.$values.getState()).toMatchSnapshot();
   });
 
   test('add form item with values (x3) > add inner (x3) > remove form item 1 > render', () => {
@@ -328,7 +365,9 @@ describe('FieldArray', () => {
       push(formItemsInner[counterInner++]);
     };
 
-    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} onPushInner={onPushInner} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
@@ -363,7 +402,9 @@ describe('FieldArray', () => {
       push(formItemsInner[counterInner++]);
     };
 
-    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} onPushInner={onPushInner} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
@@ -371,7 +412,7 @@ describe('FieldArray', () => {
     fireEvent.click(removeFormItem[0]);
     const addFormItemInner = screen.getAllByText('add inner form item');
     fireEvent.click(addFormItemInner[0]);
-    expect($values.getState()).toMatchSnapshot();
+    expect(form.$values.getState()).toMatchSnapshot();
   });
 
   test('add form item with values (x2) > remove 1 > add inner 0 (x1) > render', () => {
@@ -394,7 +435,9 @@ describe('FieldArray', () => {
       push(formItemsInner[counterInner++]);
     };
 
-    render(<FieldArray onPush={onPush} onPushInner={onPushInner} />);
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={onPush} onPushInner={onPushInner} />);
     const addFormItem = screen.getByText('add form item with values');
     fireEvent.click(addFormItem);
     fireEvent.click(addFormItem);
