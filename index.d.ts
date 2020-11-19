@@ -1,4 +1,4 @@
-import { Store, Event } from 'effector';
+import { Store, Event, Domain } from 'effector';
 import React, { SyntheticEvent } from 'react';
 
 type AnyState = Record<string, any>;
@@ -191,3 +191,52 @@ declare const removeFromInlineMap: <O extends FieldsInline = FieldsInline, R ext
   inlineMap: O,
   key: string,
 ) => R;
+
+export type CreateFormParams<Values = any, MappedValues = any> = {
+  validate?: FormValidate<Values>;
+  mapSubmit?: MapSubmit<Values, MappedValues>;
+  onSubmit?: OnSubmit<Values>;
+  onChange?: OnChange<Values>;
+  initialValues?: Values;
+  domain?: Domain;
+};
+
+export type Form<Values> = {
+  $values: Store<Values>;
+  $errorsInline: Store<ErrorsInline>;
+  $outerErrorsInline: Store<ErrorsInline>;
+  $form: Store<FormState>;
+  $fieldsInline: Store<Record<string, FieldState>>;
+
+  setValue: Event<any>;
+  setOrDeleteError: Event<any>;
+  setErrorsInlineState: Event<any>;
+  setFieldState: Event<any>;
+  setSubmitted: Event<any>;
+  resetOuterFieldStateFlags: Event<any>;
+  setOrDeleteOuterError: Event<any>;
+
+  setOuterErrorsInlineState: Event<any>;
+  validateForm: Event<any>;
+  submit: Event<any>;
+
+  onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  fieldInit: Event<{ name: string; validate?: ControllerParams['validate'] }>;
+};
+
+export type FieldArray<Values> = {
+  form: Form<Values>;
+  push: Event<{ fieldName: string; value: any | any[] }>;
+  remove: Event<{ fieldName: string; index: number }>;
+};
+
+export type CreateFieldArrayParams<Values> = {
+  form: Form<Values>;
+  domain?: Domain;
+};
+
+declare const createForm: <Values>(params: CreateFormParams<Values>) => Form<Values>;
+
+declare const createFieldArray: <Values>(params: CreateFieldArrayParams<Values>) => FieldArray<Values>;
