@@ -1,4 +1,4 @@
-import { Store, Event } from 'effector';
+import { Store, Event, Domain } from 'effector';
 import React, { SyntheticEvent } from 'react';
 
 type AnyState = Record<string, any>;
@@ -119,7 +119,18 @@ type UseFormParams<Values = any, MappedValues = any> =
       mapSubmit?: MapSubmit<Values, MappedValues>;
     };
 
-declare const useForm: <Values extends AnyState = AnyState>(params?: UseFormParams<Values>) => ResultHook<Values>;
+type UseFormParamsWithFactory<Values> = {
+  form: Form<Values>;
+};
+
+type UseFormResultWithFactory = {
+  controller: ControllerHof;
+  handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
+};
+
+declare const useForm: <Values extends AnyState = AnyState>(
+  params?: UseFormParamsWithFactory<Values>,
+) => UseFormResultWithFactory<Values>;
 
 type UseErrorParams = {
   name: string;
@@ -144,23 +155,22 @@ type UseErrorResult = {
 
 declare const useError: <Values extends AnyState = AnyState>(params: UseErrorParams) => UseErrorResult<Values>;
 
-type FieldArrayParams<Values> = {
+export type FieldArrayParams<Values> = {
   name: string;
-  $values: Store<Values>;
-  $fieldsInline: Store<Record<string, FieldState>>;
+  fieldArray: FieldArray<Values>;
 };
 
-type MapFieldsArrayCallbackParams = {
+export type MapFieldsArrayCallbackParams = {
   formItemName: string;
   field: any;
   fields: Array<any>;
   index: number;
 };
 
-type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
+export type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
 
-type ResultUseFieldArray = {
-  map: MapFieldArrayCallback;
+export type ResultUseFieldArray = {
+  map: (fn: MapFieldArrayCallback) => React.ReactNode[];
   remove: (index: number) => void;
   push: (value: any | Array<any>) => void;
 };
@@ -191,3 +201,52 @@ declare const removeFromInlineMap: <O extends FieldsInline = FieldsInline, R ext
   inlineMap: O,
   key: string,
 ) => R;
+
+export type CreateFormParams<Values = any, MappedValues = any> = {
+  validate?: FormValidate<Values>;
+  mapSubmit?: MapSubmit<Values, MappedValues>;
+  onSubmit?: OnSubmit<Values>;
+  onChange?: OnChange<Values>;
+  initialValues?: Values;
+  domain?: Domain;
+};
+
+export type Form<Values> = {
+  $values: Store<Values>;
+  $errorsInline: Store<ErrorsInline>;
+  $outerErrorsInline: Store<ErrorsInline>;
+  $form: Store<FormState>;
+  $fieldsInline: Store<Record<string, FieldState>>;
+
+  setValue: Event<any>;
+  setOrDeleteError: Event<any>;
+  setErrorsInlineState: Event<any>;
+  setFieldState: Event<any>;
+  setSubmitted: Event<any>;
+  resetOuterFieldStateFlags: Event<any>;
+  setOrDeleteOuterError: Event<any>;
+
+  setOuterErrorsInlineState: Event<any>;
+  validateForm: Event<any>;
+  submit: Event<any>;
+
+  onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  fieldInit: Event<{ name: string; validate?: ControllerParams['validate'] }>;
+};
+
+export type FieldArray<Values> = {
+  form: Form<Values>;
+  push: Event<{ fieldName: string; value: any | any[] }>;
+  remove: Event<{ fieldName: string; index: number }>;
+};
+
+export type CreateFieldArrayParams<Values> = {
+  form: Form<Values>;
+  domain?: Domain;
+};
+
+declare const createForm: <Values>(params: CreateFormParams<Values>) => Form<Values>;
+
+declare const createFieldArray: <Values>(params: CreateFieldArrayParams<Values>) => FieldArray<Values>;

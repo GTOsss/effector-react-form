@@ -76,6 +76,67 @@ Object {
 }
 `;
 
+exports[`SimpleForm meta 1`] = `
+Object {
+  "hasError": false,
+  "hasOuterError": false,
+  "meta": Object {
+    "formName": "simpleForm",
+  },
+  "submitted": false,
+}
+`;
+
+exports[`SimpleForm meta and onSubmit 1`] = `
+Object {
+  "errorsInline": Object {},
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "profile.lastName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": false,
+    "hasOuterError": false,
+    "meta": Object {
+      "formName": "simpleForm",
+    },
+    "submitted": true,
+  },
+  "values": Object {},
+}
+`;
+
 exports[`SimpleForm onChange profile.fistName 1`] = `
 Array [
   <input

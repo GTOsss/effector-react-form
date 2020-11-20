@@ -4,7 +4,9 @@ exports[`onChange onChange after change("t") 1`] = `
 Object {
   "type": "return",
   "value": Object {
-    "errorsInline": Object {},
+    "errorsInline": Object {
+      "username": "error",
+    },
     "fieldsInline": Object {
       "profile.firstName": Object {
         "_type": "fieldMeta",
@@ -41,7 +43,7 @@ Object {
       },
     },
     "form": Object {
-      "hasError": false,
+      "hasError": true,
       "hasOuterError": false,
       "submitted": false,
     },
@@ -57,9 +59,7 @@ exports[`onChange onChange after change("te") 1`] = `
 Object {
   "type": "return",
   "value": Object {
-    "errorsInline": Object {
-      "username": "error",
-    },
+    "errorsInline": Object {},
     "fieldsInline": Object {
       "profile.firstName": Object {
         "_type": "fieldMeta",
@@ -96,7 +96,7 @@ Object {
       },
     },
     "form": Object {
-      "hasError": true,
+      "hasError": false,
       "hasOuterError": false,
       "submitted": false,
     },

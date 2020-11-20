@@ -1,16 +1,11 @@
 import { useStoreMap } from 'effector-react';
-import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams } from '../index';
+import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams, UseErrorResult } from './ts';
 import { getIn } from './utils/object-manager';
-import { initialFieldState } from './use-form';
+import { initialFieldState } from './default-states';
 
-const useError = <Values>({
-  name,
-  $values,
-  $errorsInline,
-  $outerErrorsInline,
-  $form,
-  $fieldsInline,
-}: UseErrorParams) => {
+const useError = <Values>({ name, form }: UseErrorParams<Values>): UseErrorResult => {
+  const { $values, $fieldsInline, $errorsInline, $outerErrorsInline, $form } = form;
+
   const value = useStoreMap<Values, any, [string]>({
     store: $values,
     keys: [name],
@@ -54,6 +49,7 @@ const useError = <Values>({
     submitted: formSubmitted,
     hasError: formHasError,
     hasOuterError: formHasOuterError,
+    meta: {},
   };
 
   const isShowInnerError = (formState.submitted || fieldState.blurred) && Boolean(innerError);

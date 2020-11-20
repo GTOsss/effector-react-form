@@ -2,22 +2,23 @@ import React from 'react';
 import { createStore } from 'effector';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { useForm } from '../';
-import { Controller, OnSubmit } from '../../index';
+import { Controller } from '../../index';
+import createForm from '../factories/create-form';
 
-interface Values {
-  username?: string;
-  profile?: {
-    firstName?: string;
-    lastName?: string;
-  };
-}
+// interface Values {
+//   username?: string;
+//   profile?: {
+//     firstName?: string;
+//     lastName?: string;
+//   };
+// }
 
 interface InputProps {
   controller: Controller;
   label: string;
 }
 
-const renderForm = (onChange) => {
+const renderForm = ({ form }) => {
   const $fieldsInline = createStore({});
 
   const Input: React.FC<InputProps> = ({ controller, label }) => {
@@ -33,7 +34,7 @@ const renderForm = (onChange) => {
   };
 
   const SimpleForm = () => {
-    const { handleSubmit, controller, setOrDeleteOuterError } = useForm({ $fieldsInline, onChange });
+    const { handleSubmit, controller } = useForm({ form });
 
     return (
       <form onSubmit={handleSubmit}>
@@ -47,7 +48,7 @@ const renderForm = (onChange) => {
         <button
           type="button"
           onClick={() =>
-            setOrDeleteOuterError({
+            form.setOrDeleteOuterError({
               field: 'profile.firstName',
               error: 'First name is not valid',
             })
@@ -68,8 +69,9 @@ describe('onChange', () => {
   test('onChange after change("t")', () => {
     const onChange = (values) => values;
     const mockOnChange = jest.fn(onChange);
+    const form = createForm({ onChange: mockOnChange });
 
-    renderForm(mockOnChange);
+    renderForm({ form });
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 't' } });
     expect(mockOnChange.mock.calls.length).toBe(1);
@@ -79,8 +81,9 @@ describe('onChange', () => {
   test('onChange after change("te")', () => {
     const onChange = (values) => values;
     const mockOnChange = jest.fn(onChange);
+    const form = createForm({ onChange: mockOnChange });
 
-    renderForm(mockOnChange);
+    renderForm({ form });
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 't' } });
     fireEvent.change(input, { target: { value: 'te' } });

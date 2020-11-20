@@ -1,6 +1,6 @@
 {
   "name": "effector-react-form",
-  "version": "1.0.51",
+  "version": "2.0.4",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -26,7 +26,6 @@
     "react-dom": "^16.8.6"
   },
   "dependencies": {
-    "lodash.topath": "^4.5.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
