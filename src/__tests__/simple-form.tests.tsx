@@ -35,7 +35,7 @@ const renderForm = ({ inputRender, form }: any) => {
   };
 
   const SimpleForm = () => {
-    const { handleSubmit, controller } = useForm({ form });
+    const { handleSubmit, controller } = useForm({ form, meta: { formName: 'simpleForm' } });
 
     return (
       <form onSubmit={handleSubmit}>
@@ -147,5 +147,21 @@ describe('SimpleForm', () => {
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
     expect(form.$fieldsInline.getState()).toMatchSnapshot();
+  });
+
+  test('meta', () => {
+    const form = createForm();
+    renderForm({ form });
+    expect(form.$form.getState()).toMatchSnapshot();
+  });
+
+  test('meta and onSubmit', () => {
+    const fn = jest.fn(() => null);
+    const form = createForm({ onSubmit: fn });
+    renderForm({ form });
+    const buttonSubmit = screen.getByText('submit');
+    fireEvent.click(buttonSubmit);
+    // @ts-ignore
+    expect(fn.mock.calls[0][0]).toMatchSnapshot();
   });
 });

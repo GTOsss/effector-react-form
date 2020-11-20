@@ -1,5 +1,5 @@
 import { Store, Event, Domain } from 'effector';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 
 export type AnyState = Record<string, any>;
 
@@ -13,17 +13,18 @@ export type Messages<Values> = {
   [key in keyof Values]?: Values[key] extends AnyState ? Messages<Values[key]> : Message;
 };
 
-export type SubmitParams<Values> = {
+export type SubmitParams<Values, Meta> = {
   values: Values;
   errorsInline: ErrorsInline;
   fieldsInline: FieldsInline;
-  form: FormState;
+  form: FormState<Meta>;
 };
 
-export type FormState = {
+export type FormState<Meta = any> = {
   submitted: boolean;
   hasError: boolean;
   hasOuterError: boolean;
+  meta: Meta;
 };
 
 export type FieldState = {
@@ -48,7 +49,7 @@ export type SetOrDeleteErrorParams = {
   error?: Message;
 };
 
-export type ControllerInjectedResult = {
+export type ControllerInjectedResult<Meta = any> = {
   input: {
     name: string;
     value;
@@ -62,7 +63,7 @@ export type ControllerInjectedResult = {
   isShowError: boolean;
   isShowOuterError: boolean;
   isShowInnerError: boolean;
-  form: FormState;
+  form: FormState<Meta>;
   validate?: (value: any) => Message;
   setFieldState: ({ field: string, state: FieldState }) => void;
   setOrDeleteError: ({ field: string, error: Message }) => void;
@@ -71,25 +72,9 @@ export type ControllerInjectedResult = {
   fieldState: FieldState;
 };
 
-export type Controller = () => ControllerInjectedResult;
+export type Controller<Meta = any> = () => ControllerInjectedResult<Meta>;
 
-export type ControllerHof = (a: ControllerParams) => Controller;
-
-export type ResultHook<Values> = {
-  controller: ControllerHof;
-  handleSubmit: (e: SyntheticEvent<HTMLFormElement>) => void;
-  setValue: Event<{ field: string; value: any }>;
-  setOrDeleteError: Event<SetOrDeleteErrorParams>;
-  setErrorsInlineState: (errorsInlineState: ErrorsInline) => void;
-  setOrDeleteOuterError: ({ field: string, error: Message }) => void;
-  setOuterErrorsInlineState: (errors: ErrorsInline) => void;
-  $values: Store<Values>;
-  $errorsInline: Store<ErrorsInline>;
-  $outerErrorsInline: Store<ErrorsInline>;
-  $form: Store<FormState>;
-  $fieldsInline: Store<Record<string, FieldState>>;
-  submit: Event<any>;
-};
+export type ControllerHof<Meta = any> = (a: ControllerParams) => Controller<Meta>;
 
 export type FormValidateParams<Values> = {
   values: Values;
@@ -98,35 +83,22 @@ export type FormValidateParams<Values> = {
 
 export type FormValidate<Values> = (params: FormValidateParams<Values>) => ErrorsInline;
 
-export type MapSubmit<Values, ResultValues> = (params: SubmitParams<Values>) => SubmitParams<ResultValues>;
+export type MapSubmit<Values, ResultValues, Meta = any> = (
+  params: SubmitParams<Values, Meta>,
+) => SubmitParams<ResultValues, Meta>;
 
-export type OnSubmit<Values> = (params: SubmitParams<Values>) => void;
+export type OnSubmit<Values, Meta> = (params: SubmitParams<Values, Meta>) => void;
 
-export type OnChange<Values> = OnSubmit<Values>;
-
-export type UseFormParams<Values = any, MappedValues = any> =
-  | undefined
-  | {
-      $values?: Store<Values>;
-      $outerErrorsInline?: Store<ErrorsInline>;
-      $errorsInline?: Store<ErrorsInline>;
-      $fieldsInline?: Store<Record<string, FieldState>>;
-      $form?: Store<FormState>;
-      validate?: FormValidate<Values>;
-      onSubmit?: OnSubmit<Values>;
-      onChange?: OnChange<Values>;
-      submit?: Event<any>;
-      mapSubmit?: MapSubmit<Values, MappedValues>;
-    };
+export type OnChange<Values, Meta> = OnSubmit<Values, Meta>;
 
 export type UseErrorParams<Values> = {
   name: string;
   form: Form<Values>;
 };
 
-export type UseErrorResult = {
+export type UseErrorResult<Meta = any> = {
   inputValue: any;
-  form: FormState;
+  form: FormState<Meta>;
   fieldState: FieldState;
   error: Message;
   innerError: Message;
@@ -156,20 +128,20 @@ export type ResultUseFieldArray = {
   push: (value: any | Array<any>) => void;
 };
 
-export type CreateFormParams<Values = any, MappedValues = any> = {
+export type CreateFormParams<Values = any, MappedValues = any, Meta = any> = {
   validate?: FormValidate<Values>;
-  mapSubmit?: MapSubmit<Values, MappedValues>;
-  onSubmit?: OnSubmit<Values>;
-  onChange?: OnChange<Values>;
+  mapSubmit?: MapSubmit<Values, MappedValues, Meta>;
+  onSubmit?: OnSubmit<Values, Meta>;
+  onChange?: OnChange<Values, Meta>;
   initialValues?: Values;
   domain?: Domain;
 };
 
-export type Form<Values> = {
+export type Form<Values = any, Meta = any> = {
   $values: Store<Values>;
   $errorsInline: Store<ErrorsInline>;
   $outerErrorsInline: Store<ErrorsInline>;
-  $form: Store<FormState>;
+  $form: Store<FormState<Meta>>;
   $fieldsInline: Store<Record<string, FieldState>>;
 
   setValue: Event<any>;
@@ -179,6 +151,8 @@ export type Form<Values> = {
   setSubmitted: Event<any>;
   resetOuterFieldStateFlags: Event<any>;
   setOrDeleteOuterError: Event<any>;
+
+  setMeta: Event<any>;
 
   setOuterErrorsInlineState: Event<any>;
   validateForm: Event<any>;

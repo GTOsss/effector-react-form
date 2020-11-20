@@ -15,8 +15,9 @@ import { useStoreMap } from 'effector-react';
 import { getIn, makeConsistentKey } from './utils/object-manager';
 import { initialFieldState } from './default-states';
 
-type UseFormParamsWithFactory<Values> = {
+type UseFormParamsWithFactory<Values, Meta> = {
   form: Form<Values>;
+  meta?: Meta;
 };
 
 type UseFormResultWithFactory = {
@@ -24,10 +25,13 @@ type UseFormResultWithFactory = {
   handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
 };
 
-const useForm = <Values extends AnyState = AnyState>({
+const useForm = <Values extends AnyState = AnyState, Meta = any>({
   form,
-}: UseFormParamsWithFactory<Values>): UseFormResultWithFactory => {
+  meta,
+}: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory => {
   const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
+
+  const setMeta = useEvent(form.setMeta);
 
   const setOrDeleteError = useEvent(form.setOrDeleteError);
   const setFieldState = useEvent(form.setFieldState);
@@ -45,6 +49,10 @@ const useForm = <Values extends AnyState = AnyState>({
   useEffect(() => {
     validateForm();
   }, []);
+
+  useEffect(() => {
+    setMeta(meta);
+  }, [meta]);
 
   const controller = useCallback<ControllerHof>(({ name: nameProp, validate }) => {
     return (): ControllerInjectedResult => {
@@ -98,6 +106,7 @@ const useForm = <Values extends AnyState = AnyState>({
         submitted: formSubmitted,
         hasError: formHasError,
         hasOuterError: formHasOuterError,
+        meta: {},
       };
 
       const isShowInnerError = (formState.submitted || fieldState.blurred) && Boolean(innerError);

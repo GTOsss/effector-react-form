@@ -15,7 +15,7 @@ import { SyntheticEvent } from 'react';
 import { getValue } from '../utils/dom-helper';
 import { deleteIn, getIn, setIn } from '../utils/object-manager';
 
-const createForm = <Values>({
+const createForm = <Values = any, Meta = any>({
   validate,
   mapSubmit,
   onSubmit,
@@ -25,6 +25,8 @@ const createForm = <Values>({
 }: CreateFormParams<Values> = {}): Form<Values> => {
   const createEvent = domain ? domain.createEvent : createEventNative;
   const createStore = domain ? domain.createStore : createStoreNative;
+
+  const setMeta = createEvent<Meta>(`hookForm_SetValue`);
 
   const setValue = createEvent<{ field: string; value: any }>(`hookForm_SetValue`);
   const setOrDeleteError = createEvent<SetOrDeleteErrorParams>(`hookForm_SetOrDeleteError`);
@@ -42,7 +44,7 @@ const createForm = <Values>({
   const $errorsInline = createStore<ErrorsInline>({});
   const $outerErrorsInline = createStore<ErrorsInline>({});
   const $fieldsInline = createStore<FieldsInline>({});
-  const $form = createStore<FormState>(initialFormState);
+  const $form = createStore<FormState<Meta>>(initialFormState);
 
   const onChangeFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`hookForm_OnChange`);
   const onChangeField = onChangeFieldBrowser.map<{ value: any; name: string }>(({ name, event }) => ({
@@ -159,6 +161,7 @@ const createForm = <Values>({
       hasOuterError: Boolean(Object.keys(outerErrors).length),
     }))
     .on(setSubmitted, (state, value) => setIn(state, 'submitted', value))
+    .on(setMeta, (state, value) => setIn(state, 'meta', value))
     .on($errorsInline.updates, (state, errorsInline) =>
       setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)),
     );
@@ -249,6 +252,8 @@ const createForm = <Values>({
     setOuterErrorsInlineState,
     validateForm,
     submit,
+
+    setMeta,
 
     $values,
     $errorsInline,

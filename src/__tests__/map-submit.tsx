@@ -3,8 +3,8 @@ import { createStore } from 'effector';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { useForm } from '../';
 import { getIn } from '../utils/object-manager';
-import { Controller, MapSubmit } from '../../index';
 import createForm from '../factories/create-form';
+import { MapSubmit, Controller } from '../ts';
 
 interface MappedValues {
   profile: {
