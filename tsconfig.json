@@ -39,6 +39,8 @@
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
     "strict": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declaration": true,
+    "emitDeclarationOnly": true
   }
 }
