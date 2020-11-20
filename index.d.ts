@@ -119,7 +119,18 @@ type UseFormParams<Values = any, MappedValues = any> =
       mapSubmit?: MapSubmit<Values, MappedValues>;
     };
 
-declare const useForm: <Values extends AnyState = AnyState>(params?: UseFormParams<Values>) => ResultHook<Values>;
+type UseFormParamsWithFactory<Values> = {
+  form: Form<Values>;
+};
+
+type UseFormResultWithFactory = {
+  controller: ControllerHof;
+  handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
+};
+
+declare const useForm: <Values extends AnyState = AnyState>(
+  params?: UseFormParamsWithFactory<Values>,
+) => UseFormResultWithFactory<Values>;
 
 type UseErrorParams = {
   name: string;
@@ -144,23 +155,22 @@ type UseErrorResult = {
 
 declare const useError: <Values extends AnyState = AnyState>(params: UseErrorParams) => UseErrorResult<Values>;
 
-type FieldArrayParams<Values> = {
+export type FieldArrayParams<Values> = {
   name: string;
-  $values: Store<Values>;
-  $fieldsInline: Store<Record<string, FieldState>>;
+  fieldArray: FieldArray<Values>;
 };
 
-type MapFieldsArrayCallbackParams = {
+export type MapFieldsArrayCallbackParams = {
   formItemName: string;
   field: any;
   fields: Array<any>;
   index: number;
 };
 
-type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
+export type MapFieldArrayCallback = (params: MapFieldsArrayCallbackParams) => React.ReactNode;
 
-type ResultUseFieldArray = {
-  map: MapFieldArrayCallback;
+export type ResultUseFieldArray = {
+  map: (fn: MapFieldArrayCallback) => React.ReactNode[];
   remove: (index: number) => void;
   push: (value: any | Array<any>) => void;
 };
