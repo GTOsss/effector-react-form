@@ -45,6 +45,7 @@ Object {
     "form": Object {
       "hasError": true,
       "hasOuterError": false,
+      "meta": Object {},
       "submitted": false,
     },
     "outerErrorsInline": Object {},
@@ -98,6 +99,7 @@ Object {
     "form": Object {
       "hasError": false,
       "hasOuterError": false,
+      "meta": Object {},
       "submitted": false,
     },
     "outerErrorsInline": Object {},

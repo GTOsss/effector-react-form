@@ -16,6 +16,7 @@ exports[`UnmountField $form after submit and removed 1`] = `
 Object {
   "hasError": true,
   "hasOuterError": false,
+  "meta": Object {},
   "submitted": true,
 }
 `;

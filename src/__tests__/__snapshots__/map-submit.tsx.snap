@@ -30,6 +30,7 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
+    "meta": Object {},
     "submitted": false,
   },
   "outerErrorsInline": Object {},
@@ -74,6 +75,7 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
+    "meta": Object {},
     "submitted": false,
   },
   "outerErrorsInline": Object {},
@@ -116,6 +118,7 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
+    "meta": Object {},
     "submitted": true,
   },
   "values": Object {
@@ -159,6 +162,7 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
+    "meta": Object {},
     "submitted": true,
   },
   "values": Object {
