@@ -96,6 +96,7 @@ Object {
   "form": Object {
     "hasError": true,
     "hasOuterError": false,
+    "meta": Object {},
     "submitted": true,
   },
   "values": Object {},

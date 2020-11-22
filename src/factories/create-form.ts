@@ -1,3 +1,5 @@
+import { combine, createEvent as createEventNative, createStore as createStoreNative, sample } from 'effector';
+import { SyntheticEvent } from 'react';
 import {
   ControllerParams,
   CreateFormParams,
@@ -8,10 +10,9 @@ import {
   FormState,
   Message,
   SetOrDeleteErrorParams,
+  SubmitParams,
 } from '../ts';
-import { combine, createEvent as createEventNative, createStore as createStoreNative, sample } from 'effector';
 import { initialFieldState, initialFormState } from '../default-states';
-import { SyntheticEvent } from 'react';
 import { getValue } from '../utils/dom-helper';
 import { deleteIn, getIn, setIn } from '../utils/object-manager';
 
@@ -23,6 +24,8 @@ const createForm = <Values = any, Meta = any>({
   initialValues,
   domain,
 }: CreateFormParams<Values> = {}): Form<Values> => {
+  const submitData = {} as SubmitParams<Values>;
+
   const createEvent = domain ? domain.createEvent : createEventNative;
   const createStore = domain ? domain.createStore : createStoreNative;
 
@@ -46,6 +49,19 @@ const createForm = <Values = any, Meta = any>({
   const $fieldsInline = createStore<FieldsInline>({});
   const $form = createStore<FormState<Meta>>(initialFormState);
 
+  $values.watch((values) => {
+    submitData.values = values;
+  });
+  $errorsInline.watch((errorsInline) => {
+    submitData.errorsInline = errorsInline;
+  });
+  $fieldsInline.watch((fieldsInline) => {
+    submitData.fieldsInline = fieldsInline;
+  });
+  $form.watch((form) => {
+    submitData.form = form;
+  });
+
   const onChangeFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`hookForm_OnChange`);
   const onChangeField = onChangeFieldBrowser.map<{ value: any; name: string }>(({ name, event }) => ({
     value: getValue(event),
@@ -58,7 +74,7 @@ const createForm = <Values = any, Meta = any>({
   const validateByValues = (values) => {
     const errorsInlineState = {};
 
-    Object.entries<FieldState>($fieldsInline.getState()).forEach(([name, { validate }]) => {
+    Object.entries<FieldState>(submitData.fieldsInline).forEach(([name, { validate }]) => {
       const error = validate && validate(getIn(values, name));
       if (error) {
         errorsInlineState[name] = validate && validate(getIn(values, name));
@@ -85,15 +101,8 @@ const createForm = <Values = any, Meta = any>({
     validateForm();
     resetOuterFieldStateFlags();
 
-    const submitParams = {
-      values: $values.getState(),
-      errorsInline: $errorsInline.getState(),
-      fieldsInline: $fieldsInline.getState(),
-      form: $form.getState(),
-    };
-
     if (onSubmit) {
-      onSubmit(mapSubmit ? mapSubmit(submitParams) : submitParams);
+      onSubmit(mapSubmit ? mapSubmit(submitData) : submitData);
     }
   });
 
@@ -156,12 +165,11 @@ const createForm = <Values = any, Meta = any>({
     );
 
   $form
-    .on($outerErrorsInline.updates, (state, outerErrors) => ({
-      ...state,
-      hasOuterError: Boolean(Object.keys(outerErrors).length),
-    }))
+    .on($outerErrorsInline.updates, (state, outerErrors) =>
+      setIn(state, 'hasOuterError', Boolean(Object.keys(outerErrors).length)),
+    )
     .on(setSubmitted, (state, value) => setIn(state, 'submitted', value))
-    .on(setMeta, (state, value) => setIn(state, 'meta', value))
+    .on(setMeta, (state, value) => setIn(state, 'meta', value || {}))
     .on($errorsInline.updates, (state, errorsInline) =>
       setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)),
     );

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useEvent } from 'effector-react';
+import { useEvent, useStoreMap } from 'effector-react';
 import {
   ControllerHof,
   ControllerInjectedResult,
@@ -11,7 +11,6 @@ import {
   FieldsInline,
   Message,
 } from './ts';
-import { useStoreMap } from 'effector-react';
 import { getIn, makeConsistentKey } from './utils/object-manager';
 import { initialFieldState } from './default-states';
 

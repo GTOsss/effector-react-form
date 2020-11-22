@@ -23,9 +23,11 @@
     "effector": "^21.6.0",
     "effector-react": "^21.0.8",
     "react": "^16.13.1",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "lodash.topath": "^4.5.2"
   },
   "dependencies": {
+    "lodash.topath": "^4.5.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",

@@ -13,7 +13,7 @@ export type Messages<Values> = {
   [key in keyof Values]?: Values[key] extends AnyState ? Messages<Values[key]> : Message;
 };
 
-export type SubmitParams<Values, Meta> = {
+export type SubmitParams<Values, Meta = any> = {
   values: Values;
   errorsInline: ErrorsInline;
   fieldsInline: FieldsInline;
@@ -87,9 +87,9 @@ export type MapSubmit<Values, ResultValues, Meta = any> = (
   params: SubmitParams<Values, Meta>,
 ) => SubmitParams<ResultValues, Meta>;
 
-export type OnSubmit<Values, Meta> = (params: SubmitParams<Values, Meta>) => void;
+export type OnSubmit<Values, Meta = any> = (params: SubmitParams<Values, Meta>) => void;
 
-export type OnChange<Values, Meta> = OnSubmit<Values, Meta>;
+export type OnChange<Values, Meta = any> = OnSubmit<Values, Meta>;
 
 export type UseErrorParams<Values> = {
   name: string;
