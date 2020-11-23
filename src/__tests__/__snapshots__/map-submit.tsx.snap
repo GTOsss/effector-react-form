@@ -30,9 +30,9 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
-    "meta": Object {},
     "submitted": false,
   },
+  "meta": Object {},
   "outerErrorsInline": Object {},
   "values": Object {
     "info": Object {
@@ -75,9 +75,9 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
-    "meta": Object {},
     "submitted": false,
   },
+  "meta": Object {},
   "outerErrorsInline": Object {},
   "values": Object {
     "profile": Object {
@@ -118,9 +118,10 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
-    "meta": Object {},
     "submitted": true,
   },
+  "meta": Object {},
+  "outerErrorsInline": Object {},
   "values": Object {
     "info": Object {
       "username": "test username",
@@ -162,9 +163,10 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
-    "meta": Object {},
     "submitted": true,
   },
+  "meta": Object {},
+  "outerErrorsInline": Object {},
   "values": Object {
     "profile": Object {
       "firstName": "test first name",

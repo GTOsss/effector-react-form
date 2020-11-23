@@ -15,5 +15,4 @@ export const initialFormState: FormState = {
   submitted: false,
   hasError: false,
   hasOuterError: false,
-  meta: {},
 };
