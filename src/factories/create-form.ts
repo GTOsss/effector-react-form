@@ -1,4 +1,11 @@
-import { combine, createEvent as createEventNative, createStore as createStoreNative, forward, sample } from 'effector';
+import {
+  combine,
+  createEvent as createEventNative,
+  createStore as createStoreNative,
+  forward,
+  is,
+  sample,
+} from 'effector';
 import { SyntheticEvent } from 'react';
 import {
   ControllerParams,
@@ -19,8 +26,8 @@ import { deleteIn, getIn, setIn } from '../utils/object-manager';
 const createForm = <Values = any, Meta = any>({
   validate,
   mapSubmit = (params) => params,
-  onSubmit: onSubmitCallback = () => {},
-  onChange: onChangeCallback = () => {},
+  onSubmit: onSubmitArg,
+  onChange: onChangeArg,
   initialValues,
   initialMeta = {},
   domain,
@@ -59,8 +66,6 @@ const createForm = <Values = any, Meta = any>({
     form: $form,
     meta: $meta,
   });
-
-  // const $valuesMapped = createStore();
 
   const onChangeFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnChange`);
   const onChangeField = onChangeFieldBrowser.map<{ value: any; name: string }>(({ name, event }) => ({
@@ -107,8 +112,6 @@ const createForm = <Values = any, Meta = any>({
     target: onSubmit,
   });
 
-  onSubmit.watch(onSubmitCallback);
-
   sample({
     source: $allFormState,
     clock: onChangeFieldBrowser,
@@ -116,7 +119,27 @@ const createForm = <Values = any, Meta = any>({
     target: onChange,
   });
 
-  onChange.watch(onChangeCallback);
+  if (onSubmitArg) {
+    if (is.effect(onSubmitArg) || is.event(onSubmitArg)) {
+      forward({
+        from: onSubmit,
+        to: onSubmitArg,
+      });
+    } else if (typeof onSubmitArg === 'function') {
+      onSubmit.watch(onSubmitArg);
+    }
+  }
+
+  if (onChangeArg) {
+    if (is.effect(onChangeArg) || is.event(onChangeArg)) {
+      forward({
+        from: onChange,
+        to: onChangeArg,
+      });
+    } else if (typeof onChangeArg === 'function') {
+      onChange.watch(onChangeArg);
+    }
+  }
 
   sample({
     source: { values: $values, fieldsInline: $fieldsInline },
@@ -255,6 +278,7 @@ const createForm = <Values = any, Meta = any>({
     setOuterErrorsInlineState,
     validateForm,
     submit,
+    onSubmit,
 
     setMeta,
 
