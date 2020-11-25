@@ -2329,9 +2329,9 @@ effector-react@^21.0.8:
   integrity sha512-mNJ785p7tT3+crEPvAiKH8YH/XXmBjAfYAcwktEs3awn5rplXMH246tQE6rjzFVnNZEhaROgFZqw51ViyrD2cw==
 
 effector@^21.6.1:
-  version "21.6.1"
-  resolved "https://registry.yarnpkg.com/effector/-/effector-21.6.1.tgz#1fcc9e549bc057b986cc4c29441831cf2ce3ce88"
-  integrity sha512-Ax/fshrUOBhF7AyB2osuqRnzo/IVK95ExJfTW5rV1/P6Lp/HuU4S0r7oBUUeixQaneA/02V8/S1/f5u7sd4VPw==
+  version "21.7.3"
+  resolved "https://registry.yarnpkg.com/effector/-/effector-21.7.3.tgz#584dff632c175c05d8c55c537ec2ede26450bc13"
+  integrity sha512-d8q95WnGfLFafpdmj5w8pJpteW0i9thWmQqaoLuvNrWMcnDlUIDtKg0PBaY2vywZN2E8FknCl3d7xYtCxeU/xw==
 
 electron-to-chromium@^1.3.585:
   version "1.3.587"
