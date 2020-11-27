@@ -148,11 +148,15 @@ export type ResultUseFieldArray = {
   push: (value: any | Array<any>) => void;
 };
 
+export type GuardFn<Values = any, Meta = any> = (params: SubmitParams<Values, Meta>) => boolean;
+
 export type CreateFormParams<Values = any, MappedValues = any, Meta = any> = {
   validate?: FormValidate<Values>;
   mapSubmit?: MapSubmit<Values, MappedValues, Meta>;
   onSubmit?: OnSubmit<Values, Meta>;
+  onSubmitGuardFn?: GuardFn<Values, Meta>;
   onChange?: OnChange<Values, Meta>;
+  onChangeGuardFn?: GuardFn<Values, Meta>;
   initialValues?: Values;
   initialMeta?: Meta;
   domain?: Domain;

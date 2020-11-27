@@ -105,7 +105,6 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
         submitted: formSubmitted,
         hasError: formHasError,
         hasOuterError: formHasOuterError,
-        meta: {},
       };
 
       const isShowInnerError = (formState.submitted || fieldState.blurred) && Boolean(innerError);

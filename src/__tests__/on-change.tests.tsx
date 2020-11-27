@@ -74,7 +74,7 @@ describe('onChange', () => {
     renderForm({ form });
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 't' } });
-    expect(mockOnChange.mock.calls.length).toBe(1);
+    expect(mockOnChange.mock.calls.length).toBe(0);
     expect(mockOnChange.mock.results[0]).toMatchSnapshot();
   });
 
@@ -87,7 +87,7 @@ describe('onChange', () => {
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 't' } });
     fireEvent.change(input, { target: { value: 'te' } });
-    expect(mockOnChange.mock.calls.length).toBe(2);
-    expect(mockOnChange.mock.results[1]).toMatchSnapshot();
+    expect(mockOnChange.mock.calls.length).toBe(1);
+    expect(mockOnChange.mock.results[0]).toMatchSnapshot();
   });
 });
