@@ -80,9 +80,6 @@ exports[`SimpleForm meta 1`] = `
 Object {
   "hasError": false,
   "hasOuterError": false,
-  "meta": Object {
-    "formName": "simpleForm",
-  },
   "submitted": false,
 }
 `;
@@ -128,11 +125,12 @@ Object {
   "form": Object {
     "hasError": false,
     "hasOuterError": false,
-    "meta": Object {
-      "formName": "simpleForm",
-    },
     "submitted": true,
   },
+  "meta": Object {
+    "formName": "simpleForm",
+  },
+  "outerErrorsInline": Object {},
   "values": Object {},
 }
 `;

@@ -3,6 +3,7 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import { useForm } from '../';
 import { Controller } from '../../index';
 import createForm from '../factories/create-form';
+import { createEvent } from 'effector';
 
 // interface Values {
 //   username?: string;
@@ -163,5 +164,29 @@ describe('SimpleForm', () => {
     fireEvent.click(buttonSubmit);
     // @ts-ignore
     expect(fn.mock.calls[0][0]).toMatchSnapshot();
+  });
+
+  test('onSubmit callback call count', () => {
+    const fn = jest.fn(() => null);
+    const form = createForm({ onSubmit: fn });
+    renderForm({ form });
+    const input = screen.getByPlaceholderText('First name');
+    fireEvent.change(input, { target: { value: 'test' } });
+    const buttonSubmit = screen.getByText('submit');
+    fireEvent.click(buttonSubmit);
+    expect(fn.mock.calls.length).toBe(1);
+  });
+
+  test('onSubmit event call count', () => {
+    const fn = jest.fn(() => null);
+    const onSubmit = createEvent<any>();
+    onSubmit.watch(fn);
+    const form = createForm({ onSubmit });
+    renderForm({ form });
+    const input = screen.getByPlaceholderText('First name');
+    fireEvent.change(input, { target: { value: 'test' } });
+    const buttonSubmit = screen.getByText('submit');
+    fireEvent.click(buttonSubmit);
+    expect(fn.mock.calls.length).toBe(1);
   });
 });
