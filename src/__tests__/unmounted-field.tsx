@@ -3,7 +3,7 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import { createEvent } from 'effector';
 import { useStore } from 'effector-react';
 import { useForm } from '../';
-import { Controller } from '../../index';
+import { Controller } from '../ts';
 import { setIn, removeFromInlineMap } from '../utils/object-manager';
 import { Form } from '../ts';
 import createForm from '../factories/create-form';

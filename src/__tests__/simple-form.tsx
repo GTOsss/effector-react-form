@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { useForm } from '../';
-import { Controller } from '../../index';
+import { Controller } from '../ts';
 import createForm from '../factories/create-form';
 import { createEvent } from 'effector';
 

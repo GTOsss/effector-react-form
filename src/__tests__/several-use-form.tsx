@@ -1,4 +1,4 @@
-import { Controller } from '../../index';
+import { Controller } from '../ts';
 import React, { useState } from 'react';
 import { useForm } from '../index';
 import { render, screen, fireEvent } from '@testing-library/react';

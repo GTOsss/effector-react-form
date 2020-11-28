@@ -1,7 +1,7 @@
 import {
   Controller,
   // OnSubmit,
-} from '../../index';
+} from '../ts';
 import React from 'react';
 import { useForm } from '../index';
 import { render, screen, fireEvent } from '@testing-library/react';

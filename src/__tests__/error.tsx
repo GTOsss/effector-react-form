@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from '../index';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useError } from '../index';
-import { Controller } from '../../index';
+import { Controller } from '../ts';
 import createForm from '../factories/create-form';
 
 // interface Values {
