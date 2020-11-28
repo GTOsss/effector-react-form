@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { useForm } from '../';
-import { Controller } from '../ts';
-import createForm from '../factories/create-form';
+import { useForm } from '../src';
+import { Controller } from '../src/ts';
+import createForm from '../src/factories/create-form';
 import { createEvent } from 'effector';
 
 // interface Values {

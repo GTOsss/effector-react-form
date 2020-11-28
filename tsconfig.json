@@ -24,6 +24,9 @@
     "strict": false,
     "skipLibCheck": true,
     "declaration": true,
-    "emitDeclarationOnly": true
-  }
+    "emitDeclarationOnly": true,
+    "outDir": "types"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build", "dist", "example", "src/__test__"]
 }

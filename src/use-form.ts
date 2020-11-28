@@ -10,6 +10,11 @@ import {
   ErrorsInline,
   FieldsInline,
   Message,
+  SetOrDeleteErrorParams,
+  SetValueParams,
+  SetFieldStateParams,
+  SetOrDeleteOuterErrorParams,
+  FieldInitParams,
 } from './ts';
 import { getIn, makeConsistentKey } from './utils/object-manager';
 import { initialFieldState } from './default-states';
@@ -22,6 +27,15 @@ type UseFormParamsWithFactory<Values, Meta> = {
 type UseFormResultWithFactory = {
   controller: ControllerHof;
   handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
+  setValue: (params: SetValueParams) => SetValueParams;
+  setOrDeleteError: (params: SetOrDeleteErrorParams) => SetOrDeleteErrorParams;
+  setFieldState: (params: SetFieldStateParams) => SetFieldStateParams;
+  setOrDeleteOuterError: (params: SetOrDeleteOuterErrorParams) => SetOrDeleteOuterErrorParams;
+  setOuterErrorsInlineState: (params: ErrorsInline) => ErrorsInline;
+  validateForm: () => void;
+  submit: (e: any) => void;
+  reset: () => void;
+  fieldInit: (params: FieldInitParams) => FieldInitParams;
 };
 
 const useForm = <Values extends AnyState = AnyState, Meta = any>({
@@ -31,6 +45,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
 
   const setMeta = useEvent(form.setMeta);
+  const setValue = useEvent(form.setValue);
 
   const setOrDeleteError = useEvent(form.setOrDeleteError);
   const setFieldState = useEvent(form.setFieldState);
@@ -39,6 +54,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   const setOuterErrorsInlineState = useEvent(form.setOuterErrorsInlineState);
   const validateForm = useEvent(form.validateForm) as any;
   const submit = useEvent(form.submit) as any;
+  const reset = useEvent(form.reset) as any;
 
   const onChangeFieldBrowser = useEvent(form.onChangeFieldBrowser);
   const onFocusFieldBrowser = useEvent(form.onFocusFieldBrowser);
@@ -120,6 +136,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
           onBlur: (event) => onBlurFieldBrowser({ event, name: refName.current }),
         },
         form: formState,
+        meta,
         fieldState,
         error,
         innerError,
@@ -144,6 +161,15 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   return {
     controller,
     handleSubmit,
+    setValue,
+    setOrDeleteError,
+    setFieldState,
+    setOrDeleteOuterError,
+    setOuterErrorsInlineState,
+    validateForm,
+    submit,
+    reset,
+    fieldInit,
   };
 };
 

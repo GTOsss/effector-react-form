@@ -303,6 +303,7 @@ const createForm = <Values = any, Meta = any>({
     $outerErrorsInline,
     $fieldsInline,
     $form,
+    $meta,
 
     onChangeFieldBrowser,
     onFocusFieldBrowser,

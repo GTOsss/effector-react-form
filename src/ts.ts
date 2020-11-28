@@ -84,6 +84,7 @@ export type ControllerInjectedResult<Meta = any> = {
   isShowOuterError: boolean;
   isShowInnerError: boolean;
   form: FormState;
+  meta: Meta;
   validate?: (value: any) => Message;
   setFieldState: ({ field: string, state: FieldState }) => void;
   setOrDeleteError: ({ field: string, error: Message }) => void;
@@ -119,6 +120,7 @@ export type UseErrorParams<Values> = {
 export type UseErrorResult<Meta = any> = {
   inputValue: any;
   form: FormState;
+  meta: Meta;
   fieldState: FieldState;
   error: Message;
   innerError: Message;
@@ -168,6 +170,7 @@ export type Form<Values = any, Meta = any> = {
   $outerErrorsInline: Store<ErrorsInline>;
   $form: Store<FormState>;
   $fieldsInline: Store<Record<string, FieldState>>;
+  $meta: Store<Meta>;
 
   setValue: Event<any>;
   setOrDeleteError: Event<any>;
