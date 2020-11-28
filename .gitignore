@@ -4,6 +4,7 @@
 /node_modules
 /lib
 /es
+/types
 
 .vscode
 node_modules
