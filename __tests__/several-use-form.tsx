@@ -1,8 +1,8 @@
-import { Controller } from '../../index';
+import { Controller } from '../src/ts';
 import React, { useState } from 'react';
-import { useForm } from '../index';
+import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
-import createForm from '../factories/create-form';
+import createForm from '../src/factories/create-form';
 
 interface InputProps {
   controller: Controller;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStore } from 'effector';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { useForm } from '../';
-import { Controller } from '../../index';
-import createForm from '../factories/create-form';
+import { useForm } from '../src';
+import { Controller } from '../src/ts';
+import createForm from '../src/factories/create-form';
 
 // interface Values {
 //   username?: string;

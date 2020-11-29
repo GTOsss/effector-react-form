@@ -5,6 +5,7 @@ jest.config.js
 setup-test.js
 tsconfig.json
 tslint.json
+src
 .idea
 .eslintrc
 .babelrc.js

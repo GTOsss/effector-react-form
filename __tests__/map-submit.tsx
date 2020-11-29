@@ -1,10 +1,10 @@
 import React from 'react';
 import { createStore } from 'effector';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { useForm } from '../';
-import { getIn } from '../utils/object-manager';
-import createForm from '../factories/create-form';
-import { MapSubmit, Controller } from '../ts';
+import { useForm } from '../src';
+import { getIn } from '../src/utils/object-manager';
+import createForm from '../src/factories/create-form';
+import { MapSubmit, Controller } from '../src/ts';
 
 interface MappedValues {
   profile: {

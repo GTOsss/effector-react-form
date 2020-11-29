@@ -1,8 +1,8 @@
 // TODO need to finish
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { useForm } from '../';
-import createForm from '../factories/create-form';
+import { useForm } from '../src';
+import createForm from '../src/factories/create-form';
 
 interface Values {
   username?: string;

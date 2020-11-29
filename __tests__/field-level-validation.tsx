@@ -1,8 +1,8 @@
-import { Controller } from '../../index';
+import { Controller } from '../src/ts';
 import React from 'react';
-import { useForm } from '../index';
+import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
-import createForm from '../factories/create-form';
+import createForm from '../src/factories/create-form';
 
 // interface Values {
 //   username?: string;
@@ -17,21 +17,7 @@ interface InputProps {
   label: string;
 }
 
-const formValidate = ({ values }) => {
-  const errors: Record<string, any> = {};
-
-  if (!values.username) {
-    errors.username = 'Field is required';
-  } else if (values.username.length < 4) {
-    errors.username = 'Minimum of 4 characters';
-  }
-
-  if (!values.profile || !values.profile.firstName) {
-    errors['profile.firstName'] = 'Field is required'; // Field without nesting!
-  }
-
-  return errors;
-};
+const validateRequired = (value) => (value ? undefined : 'Field is required');
 
 const Input: React.FC<InputProps> = ({ controller, label }) => {
   const { input, fieldState, form, error } = controller();
@@ -59,7 +45,7 @@ const FieldLevelValidation = ({ form }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Input label="Username" controller={controller({ name: 'username' })} />
-      <Input label="First name" controller={controller({ name: 'profile.firstName' })} />
+      <Input label="First name" controller={controller({ name: 'profile.firstName', validate: validateRequired })} />
       <Input label="Last name" controller={controller({ name: 'profile.lastName' })} />
       <button type="submit">submit</button>
       <button
@@ -77,9 +63,9 @@ const FieldLevelValidation = ({ form }) => {
   );
 };
 
-describe('FormLevelValidation', () => {
+describe('FieldLevelValidation', () => {
   test('submit', () => {
-    const form = createForm({ validate: formValidate });
+    const form = createForm();
     render(<FieldLevelValidation form={form} />);
     const buttonSubmit = screen.getByText('submit');
     fireEvent.click(buttonSubmit);
@@ -88,7 +74,7 @@ describe('FormLevelValidation', () => {
   });
 
   test('onFocus, onBlur', () => {
-    const form = createForm({ validate: formValidate });
+    const form = createForm();
     render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
@@ -98,7 +84,7 @@ describe('FormLevelValidation', () => {
   });
 
   test('onFocus, onChange: "t" -> ""', () => {
-    const form = createForm({ validate: formValidate });
+    const form = createForm();
     render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
@@ -109,7 +95,7 @@ describe('FormLevelValidation', () => {
   });
 
   test('onFocus, onChange: "t" -> "", onBlur', () => {
-    const form = createForm({ validate: formValidate });
+    const form = createForm();
     render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
