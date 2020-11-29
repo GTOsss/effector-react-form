@@ -4,9 +4,8 @@ const { terser } = require('rollup-plugin-terser');
 const rollup = require('rollup');
 
 const input = 'src/index.ts';
-const external = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
-const outputDirCSR = 'dist';
-const outputDirSSR = 'dist/ssr';
+const externalCSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
+const externalSSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
 
 configCSR = {
   input,
@@ -15,22 +14,33 @@ configCSR = {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
     babel({
+      presets: [
+        [
+          '@babel/env',
+          {
+            loose: true,
+            modules: false,
+          },
+        ],
+        '@babel/preset-react',
+      ],
       babelHelpers: 'runtime',
       exclude: 'node_modules/**',
       extensions: ['.js', '.ts'],
+      plugins: [['@babel/plugin-transform-typescript']],
     }),
-    terser(),
+    // terser(),
   ],
-  external,
+  external: externalCSR,
 };
 
 const outputCSR = [
   {
-    file: `${outputDirCSR}/bundle.cjs.js`,
+    file: `effector-react-form.cjs.js`,
     format: 'cjs',
   },
   {
-    file: `${outputDirCSR}/bundle.esm.js`,
+    file: `effector-react-form.esm.js`,
     format: 'esm',
   },
 ];
@@ -42,23 +52,33 @@ const configSSR = {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
     babel({
+      presets: [
+        [
+          '@babel/env',
+          {
+            loose: true,
+            modules: false,
+          },
+        ],
+        '@babel/preset-react',
+      ],
       babelHelpers: 'runtime',
       exclude: 'node_modules/**',
       extensions: ['.js', '.ts'],
-      plugins: [['effector/babel-plugin', { reactSsr: true }]],
+      plugins: [['@babel/plugin-transform-typescript'], ['effector/babel-plugin', { reactSsr: true }]],
     }),
-    terser(),
+    // terser(),
   ],
-  external,
+  external: externalSSR,
 };
 
 const outputSSR = [
   {
-    file: `${outputDirSSR}/bundle.cjs.js`,
+    file: `ssr.js`,
     format: 'cjs',
   },
   {
-    file: `${outputDirSSR}/bundle.esm.js`,
+    file: `ssr.esm.js`,
     format: 'esm',
   },
 ];
@@ -68,7 +88,7 @@ const build = async () => {
   const bundleCSR = await rollup.rollup(configCSR);
   await Promise.all(outputCSR.map((el) => bundleCSR.write(el)));
 
-  //SSR
+  // SSR
   const bundleSSR = await rollup.rollup(configSSR);
   await Promise.all(outputSSR.map((el) => bundleSSR.write(el)));
 };

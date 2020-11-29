@@ -1,13 +1,23 @@
 {
   "name": "effector-react-form",
-  "version": "2.0.10",
+  "version": "2.0.14",
   "description": "form manager",
   "main": "dist/bundle.cjs.js",
-  "module": "dist/bundle.esm.js",
+  "module": "dist/effector-react-form.esm.js",
   "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./effector-react-form.cjs.js",
+      "default": "./effector-react-form.esm.js"
+    },
+    "./ssr": {
+      "require": "./ssr.js",
+      "default": "./ssr.esm.js"
+    }
+  },
   "scripts": {
     "build": "npm run clean && npm run build:tsc && npm run build:rollup",
-    "build:rollup": "npm run clean && node tools/builder/rollup.js",
+    "build:rollup": "node tools/builder/rollup.js",
     "build:tsc": "tsc",
     "pretty": "cross-env prettier --write '**/*.{j,t}{s,sx}'",
     "lint": "cross-env eslint . --ext .js,.jsx,.ts,.tsx --fix.",
