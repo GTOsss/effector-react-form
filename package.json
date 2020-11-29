@@ -1,6 +1,6 @@
 {
   "name": "effector-react-form",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "form manager",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.esm.js",

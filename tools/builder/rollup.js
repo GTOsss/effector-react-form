@@ -1,6 +1,6 @@
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const { babel } = require('@rollup/plugin-babel');
-// const { terser } = require('rollup-plugin-terser');
+const { terser } = require('rollup-plugin-terser');
 const rollup = require('rollup');
 
 const input = 'src/index.ts';
@@ -54,11 +54,11 @@ const configSSR = {
 
 const outputSSR = [
   {
-    file: `${outputDirSSR}/ssr/bundle.cjs.js`,
+    file: `${outputDirSSR}/bundle.cjs.js`,
     format: 'cjs',
   },
   {
-    file: `${outputDirSSR}/ssr/bundle.esm.js`,
+    file: `${outputDirSSR}/bundle.esm.js`,
     format: 'esm',
   },
 ];
