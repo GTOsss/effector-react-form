@@ -22,6 +22,7 @@ import { initialFieldState } from './default-states';
 type UseFormParamsWithFactory<Values, Meta> = {
   form: Form<Values>;
   meta?: Meta;
+  resetUnmount?: boolean;
 };
 
 type UseFormResultWithFactory = {
@@ -41,6 +42,7 @@ type UseFormResultWithFactory = {
 const useForm = <Values extends AnyState = AnyState, Meta = any>({
   form,
   meta,
+  resetUnmount = true,
 }: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory => {
   const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
 
@@ -63,6 +65,12 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
 
   useEffect(() => {
     validateForm();
+
+    return () => {
+      if (resetUnmount) {
+        reset();
+      }
+    };
   }, []);
 
   useEffect(() => {
