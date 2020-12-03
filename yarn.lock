@@ -2321,9 +2321,9 @@ ecc-jsbn@~0.1.1:
     safer-buffer "^2.1.0"
 
 effector-react@^21.0.8:
-  version "21.0.8"
-  resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-21.0.8.tgz#497b7834e08a52b3f8f84c90d777bba1500cb2e7"
-  integrity sha512-mNJ785p7tT3+crEPvAiKH8YH/XXmBjAfYAcwktEs3awn5rplXMH246tQE6rjzFVnNZEhaROgFZqw51ViyrD2cw==
+  version "21.2.0"
+  resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-21.2.0.tgz#c15e2ef59e27b7772704168a59acee0808f3ab41"
+  integrity sha512-lAz8b2F5YgfJKQIegbBT2w8Jqvcs+62QnnYJe4+PqI2s7X3oJvuQ2Zm1obrrsWpoMOqDUdEpaP0KDMq8YRg5ng==
 
 effector@^21.6.1:
   version "21.7.5"
