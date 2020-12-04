@@ -4,7 +4,7 @@ import stringToPath from 'lodash.topath';
  * @param {object} state Redux state
  * @param path
  * @param removeEmpty
- * @param inDeep
+ * @param inDeep should be false for inlineMap
  * @param index
  * @returns {object} State
  */
