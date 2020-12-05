@@ -1,3 +1,7 @@
-*.test.ts
-*.test.tsx
-*.tests.tsx
+types
+tools
+utils
+ssr
+.eslintrc.js
+*.config.js
+__tests__

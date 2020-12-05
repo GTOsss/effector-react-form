@@ -1,4 +1,4 @@
-import { removeFromInlineMap } from '../utils/object-manager';
+import { removeFromInlineMap } from '../src/utils/object-manager';
 
 describe('utils', () => {
   test('removeFromInlineMap', () => {

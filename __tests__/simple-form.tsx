@@ -1,25 +1,24 @@
 import React from 'react';
-import { createStore } from 'effector';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { useForm } from '../';
-import { Controller } from '../../index';
+import { useForm } from '../src';
+import { Controller } from '../src/ts';
+import createForm from '../src/factories/create-form';
+import { createEvent } from 'effector';
 
-interface Values {
-  username?: string;
-  profile?: {
-    firstName?: string;
-    lastName?: string;
-  };
-}
+// interface Values {
+//   username?: string;
+//   profile?: {
+//     firstName?: string;
+//     lastName?: string;
+//   };
+// }
 
 interface InputProps {
   controller: Controller;
   label: string;
 }
 
-const renderForm = (inputRender?) => {
-  const $fieldsInline = createStore({});
-
+const renderForm = ({ inputRender, form }: any) => {
   const Input: React.FC<InputProps> = ({ controller, label }) => {
     const { input, error, isShowError } = controller();
 
@@ -37,7 +36,7 @@ const renderForm = (inputRender?) => {
   };
 
   const SimpleForm = () => {
-    const { handleSubmit, controller, setOrDeleteOuterError } = useForm({ $fieldsInline, onSubmit: () => {} });
+    const { handleSubmit, controller } = useForm({ form, meta: { formName: 'simpleForm' } });
 
     return (
       <form onSubmit={handleSubmit}>
@@ -48,7 +47,7 @@ const renderForm = (inputRender?) => {
         <button
           type="button"
           onClick={() =>
-            setOrDeleteOuterError({
+            form.setOrDeleteOuterError({
               field: 'profile.firstName',
               error: 'First name is not valid',
             })
@@ -61,12 +60,11 @@ const renderForm = (inputRender?) => {
   };
 
   render(<SimpleForm />);
-
-  return { $fieldsInline };
 };
 
 describe('SimpleForm', () => {
   test('onChange username, test performance', () => {
+    const form = createForm();
     const mapRenders = {
       username: 0,
       'profile.firstName': 0,
@@ -75,7 +73,7 @@ describe('SimpleForm', () => {
     const renderCallback = (name) => {
       mapRenders[name] += 1;
     };
-    renderForm(renderCallback);
+    renderForm({ inputRender: renderCallback, form });
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 't' } });
     fireEvent.change(input, { target: { value: 'te' } });
@@ -86,12 +84,14 @@ describe('SimpleForm', () => {
   });
 
   test('$fieldsInline after render', () => {
-    const { $fieldsInline } = renderForm();
-    expect($fieldsInline.getState()).toMatchSnapshot();
+    const form = createForm();
+    renderForm({ form });
+    expect(form.$fieldsInline.getState()).toMatchSnapshot();
   });
 
   test('onChange username', () => {
-    renderForm();
+    const form = createForm();
+    renderForm({ form });
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 'test' } });
     const inputs = screen.getAllByRole('textbox');
@@ -99,7 +99,8 @@ describe('SimpleForm', () => {
   });
 
   test('onChange profile.fistName', () => {
-    renderForm();
+    const form = createForm();
+    renderForm({ form });
     const input = screen.getByPlaceholderText('First name');
     fireEvent.change(input, { target: { value: 'test' } });
     const inputs = screen.getAllByRole('textbox');
@@ -107,7 +108,8 @@ describe('SimpleForm', () => {
   });
 
   test('setError profile.firstName', () => {
-    renderForm();
+    const form = createForm();
+    renderForm({ form });
     const button = screen.getByText('set error for firstName');
     fireEvent.click(button);
     const inputs = screen.getAllByRole('wrapper-for-input');
@@ -115,7 +117,8 @@ describe('SimpleForm', () => {
   });
 
   test('setError profile.firstName and submit', () => {
-    renderForm();
+    const form = createForm();
+    renderForm({ form });
     const button = screen.getByText('set error for firstName');
     fireEvent.click(button);
     const buttonSubmit = screen.getByText('submit');
@@ -125,7 +128,8 @@ describe('SimpleForm', () => {
   });
 
   test('setError profile.firstName, change and submit', () => {
-    renderForm();
+    const form = createForm();
+    renderForm({ form });
     const button = screen.getByText('set error for firstName');
     fireEvent.click(button);
     const buttonSubmit = screen.getByText('submit');
@@ -137,11 +141,52 @@ describe('SimpleForm', () => {
   });
 
   test('$fieldsInline after setError profile.firstName and focus firstName', () => {
-    const { $fieldsInline } = renderForm();
+    const form = createForm();
+    renderForm({ form });
     const button = screen.getByText('set error for firstName');
     fireEvent.click(button);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
-    expect($fieldsInline.getState()).toMatchSnapshot();
+    expect(form.$fieldsInline.getState()).toMatchSnapshot();
+  });
+
+  test('meta', () => {
+    const form = createForm();
+    renderForm({ form });
+    expect(form.$form.getState()).toMatchSnapshot();
+  });
+
+  test('meta and onSubmit', () => {
+    const fn = jest.fn(() => null);
+    const form = createForm({ onSubmit: fn });
+    renderForm({ form });
+    const buttonSubmit = screen.getByText('submit');
+    fireEvent.click(buttonSubmit);
+    // @ts-ignore
+    expect(fn.mock.calls[0][0]).toMatchSnapshot();
+  });
+
+  test('onSubmit callback call count', () => {
+    const fn = jest.fn(() => null);
+    const form = createForm({ onSubmit: fn });
+    renderForm({ form });
+    const input = screen.getByPlaceholderText('First name');
+    fireEvent.change(input, { target: { value: 'test' } });
+    const buttonSubmit = screen.getByText('submit');
+    fireEvent.click(buttonSubmit);
+    expect(fn.mock.calls.length).toBe(1);
+  });
+
+  test('onSubmit event call count', () => {
+    const fn = jest.fn(() => null);
+    const onSubmit = createEvent<any>();
+    onSubmit.watch(fn);
+    const form = createForm({ onSubmit });
+    renderForm({ form });
+    const input = screen.getByPlaceholderText('First name');
+    fireEvent.change(input, { target: { value: 'test' } });
+    const buttonSubmit = screen.getByText('submit');
+    fireEvent.click(buttonSubmit);
+    expect(fn.mock.calls.length).toBe(1);
   });
 });

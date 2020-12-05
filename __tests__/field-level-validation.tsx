@@ -1,15 +1,16 @@
-import { Controller, OnSubmit } from '../../index';
+import { Controller } from '../src/ts';
 import React from 'react';
-import { useForm } from '../index';
+import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
+import createForm from '../src/factories/create-form';
 
-interface Values {
-  username?: string;
-  profile?: {
-    firstName?: string;
-    lastName?: string;
-  };
-}
+// interface Values {
+//   username?: string;
+//   profile?: {
+//     firstName?: string;
+//     lastName?: string;
+//   };
+// }
 
 interface InputProps {
   controller: Controller;
@@ -38,8 +39,8 @@ const Input: React.FC<InputProps> = ({ controller, label }) => {
   );
 };
 
-const FieldLevelValidation = () => {
-  const { handleSubmit, controller, setOrDeleteError } = useForm({ onSubmit: () => {} });
+const FieldLevelValidation = ({ form }) => {
+  const { handleSubmit, controller } = useForm({ form });
 
   return (
     <form onSubmit={handleSubmit}>
@@ -50,7 +51,7 @@ const FieldLevelValidation = () => {
       <button
         type="button"
         onClick={() =>
-          setOrDeleteError({
+          form.setOrDeleteError({
             field: 'profile.firstName',
             error: 'First name is not valid',
           })
@@ -64,7 +65,8 @@ const FieldLevelValidation = () => {
 
 describe('FieldLevelValidation', () => {
   test('submit', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm();
+    render(<FieldLevelValidation form={form} />);
     const buttonSubmit = screen.getByText('submit');
     fireEvent.click(buttonSubmit);
     const inputs = screen.getAllByRole('wrapper-for-input');
@@ -72,7 +74,8 @@ describe('FieldLevelValidation', () => {
   });
 
   test('onFocus, onBlur', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm();
+    render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
     fireEvent.blur(inputFirstName);
@@ -81,7 +84,8 @@ describe('FieldLevelValidation', () => {
   });
 
   test('onFocus, onChange: "t" -> ""', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm();
+    render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
     fireEvent.change(inputFirstName, { target: { value: 't' } });
@@ -91,7 +95,8 @@ describe('FieldLevelValidation', () => {
   });
 
   test('onFocus, onChange: "t" -> "", onBlur', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm();
+    render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
     fireEvent.change(inputFirstName, { target: { value: 't' } });

@@ -1,8 +1,9 @@
 import React from 'react';
-import { useForm } from '../index';
+import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { useError } from '../index';
-import { Controller } from '../../index';
+import { useError } from '../src';
+import { Controller } from '../src/ts';
+import createForm from '../src/factories/create-form';
 
 // interface Values {
 //   username?: string,
@@ -39,12 +40,10 @@ const Input: React.FC<InputProps> = ({ controller, label }) => {
   );
 };
 
-const FieldLevelValidation = () => {
-  const { handleSubmit, controller, setOrDeleteError, ...rest } = useForm({
-    onSubmit: () => {},
-  });
-  const userNameError = useError({ ...rest, name: 'username' });
-  const profileFirstNameError = useError({ ...rest, name: 'profile.firstName' });
+const FieldLevelValidation = ({ form }) => {
+  const { handleSubmit, controller } = useForm({ form });
+  const userNameError = useError({ form, name: 'username' });
+  const profileFirstNameError = useError({ form, name: 'profile.firstName' });
 
   return (
     <form onSubmit={handleSubmit}>
@@ -55,7 +54,7 @@ const FieldLevelValidation = () => {
       <button
         type="button"
         onClick={() =>
-          setOrDeleteError({
+          form.setOrDeleteError({
             field: 'profile.firstName',
             error: 'First name is not valid',
           })
@@ -71,7 +70,8 @@ const FieldLevelValidation = () => {
 
 describe('useError', () => {
   test('submit, render', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm();
+    render(<FieldLevelValidation form={form} />);
     const buttonSubmit = screen.getByText('submit');
     fireEvent.click(buttonSubmit);
     const errors = screen.getAllByRole('error');

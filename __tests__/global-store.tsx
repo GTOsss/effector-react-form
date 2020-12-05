@@ -1,9 +1,8 @@
 // TODO need to finish
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { createStore } from 'effector';
-import { useForm } from '../';
-import { OnSubmit } from '../../index';
+import { useForm } from '../src';
+import createForm from '../src/factories/create-form';
 
 interface Values {
   username?: string;
@@ -14,8 +13,6 @@ interface Values {
 }
 
 const initialState: Values = { username: 'Initial username' };
-
-const $values = createStore(initialState);
 
 const Input = ({ controller, label }) => {
   const { input } = controller();
@@ -28,8 +25,8 @@ const Input = ({ controller, label }) => {
   );
 };
 
-const SimpleForm = () => {
-  const { handleSubmit, controller } = useForm<Values>({ $values, onSubmit: () => {} });
+const SimpleForm = ({ form }) => {
+  const { handleSubmit, controller } = useForm<Values>({ form });
 
   return (
     <form onSubmit={handleSubmit}>
@@ -43,7 +40,8 @@ const SimpleForm = () => {
 
 describe('GlobalStore', () => {
   test('onChange username', () => {
-    render(<SimpleForm />);
+    const form = createForm();
+    render(<SimpleForm form={form} />);
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 'test' } });
     const inputs = screen.getAllByRole('textbox');
@@ -51,9 +49,10 @@ describe('GlobalStore', () => {
   });
 
   test('onChange username ($values)', () => {
-    render(<SimpleForm />);
+    const form = createForm({ initialValues: initialState });
+    render(<SimpleForm form={form} />);
     const input = screen.getByPlaceholderText('Username');
     fireEvent.change(input, { target: { value: 'test' } });
-    expect($values.getState()).toMatchSnapshot();
+    expect(form.$values.getState()).toMatchSnapshot();
   });
 });

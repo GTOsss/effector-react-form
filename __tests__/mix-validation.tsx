@@ -1,10 +1,11 @@
 import {
   Controller,
   // OnSubmit,
-} from '../../index';
+} from '../src/ts';
 import React from 'react';
-import { useForm } from '../index';
+import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
+import createForm from '../src/factories/create-form';
 
 // interface Values {
 //   username?: string,
@@ -55,8 +56,8 @@ const Input: React.FC<InputProps> = ({ controller, label }) => {
   );
 };
 
-const FieldLevelValidation = () => {
-  const { handleSubmit, controller, setOrDeleteError } = useForm({ validate: formValidate, onSubmit: () => {} });
+const FieldLevelValidation = ({ form }) => {
+  const { handleSubmit, controller } = useForm({ form });
 
   return (
     <form onSubmit={handleSubmit}>
@@ -67,7 +68,7 @@ const FieldLevelValidation = () => {
       <button
         type="button"
         onClick={() =>
-          setOrDeleteError({
+          form.setOrDeleteError({
             field: 'profile.firstName',
             error: 'First name is not valid',
           })
@@ -81,7 +82,8 @@ const FieldLevelValidation = () => {
 
 describe('MixValidation', () => {
   test('submit', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm({ validate: formValidate });
+    render(<FieldLevelValidation form={form} />);
     const buttonSubmit = screen.getByText('submit');
     fireEvent.click(buttonSubmit);
     const inputs = screen.getAllByRole('wrapper-for-input');
@@ -89,7 +91,8 @@ describe('MixValidation', () => {
   });
 
   test('onFocus, onBlur', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm({ validate: formValidate });
+    render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
     fireEvent.blur(inputFirstName);
@@ -98,7 +101,8 @@ describe('MixValidation', () => {
   });
 
   test('onFocus, onChange: "t" -> ""', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm({ validate: formValidate });
+    render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
     fireEvent.change(inputFirstName, { target: { value: 't' } });
@@ -108,7 +112,8 @@ describe('MixValidation', () => {
   });
 
   test('onFocus, onChange: "t" -> "", onBlur', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm({ validate: formValidate });
+    render(<FieldLevelValidation form={form} />);
     const inputFirstName = screen.getByPlaceholderText('First name');
     fireEvent.focus(inputFirstName);
     fireEvent.change(inputFirstName, { target: { value: 't' } });
@@ -119,7 +124,8 @@ describe('MixValidation', () => {
   });
 
   test('onFocus, onChange: "t", onBlur', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm({ validate: formValidate });
+    render(<FieldLevelValidation form={form} />);
     const inputUsername = screen.getByPlaceholderText('Username');
     fireEvent.focus(inputUsername);
     fireEvent.change(inputUsername, { target: { value: 't' } });
@@ -129,7 +135,8 @@ describe('MixValidation', () => {
   });
 
   test('onFocus, onChange: "test", onBlur', () => {
-    render(<FieldLevelValidation />);
+    const form = createForm({ validate: formValidate });
+    render(<FieldLevelValidation form={form} />);
     const inputUsername = screen.getByPlaceholderText('Username');
     fireEvent.focus(inputUsername);
     fireEvent.change(inputUsername, { target: { value: 'test' } });

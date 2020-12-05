@@ -1,8 +1,8 @@
-import { Controller } from '../../index';
+import { Controller } from '../src/ts';
 import React, { useState } from 'react';
-import { useForm } from '../index';
+import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { createStore } from 'effector';
+import createForm from '../src/factories/create-form';
 
 interface InputProps {
   controller: Controller;
@@ -31,12 +31,12 @@ const Input: React.FC<InputProps> = ({ controller, label }) => {
   );
 };
 
-const $values1 = createStore({});
-const $values2 = createStore({});
+const form1 = createForm();
+const form2 = createForm();
 
-const RemoteSubmit = ({ onSubmit }) => {
-  const { handleSubmit: handleSubmit1, controller: controller1 } = useForm({ onSubmit, $values: $values1 });
-  const { handleSubmit: handleSubmit2, controller: controller2 } = useForm({ onSubmit, $values: $values2 });
+const RemoteSubmit = () => {
+  const { handleSubmit: handleSubmit1, controller: controller1 } = useForm({ form: form1 });
+  const { handleSubmit: handleSubmit2, controller: controller2 } = useForm({ form: form2 });
   const [formValue, setFormValue] = useState(true);
 
   const onClickToggle = () => {
@@ -65,15 +65,15 @@ const RemoteSubmit = ({ onSubmit }) => {
 
 describe('SeveralUseForm', () => {
   test('change and submit', () => {
-    render(<RemoteSubmit onSubmit={() => {}} />);
+    render(<RemoteSubmit />);
     const toggleForm = screen.getByText('toggle form');
     let input = screen.getByPlaceholderText('Name');
     fireEvent.change(input, { target: { value: 'test' } });
     fireEvent.click(toggleForm);
     input = screen.getByPlaceholderText('Name');
     fireEvent.change(input, { target: { value: 't' } });
-    const values1 = $values1.getState();
-    const values2 = $values2.getState();
+    const values1 = form1.$values.getState();
+    const values2 = form2.$values.getState();
     const form = screen.getByRole('form');
     expect(values1).toStrictEqual({ name: 'test' });
     expect(values2).toStrictEqual({ name: 't' });

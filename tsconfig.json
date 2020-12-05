@@ -2,26 +2,9 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["dom", "es2015", "es2016", "es2017"],
+    "lib": ["dom", "esnext"],
     "jsx": "react",
     "baseUrl": ".",
-    "paths": {
-      "@api/*": ["./src/api/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@components/*": ["./src/components/*"],
-      "@containers/*": ["./src/containers/*"],
-      "@hoc/*": ["./src/hoc/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@interfaces/*": ["./src/interfaces/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@services/*": ["./src/services/*"],
-      "@store/*": ["./src/store/*"],
-      "@styles/*": ["./src/styles/*"],
-      "@typings/*": ["./src/typings/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@misc/*": ["./src/misc/*"],
-      "@routes/*": ["./src/routes/*"],
-    },
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
@@ -39,6 +22,11 @@
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
     "strict": false,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "types"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build", "dist", "example", "src/__test__"]
 }

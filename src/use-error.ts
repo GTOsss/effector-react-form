@@ -1,16 +1,11 @@
-import { useStoreMap } from 'effector-react';
-import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams } from '../index';
+import { useStore, useStoreMap } from 'effector-react';
+import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams, UseErrorResult } from './ts';
 import { getIn } from './utils/object-manager';
-import { initialFieldState } from './use-form';
+import { initialFieldState } from './default-states';
 
-const useError = <Values>({
-  name,
-  $values,
-  $errorsInline,
-  $outerErrorsInline,
-  $form,
-  $fieldsInline,
-}: UseErrorParams) => {
+const useError = <Values>({ name, form }: UseErrorParams<Values>): UseErrorResult => {
+  const { $values, $fieldsInline, $errorsInline, $outerErrorsInline, $form } = form;
+
   const value = useStoreMap<Values, any, [string]>({
     store: $values,
     keys: [name],
@@ -55,6 +50,7 @@ const useError = <Values>({
     hasError: formHasError,
     hasOuterError: formHasOuterError,
   };
+  const meta = useStore(form.$meta);
 
   const isShowInnerError = (formState.submitted || fieldState.blurred) && Boolean(innerError);
   const isShowOuterError = !fieldState.changedAfterOuterError && Boolean(outerError);
@@ -63,6 +59,7 @@ const useError = <Values>({
   return {
     inputValue: value,
     form: formState,
+    meta,
     fieldState,
     error,
     innerError,

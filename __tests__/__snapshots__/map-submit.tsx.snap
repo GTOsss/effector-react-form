@@ -32,6 +32,7 @@ Object {
     "hasOuterError": false,
     "submitted": false,
   },
+  "meta": Object {},
   "outerErrorsInline": Object {},
   "values": Object {
     "info": Object {
@@ -76,6 +77,7 @@ Object {
     "hasOuterError": false,
     "submitted": false,
   },
+  "meta": Object {},
   "outerErrorsInline": Object {},
   "values": Object {
     "profile": Object {
@@ -118,6 +120,8 @@ Object {
     "hasOuterError": false,
     "submitted": true,
   },
+  "meta": Object {},
+  "outerErrorsInline": Object {},
   "values": Object {
     "info": Object {
       "username": "test username",
@@ -161,6 +165,8 @@ Object {
     "hasOuterError": false,
     "submitted": true,
   },
+  "meta": Object {},
+  "outerErrorsInline": Object {},
   "values": Object {
     "profile": Object {
       "firstName": "test first name",
