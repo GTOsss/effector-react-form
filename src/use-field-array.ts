@@ -3,7 +3,10 @@ import { useStore } from 'effector-react';
 import { AnyState, FieldArrayParams, MapFieldArrayCallback, ResultUseFieldArray } from './ts';
 import { getIn } from './utils/object-manager';
 
-const useFieldArray = <Values = AnyState>({ fieldArray, name }: FieldArrayParams<Values>): ResultUseFieldArray => {
+export const useFieldArray = <Values = AnyState>({
+  fieldArray,
+  name,
+}: FieldArrayParams<Values>): ResultUseFieldArray => {
   const refName = useRef(name);
   refName.current = name;
 
@@ -39,5 +42,3 @@ const useFieldArray = <Values = AnyState>({ fieldArray, name }: FieldArrayParams
     push: (value: any | any[]) => push({ fieldName: refName.current, value }),
   };
 };
-
-export default useFieldArray;

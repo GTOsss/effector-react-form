@@ -24,7 +24,7 @@ import { initialFieldState, initialFormState } from '../default-states';
 import { getValue } from '../utils/dom-helper';
 import { deleteIn, getIn, setIn } from '../utils/object-manager';
 
-const createForm = <Values = any, Meta = any>({
+export const createForm = <Values = any, Meta = any>({
   validate,
   mapSubmit = (params) => params,
   onSubmit: onSubmitArg,
@@ -311,5 +311,3 @@ const createForm = <Values = any, Meta = any>({
     fieldInit,
   };
 };
-
-export default createForm;

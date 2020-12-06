@@ -5,3 +5,4 @@ ssr
 .eslintrc.js
 *.config.js
 __tests__
+lib

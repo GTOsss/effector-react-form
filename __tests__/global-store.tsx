@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { useForm } from '../src';
-import createForm from '../src/factories/create-form';
+import { createForm } from '../src/factories/create-form';
 
 interface Values {
   username?: string;

@@ -3,7 +3,7 @@ import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useError } from '../src';
 import { Controller } from '../src/ts';
-import createForm from '../src/factories/create-form';
+import { createForm } from '../src/factories/create-form';
 
 // interface Values {
 //   username?: string,

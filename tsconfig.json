@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "ES2015",
     "lib": ["dom", "esnext"],
     "jsx": "react",
     "baseUrl": ".",
@@ -25,7 +25,7 @@
     "skipLibCheck": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "types"
+    "outDir": "lib"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "build", "dist", "example", "src/__test__"]

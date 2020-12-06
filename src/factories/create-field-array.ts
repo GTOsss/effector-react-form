@@ -2,7 +2,7 @@ import { createEvent as createEventNative } from 'effector';
 import { CreateFieldArrayParams, FieldArray } from '../ts';
 import { getIn, removeFromInlineMap, setIn } from '../utils/object-manager';
 
-const createFieldArray = <Values>({ form, domain }: CreateFieldArrayParams<Values>): FieldArray<Values> => {
+export const createFieldArray = <Values>({ form, domain }: CreateFieldArrayParams<Values>): FieldArray<Values> => {
   const { $values, $fieldsInline } = form;
 
   const createEvent = domain ? domain.createEvent : createEventNative;
@@ -94,5 +94,3 @@ const createFieldArray = <Values>({ form, domain }: CreateFieldArrayParams<Value
     push,
   };
 };
-
-export default createFieldArray;

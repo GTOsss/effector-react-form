@@ -6,7 +6,7 @@ import { useForm } from '../src';
 import { Controller } from '../src/ts';
 import { setIn, removeFromInlineMap } from '../src/utils/object-manager';
 import { Form } from '../src/ts';
-import createForm from '../src/factories/create-form';
+import { createForm } from '../src/factories/create-form';
 
 const renderForm = ({ form }: { form: Form<any> }) => {
   const validateRequired = (value) => (value ? undefined : 'Field is required');

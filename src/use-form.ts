@@ -39,7 +39,7 @@ type UseFormResultWithFactory = {
   fieldInit: (params: FieldInitParams) => FieldInitParams;
 };
 
-const useForm = <Values extends AnyState = AnyState, Meta = any>({
+export const useForm = <Values extends AnyState = AnyState, Meta = any>({
   form,
   meta,
   resetUnmount = true,
@@ -180,5 +180,3 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
     fieldInit,
   };
 };
-
-export default useForm;

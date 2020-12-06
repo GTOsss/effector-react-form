@@ -1,7 +1,9 @@
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
+const typescript = require('rollup-plugin-typescript2');
 const { babel } = require('@rollup/plugin-babel');
 const { terser } = require('rollup-plugin-terser');
 const rollup = require('rollup');
+const pkg = require('../../package.json');
 
 const input = 'src/index.ts';
 const externalCSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
@@ -13,34 +15,35 @@ configCSR = {
     nodeResolve({
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
-    babel({
-      presets: [
-        [
-          '@babel/env',
-          {
-            loose: true,
-            modules: false,
-          },
-        ],
-        '@babel/preset-react',
-      ],
-      babelHelpers: 'runtime',
-      exclude: 'node_modules/**',
-      extensions: ['.js', '.ts'],
-      plugins: [['@babel/plugin-transform-typescript']],
-    }),
+    // babel({
+    //   presets: [
+    //     [
+    //       '@babel/env',
+    //       {
+    //         loose: true,
+    //         modules: false,
+    //       },
+    //     ],
+    //     '@babel/preset-react',
+    //   ],
+    //   babelHelpers: 'runtime',
+    //   exclude: 'node_modules/**',
+    //   extensions: ['.js', '.ts'],
+    //   plugins: [['@babel/plugin-transform-typescript']],
+    // }),
+    typescript(),
     // terser(),
   ],
-  external: externalCSR,
+  external: [Object.keys(pkg.peerDependencies | {})],
 };
 
 const outputCSR = [
   {
-    file: `effector-react-form.cjs.js`,
+    file: `lib/index.cjs.js`,
     format: 'cjs',
   },
   {
-    file: `effector-react-form.esm.js`,
+    file: `lib/index.esm.js`,
     format: 'esm',
   },
 ];
@@ -51,34 +54,35 @@ const configSSR = {
     nodeResolve({
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
-    babel({
-      presets: [
-        [
-          '@babel/env',
-          {
-            loose: true,
-            modules: false,
-          },
-        ],
-        '@babel/preset-react',
-      ],
-      babelHelpers: 'runtime',
-      exclude: 'node_modules/**',
-      extensions: ['.js', '.ts'],
-      plugins: [['@babel/plugin-transform-typescript'], ['effector/babel-plugin', { reactSsr: true }]],
-    }),
+    // babel({
+    //   presets: [
+    //     [
+    //       '@babel/env',
+    //       {
+    //         loose: true,
+    //         modules: false,
+    //       },
+    //     ],
+    //     '@babel/preset-react',
+    //   ],
+    //   babelHelpers: 'runtime',
+    //   exclude: 'node_modules/**',
+    //   extensions: ['.js', '.ts'],
+    //   plugins: [['@babel/plugin-transform-typescript'], ['effector/babel-plugin', { reactSsr: true }]],
+    // }),
+    typescript(),
     // terser(),
   ],
-  external: externalSSR,
+  external: [Object.keys(pkg.peerDependencies | {})],
 };
 
 const outputSSR = [
   {
-    file: `ssr.js`,
+    file: `lib/ssr/index.cjs.js`,
     format: 'cjs',
   },
   {
-    file: `ssr.esm.js`,
+    file: `lib/ssr/index.esm.js`,
     format: 'esm',
   },
 ];

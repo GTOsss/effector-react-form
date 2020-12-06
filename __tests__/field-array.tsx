@@ -3,8 +3,8 @@ import React from 'react';
 import { useForm, useFieldArray } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { createEvent } from 'effector';
-import createForm from '../src/factories/create-form';
-import createFieldArray from '../src/factories/create-field-array';
+import { createForm } from '../src/factories/create-form';
+import { createFieldArray } from '../src/factories/create-field-array';
 
 let counterGlobal = 0;
 const getId = () => (counterGlobal += 1);

@@ -2,7 +2,7 @@ import { Controller } from '../src/ts';
 import React from 'react';
 import { useForm } from '../src';
 import { render, screen, fireEvent } from '@testing-library/react';
-import createForm from '../src/factories/create-form';
+import { createForm } from '../src/factories/create-form';
 import { createEvent } from 'effector';
 
 interface InputProps {
