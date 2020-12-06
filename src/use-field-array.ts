@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useRef } from 'react';
-import { useStore } from 'effector-react';
+import { useStore, useEvent } from 'effector-react';
 import { AnyState, FieldArrayParams, MapFieldArrayCallback, ResultUseFieldArray } from './ts';
 import { getIn } from './utils/object-manager';
 
@@ -9,9 +9,10 @@ const useFieldArray = <Values = AnyState>({ fieldArray, name }: FieldArrayParams
 
   const {
     form: { $values },
-    push,
-    remove,
   } = fieldArray;
+
+  const push = useEvent(fieldArray.push);
+  const remove = useEvent(fieldArray.remove);
 
   const values = useStore($values);
 
