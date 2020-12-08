@@ -1,6 +1,6 @@
 {
   "name": "effector-react-form",
-  "version": "2.0.20-beta-2",
+  "version": "2.0.20-beta-3",
   "description": "form manager",
   "main": "./lib/index.cjs.js",
   "module": "./lib/index.esm.js",
@@ -26,13 +26,13 @@
   ],
   "scripts": {
     "build": "npm run build:scr && npm run build:ssr",
-    "prebuild": "cross-env rimraf lib",
-    "build:scr": "cross-env tsc --outFile ./lib/index.d.ts && NODE_ENV=scr rollup -c",
-    "build:ssr": "cross-env tsc --outFile ./lib/ssr/index.d.ts && NODE_ENV=ssr rollup -c",
-    "pretty": "cross-env prettier --write '**/*.{j,t}{s,sx}'",
-    "lint": "cross-env eslint . --ext .js,.jsx,.ts,.tsx --fix.",
-    "test": "cross-env jest",
-    "commit": "cross-env git-cz"
+    "prebuild": "rimraf lib",
+    "build:scr": "tsc --outFile ./lib/index.d.ts && cross-env NODE_ENV=scr rollup -c",
+    "build:ssr": "cross-env tsc --outFile ./lib/ssr/index.d.ts && cross-env NODE_ENV=ssr rollup -c",
+    "pretty": "prettier --write '**/*.{j,t}{s,sx}'",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix.",
+    "test": "jest",
+    "commit": "git-cz"
   },
   "author": "Goncharov Timofey",
   "repository": {
