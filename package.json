@@ -1,6 +1,6 @@
 {
   "name": "effector-react-form",
-  "version": "2.0.20",
+  "version": "2.0.20-canary-1",
   "description": "form manager",
   "main": "./lib/index.cjs.js",
   "module": "./lib/index.esm.js",
@@ -21,8 +21,8 @@
   "scripts": {
     "build": "tsc && npm run build:scr && npm run build:ssr",
     "prebuild": "rimraf lib",
-    "build:scr": "NODE_ENV=scr rollup -c",
-    "build:ssr": "NODE_ENV=ssr rollup -c",
+    "build:scr": "cross-env NODE_ENV=scr rollup -c",
+    "build:ssr": "cross-env NODE_ENV=ssr rollup -c",
     "pretty": "cross-env prettier --write '**/*.{j,t}{s,sx}'",
     "lint": "cross-env eslint . --ext .js,.jsx,.ts,.tsx --fix.",
     "ts-check": "tsc",
