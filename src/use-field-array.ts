@@ -20,20 +20,19 @@ export const useFieldArray = <Values = AnyState>({
   const values = useStore($values);
 
   const map = useCallback<(fn: MapFieldArrayCallback) => ReactNode[]>(
-    (callback: MapFieldArrayCallback) => {
-      const results = [];
-      const fields = getIn(values, refName.current, []) as any[];
-      fields.forEach((field, index) => {
-        const callbackResult = callback({
-          formItemName: `${refName.current}.${index}`,
-          fields,
-          field,
-          index,
-        });
-        results.push(callbackResult);
-      });
-      return results;
-    },
+    (callback: MapFieldArrayCallback) =>
+      getIn(values, refName.current, []).reduce(
+        (acc, field, index, fields) =>
+          acc.concat(
+            callback({
+              formItemName: `${refName.current}.${index}`,
+              fields,
+              field,
+              index,
+            }),
+          ),
+        [] as any[],
+      ),
     [values],
   ); // todo Fix type
 
