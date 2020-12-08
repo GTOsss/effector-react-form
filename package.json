@@ -25,6 +25,7 @@
     "build:ssr": "NODE_ENV=ssr rollup -c",
     "pretty": "cross-env prettier --write '**/*.{j,t}{s,sx}'",
     "lint": "cross-env eslint . --ext .js,.jsx,.ts,.tsx --fix.",
+    "ts-check": "tsc",
     "test": "cross-env NODE_ENV=test jest",
     "clean": "rimraf dist lib es types",
     "commit": "cross-env git-cz"
