@@ -8,8 +8,8 @@ import stringToPath from 'lodash.topath';
  * @param index
  * @returns {object} State
  */
-export const deleteIn = (
-  state: Record<string, any>,
+export const deleteIn = <Obj = any>(
+  state: Obj,
   path: Array<string> | string,
   removeEmpty = false,
   inDeep = true, // false for inlineMap
@@ -50,11 +50,13 @@ export const deleteIn = (
     }
   } else if (isArray) {
     if (isEndPoint) {
+      // @ts-ignore
       return newState.filter((_, i) => Number(currentKey) !== i);
     } else {
       const result = deleteIn(newState[currentKey], pathArray, removeEmpty, inDeep, index + 1);
       const isRemoveEmpty = !result || (removeEmpty && (!result || !Object.keys(result).length));
       if (isRemoveEmpty) {
+        // @ts-ignore
         return newState.filter((_, i) => Number(currentKey) !== i);
       } else {
         newState[currentKey] = result;
@@ -72,7 +74,7 @@ export const deleteIn = (
  * @param {number} pathIndex Not require
  * @returns {object} State
  */
-export const setIn = (state, path, value, pathIndex = 0) => {
+export const setIn = <Obj = any, Result = any | any[]>(state: Obj, path, value, pathIndex = 0): Result => {
   const pathArray = pathIndex === 0 ? stringToPath(path) : path;
 
   if (pathIndex >= pathArray.length) {
@@ -85,11 +87,12 @@ export const setIn = (state, path, value, pathIndex = 0) => {
 
   if (!state) {
     if (isNaN(first)) {
-      return { [first]: next };
+      return { [first]: next } as Result;
     }
     const initialized = [];
     // @ts-ignore
     initialized[parseInt(first, 10)] = next;
+    // @ts-ignore
     return initialized;
   }
 
@@ -98,9 +101,11 @@ export const setIn = (state, path, value, pathIndex = 0) => {
     const copy = [].concat(state);
     // @ts-ignore
     copy[parseInt(first, 10)] = next;
+    // @ts-ignore
     return copy;
   }
 
+  // @ts-ignore
   return {
     ...state,
     [first]: next,
@@ -114,7 +119,7 @@ export const setIn = (state, path, value, pathIndex = 0) => {
  * @param {*?} defaultValue
  * @returns {object} State
  */
-export const getIn = (state, field, defaultValue?) => {
+export const getIn = <Obj, Result>(state: Obj, field: string, defaultValue?: Result): Result => {
   if (!state) {
     return defaultValue;
   }
@@ -134,6 +139,7 @@ export const getIn = (state, field, defaultValue?) => {
     return defaultValue;
   }
 
+  // @ts-ignore
   return result;
 };
 
