@@ -27,8 +27,8 @@
   "scripts": {
     "build": "npm run build:scr && npm run build:ssr",
     "prebuild": "cross-env rimraf lib",
-    "build:scr": "cross-env tsc --outDir ./lib/ && NODE_ENV=scr rollup -c",
-    "build:ssr": "cross-env tsc --outDir ./lib/ssr && NODE_ENV=ssr rollup -c",
+    "build:scr": "cross-env tsc --outFile ./lib/index.d.ts && NODE_ENV=scr rollup -c",
+    "build:ssr": "cross-env tsc --outFile ./lib/ssr/index.d.ts && NODE_ENV=ssr rollup -c",
     "pretty": "cross-env prettier --write '**/*.{j,t}{s,sx}'",
     "lint": "cross-env eslint . --ext .js,.jsx,.ts,.tsx --fix.",
     "test": "cross-env jest",
