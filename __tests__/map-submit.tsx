@@ -22,6 +22,7 @@ interface Values {
   };
 }
 
+// @ts-ignore
 const mapSubmit: MapSubmit<Values, MappedValues> = ({ values, ...rest }) => {
   const currentValues = {
     profile: { firstName: getIn(values, 'profile.firstName') },
