@@ -172,16 +172,16 @@ export type Form<Values = any, Meta = any> = {
   $fieldsInline: Store<Record<string, FieldState>>;
   $meta: Store<Meta>;
 
-  setValue: Event<any>;
-  setOrDeleteError: Event<any>;
+  setValue: Event<SetValueParams>;
+  setOrDeleteError: Event<SetOrDeleteErrorParams>;
   setErrorsInlineState: Event<any>;
-  setFieldState: Event<any>;
-  setSubmitted: Event<any>;
+  setFieldState: Event<SetFieldStateParams>;
+  setSubmitted: Event<boolean>;
   resetOuterFieldStateFlags: Event<any>;
-  setOrDeleteOuterError: Event<any>;
+  setOrDeleteOuterError: Event<SetOrDeleteOuterErrorParams>;
   reset: Event<any>;
 
-  setMeta: Event<any>;
+  setMeta: Event<Meta>;
 
   setOuterErrorsInlineState: Event<any>;
   validateForm: Event<any>;
