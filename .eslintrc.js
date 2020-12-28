@@ -42,5 +42,11 @@ module.exports = {
     'no-plusplus': 'off',
     'react/jsx-one-expression-per-line': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
 };
