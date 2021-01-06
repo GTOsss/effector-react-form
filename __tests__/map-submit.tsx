@@ -2,7 +2,7 @@ import React from 'react';
 import { createStore } from 'effector';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { useForm } from '../src';
-import { getIn } from '../src/utils/object-manager';
+import { getInTs } from '../src/utils/object-manager';
 import createForm from '../src/factories/create-form';
 import { MapSubmit, Controller } from '../src/ts';
 
@@ -24,8 +24,8 @@ interface Values {
 
 const mapSubmit: MapSubmit<Values, MappedValues> = ({ values, ...rest }) => {
   const currentValues = {
-    profile: { firstName: getIn(values, 'profile.firstName') },
-    info: { username: getIn(values, 'username') },
+    profile: { firstName: getInTs(values, 'profile', 'firstName') },
+    info: { username: getInTs(values, 'username') },
   };
 
   return { ...rest, values: currentValues };

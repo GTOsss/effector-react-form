@@ -9,9 +9,9 @@ export type FieldsInline = Record<string, FieldState>;
 
 export type Message = string | null | undefined;
 
-export type Messages<Values> = {
-  [key in keyof Values]?: Values[key] extends AnyState ? Messages<Values[key]> : Message;
-};
+// export type Messages<Values> = {
+//   [key in keyof Values]?: Values[key] extends AnyState ? Messages<Values[key]> : Message;
+// };
 
 export type SubmitParams<Values = any, Meta = any> = {
   values: Values;
@@ -40,7 +40,7 @@ export type FieldState = {
 };
 
 export type ControllerParams = {
-  name: string;
+  name: string | string[];
   validate?: (value: any) => Message;
 };
 

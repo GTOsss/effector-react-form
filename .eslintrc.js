@@ -48,5 +48,6 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+    '@typescript-eslint/ban-types': 'off',
   },
 };
