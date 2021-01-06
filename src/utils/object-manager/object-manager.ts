@@ -119,12 +119,12 @@ export const setIn = <Obj = any, Result = any | any[]>(state: Obj, path, value, 
  * @param {*?} defaultValue
  * @returns {object} State
  */
-export const getIn = <Obj, Result>(state: Obj, field: string, defaultValue?: Result): Result => {
+export const getIn = <Obj, Result>(state: Obj, field: string | string[], defaultValue?: Result): Result => {
   if (!state) {
     return defaultValue;
   }
 
-  const path = stringToPath(field);
+  const path: string[] = Array.isArray(field) ? field : stringToPath(field);
   const { length } = path;
   if (!length) {
     return defaultValue;
@@ -170,4 +170,10 @@ export const removeFromInlineMap = (map: Record<string, any>, key: string) => {
   return newInlineMap;
 };
 
-export const makeConsistentKey = (key) => stringToPath(key).join('.');
+export const makeConsistentKey = (key: string | string[]) => {
+  if (Array.isArray(key)) {
+    return key.join('.');
+  }
+
+  return stringToPath(key).join('.');
+};

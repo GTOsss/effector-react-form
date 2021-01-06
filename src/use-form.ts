@@ -16,7 +16,7 @@ import {
   SetOrDeleteOuterErrorParams,
   FieldInitParams,
 } from './ts';
-import { getIn, makeConsistentKey } from './utils/object-manager';
+import { getIn, makeConsistentKey, getName, GetName } from './utils/object-manager';
 import { initialFieldState } from './default-states';
 
 type UseFormParamsWithFactory<Values, Meta> = {
@@ -25,8 +25,9 @@ type UseFormParamsWithFactory<Values, Meta> = {
   resetUnmount?: boolean;
 };
 
-type UseFormResultWithFactory = {
+type UseFormResultWithFactory<Values extends object> = {
   controller: ControllerHof;
+  getName: GetName<Values>;
   handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
   setValue: (params: SetValueParams) => SetValueParams;
   setOrDeleteError: (params: SetOrDeleteErrorParams) => SetOrDeleteErrorParams;
@@ -43,7 +44,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   form,
   meta,
   resetUnmount = true,
-}: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory => {
+}: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory<Values> => {
   const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
 
   const setMeta = useEvent(form.setMeta);
@@ -86,27 +87,27 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
         fieldInit({ name: refName.current, validate });
       }, []);
 
-      const value = useStoreMap<Values, any, [string]>({
+      const value = useStoreMap({
         store: $values,
-        keys: [nameProp],
+        keys: [refName.current],
         fn: (values, [field]) => getIn(values, field) || null,
       });
 
-      const innerError = useStoreMap<ErrorsInline, Message, [string]>({
+      const innerError = useStoreMap({
         store: $errorsInline,
-        keys: [nameProp],
+        keys: [refName.current],
         fn: (errorsInline, [field]) => errorsInline[field] || null,
       });
       const outerError = useStoreMap<ErrorsInline, Message, [string]>({
         store: $outerErrorsInline,
-        keys: [nameProp],
+        keys: [refName.current],
         fn: (outerErrorsInline, [field]) => outerErrorsInline[field] || null,
       });
       const error = innerError || outerError;
 
       const fieldState = useStoreMap<FieldsInline, FieldState, [string]>({
         store: $fieldsInline,
-        keys: [nameProp],
+        keys: [refName.current],
         fn: (fieldsInline, [field]) => fieldsInline[field] || initialFieldState,
       });
 
@@ -137,7 +138,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
 
       return {
         input: {
-          name: nameProp,
+          name: refName.current,
           value,
           onChange: (eventOrValue) => onChangeFieldBrowser({ event: eventOrValue, name: refName.current }),
           onFocus: (event) => onFocusFieldBrowser({ event, name: refName.current }),
@@ -168,6 +169,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
 
   return {
     controller,
+    getName,
     handleSubmit,
     setValue,
     setOrDeleteError,

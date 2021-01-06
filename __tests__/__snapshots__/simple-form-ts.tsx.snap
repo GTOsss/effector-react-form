@@ -1,0 +1,352 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SimpleForm $fieldsInline after render 1`] = `
+Object {
+  "profile.firstName": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": undefined,
+  },
+  "profile.lastName": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": undefined,
+  },
+  "username": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": undefined,
+  },
+}
+`;
+
+exports[`SimpleForm $fieldsInline after setError profile.firstName and focus firstName 1`] = `
+Object {
+  "profile.firstName": Object {
+    "_type": "fieldMeta",
+    "active": true,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": true,
+    "touchedAfterOuterError": true,
+    "validate": undefined,
+  },
+  "profile.lastName": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": undefined,
+  },
+  "username": Object {
+    "_type": "fieldMeta",
+    "active": false,
+    "blurred": false,
+    "blurredAfterOuterError": false,
+    "changed": false,
+    "changedAfterOuterError": false,
+    "touched": false,
+    "touchedAfterOuterError": false,
+    "validate": undefined,
+  },
+}
+`;
+
+exports[`SimpleForm meta 1`] = `
+Object {
+  "hasError": false,
+  "hasOuterError": false,
+  "submitted": false,
+}
+`;
+
+exports[`SimpleForm meta and onSubmit 1`] = `
+Object {
+  "errorsInline": Object {},
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "profile.lastName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": false,
+    "hasOuterError": false,
+    "submitted": true,
+  },
+  "meta": Object {
+    "formName": "simpleForm",
+  },
+  "outerErrorsInline": Object {},
+  "values": Object {},
+}
+`;
+
+exports[`SimpleForm onChange profile.fistName 1`] = `
+Array [
+  <input
+    class="input"
+    name="username"
+    placeholder="Username"
+    role="textbox"
+    value=""
+  />,
+  <input
+    class="input"
+    name="profile.firstName"
+    placeholder="First name"
+    role="textbox"
+    value="test"
+  />,
+  <input
+    class="input"
+    name="profile.lastName"
+    placeholder="Last name"
+    role="textbox"
+    value=""
+  />,
+]
+`;
+
+exports[`SimpleForm onChange username 1`] = `
+Array [
+  <input
+    class="input"
+    name="username"
+    placeholder="Username"
+    role="textbox"
+    value="test"
+  />,
+  <input
+    class="input"
+    name="profile.firstName"
+    placeholder="First name"
+    role="textbox"
+    value=""
+  />,
+  <input
+    class="input"
+    name="profile.lastName"
+    placeholder="Last name"
+    role="textbox"
+    value=""
+  />,
+]
+`;
+
+exports[`SimpleForm onChange username, test performance 1`] = `
+Object {
+  "profile.firstName": 2,
+  "profile.lastName": 2,
+  "username": 7,
+}
+`;
+
+exports[`SimpleForm setError profile.firstName 1`] = `
+Array [
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Username
+    </label>
+    <input
+      class="input"
+      name="username"
+      placeholder="Username"
+      role="textbox"
+      value=""
+    />
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      First name
+    </label>
+    <input
+      class="input"
+      name="profile.firstName"
+      placeholder="First name"
+      role="textbox"
+      value=""
+    />
+    <span>
+      First name is not valid
+    </span>
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Last name
+    </label>
+    <input
+      class="input"
+      name="profile.lastName"
+      placeholder="Last name"
+      role="textbox"
+      value=""
+    />
+  </div>,
+]
+`;
+
+exports[`SimpleForm setError profile.firstName and submit 1`] = `
+Array [
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Username
+    </label>
+    <input
+      class="input"
+      name="username"
+      placeholder="Username"
+      role="textbox"
+      value=""
+    />
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      First name
+    </label>
+    <input
+      class="input"
+      name="profile.firstName"
+      placeholder="First name"
+      role="textbox"
+      value=""
+    />
+    <span>
+      First name is not valid
+    </span>
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Last name
+    </label>
+    <input
+      class="input"
+      name="profile.lastName"
+      placeholder="Last name"
+      role="textbox"
+      value=""
+    />
+  </div>,
+]
+`;
+
+exports[`SimpleForm setError profile.firstName, change and submit 1`] = `
+Array [
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Username
+    </label>
+    <input
+      class="input"
+      name="username"
+      placeholder="Username"
+      role="textbox"
+      value=""
+    />
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      First name
+    </label>
+    <input
+      class="input"
+      name="profile.firstName"
+      placeholder="First name"
+      role="textbox"
+      value="t"
+    />
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Last name
+    </label>
+    <input
+      class="input"
+      name="profile.lastName"
+      placeholder="Last name"
+      role="textbox"
+      value=""
+    />
+  </div>,
+]
+`;

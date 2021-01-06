@@ -46,14 +46,14 @@ exports[`UnmountField render fields 1`] = `
 Array [
   <input
     class="input"
-    name="fields[0].value"
+    name="fields.0.value"
     placeholder="value № 0"
     role="textbox"
     value=""
   />,
   <input
     class="input"
-    name="fields[1].value"
+    name="fields.1.value"
     placeholder="value № 1"
     role="textbox"
     value=""
@@ -65,7 +65,7 @@ exports[`UnmountField render fields after removed 1`] = `
 Array [
   <input
     class="input"
-    name="fields[0].value"
+    name="fields.0.value"
     placeholder="value № 0"
     role="textbox"
     value=""
@@ -84,11 +84,14 @@ Array [
     </label>
     <input
       class="input"
-      name="fields[0].value"
+      name="fields.0.value"
       placeholder="value № 0"
       role="textbox"
       value=""
     />
+    <span>
+      Field is required
+    </span>
   </div>,
 ]
 `;
