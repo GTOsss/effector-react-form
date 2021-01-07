@@ -22,9 +22,9 @@ import {
 } from '../ts';
 import { initialFieldState, initialFormState } from '../default-states';
 import { getValue } from '../utils/dom-helper';
-import { deleteIn, getIn, setIn } from '../utils/object-manager';
+import { deleteIn, getIn, GetName, getName, setIn } from '../utils/object-manager';
 
-const createForm = <Values = any, Meta = any>({
+const createForm = <Values extends object = any, Meta = any>({
   validate,
   mapSubmit = (params) => params,
   onSubmit: onSubmitArg,
@@ -309,6 +309,8 @@ const createForm = <Values = any, Meta = any>({
     onFocusFieldBrowser,
     onBlurFieldBrowser,
     fieldInit,
+
+    getName: getName as GetName<Values>,
   };
 };
 

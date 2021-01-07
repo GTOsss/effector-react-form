@@ -3,7 +3,7 @@ import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorPar
 import { getIn } from './utils/object-manager';
 import { initialFieldState } from './default-states';
 
-const useError = <Values>({ name, form }: UseErrorParams<Values>): UseErrorResult => {
+const useError = <Values extends object>({ name, form }: UseErrorParams<Values>): UseErrorResult => {
   const { $values, $fieldsInline, $errorsInline, $outerErrorsInline, $form } = form;
 
   const value = useStoreMap<Values, any, [string]>({

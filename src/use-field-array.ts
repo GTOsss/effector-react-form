@@ -3,7 +3,10 @@ import { useStore, useEvent } from 'effector-react';
 import { AnyState, FieldArrayParams, MapFieldArrayCallback, ResultUseFieldArray } from './ts';
 import { getIn } from './utils/object-manager';
 
-const useFieldArray = <Values = AnyState>({ fieldArray, name }: FieldArrayParams<Values>): ResultUseFieldArray => {
+const useFieldArray = <Values extends object = AnyState>({
+  fieldArray,
+  name,
+}: FieldArrayParams<Values>): ResultUseFieldArray => {
   const refName = useRef(name);
   refName.current = name;
 
