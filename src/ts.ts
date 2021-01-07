@@ -1,5 +1,6 @@
 import { Store, Event, Domain } from 'effector';
 import React from 'react';
+import { GetName } from './utils/object-manager';
 
 export type AnyState = Record<string, any>;
 
@@ -112,7 +113,7 @@ export type OnSubmit<Values, Meta = any> = (params: SubmitParams<Values, Meta>) 
 
 export type OnChange<Values, Meta = any> = OnSubmit<Values, Meta>;
 
-export type UseErrorParams<Values> = {
+export type UseErrorParams<Values extends object = any> = {
   name: string;
   form: Form<Values>;
 };
@@ -130,7 +131,7 @@ export type UseErrorResult<Meta = any> = {
   isShowInnerError: boolean;
 };
 
-export type FieldArrayParams<Values> = {
+export type FieldArrayParams<Values extends object = any> = {
   name: string;
   fieldArray: FieldArray<Values>;
 };
@@ -164,7 +165,7 @@ export type CreateFormParams<Values = any, MappedValues = any, Meta = any> = {
   domain?: Domain;
 };
 
-export type Form<Values = any, Meta = any> = {
+export type Form<Values extends object = any, Meta = any> = {
   $values: Store<Values>;
   $errorsInline: Store<ErrorsInline>;
   $outerErrorsInline: Store<ErrorsInline>;
@@ -192,15 +193,17 @@ export type Form<Values = any, Meta = any> = {
   onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   fieldInit: Event<{ name: string; validate?: ControllerParams['validate'] }>;
+
+  getName: GetName<Values>;
 };
 
-export type FieldArray<Values> = {
+export type FieldArray<Values extends object = any> = {
   form: Form<Values>;
   push: Event<{ fieldName: string; value: any | any[] }>;
   remove: Event<{ fieldName: string; index: number }>;
 };
 
-export type CreateFieldArrayParams<Values> = {
+export type CreateFieldArrayParams<Values extends object = any> = {
   form: Form<Values>;
   domain?: Domain;
 };

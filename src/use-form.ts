@@ -16,18 +16,17 @@ import {
   SetOrDeleteOuterErrorParams,
   FieldInitParams,
 } from './ts';
-import { getIn, makeConsistentKey, getName, GetName } from './utils/object-manager';
+import { getIn, makeConsistentKey } from './utils/object-manager';
 import { initialFieldState } from './default-states';
 
-type UseFormParamsWithFactory<Values, Meta> = {
+type UseFormParamsWithFactory<Values extends object, Meta> = {
   form: Form<Values>;
   meta?: Meta;
   resetUnmount?: boolean;
 };
 
-type UseFormResultWithFactory<Values extends object> = {
+type UseFormResultWithFactory = {
   controller: ControllerHof;
-  getName: GetName<Values>;
   handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
   setValue: (params: SetValueParams) => SetValueParams;
   setOrDeleteError: (params: SetOrDeleteErrorParams) => SetOrDeleteErrorParams;
@@ -44,7 +43,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   form,
   meta,
   resetUnmount = true,
-}: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory<Values> => {
+}: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory => {
   const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
 
   const setMeta = useEvent(form.setMeta);
@@ -169,7 +168,6 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
 
   return {
     controller,
-    getName,
     handleSubmit,
     setValue,
     setOrDeleteError,
