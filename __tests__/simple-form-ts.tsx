@@ -62,7 +62,7 @@ const renderForm = ({ inputRender, form }: { inputRender?: any; form: Form<Value
   render(<SimpleForm />);
 };
 
-describe('SimpleForm', () => {
+describe('SimpleFormTs', () => {
   test('onChange username, test performance', () => {
     const form = createForm<Values>();
 

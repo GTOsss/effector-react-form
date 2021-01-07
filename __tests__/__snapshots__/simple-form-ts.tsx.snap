@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SimpleForm $fieldsInline after render 1`] = `
+exports[`SimpleFormTs $fieldsInline after render 1`] = `
 Object {
   "profile.firstName": Object {
     "_type": "fieldMeta",
@@ -38,7 +38,7 @@ Object {
 }
 `;
 
-exports[`SimpleForm $fieldsInline after setError profile.firstName and focus firstName 1`] = `
+exports[`SimpleFormTs $fieldsInline after setError profile.firstName and focus firstName 1`] = `
 Object {
   "profile.firstName": Object {
     "_type": "fieldMeta",
@@ -76,7 +76,7 @@ Object {
 }
 `;
 
-exports[`SimpleForm meta 1`] = `
+exports[`SimpleFormTs meta 1`] = `
 Object {
   "hasError": false,
   "hasOuterError": false,
@@ -84,7 +84,7 @@ Object {
 }
 `;
 
-exports[`SimpleForm meta and onSubmit 1`] = `
+exports[`SimpleFormTs meta and onSubmit 1`] = `
 Object {
   "errorsInline": Object {},
   "fieldsInline": Object {
@@ -135,7 +135,7 @@ Object {
 }
 `;
 
-exports[`SimpleForm onChange profile.fistName 1`] = `
+exports[`SimpleFormTs onChange profile.fistName 1`] = `
 Array [
   <input
     class="input"
@@ -161,7 +161,7 @@ Array [
 ]
 `;
 
-exports[`SimpleForm onChange username 1`] = `
+exports[`SimpleFormTs onChange username 1`] = `
 Array [
   <input
     class="input"
@@ -187,7 +187,7 @@ Array [
 ]
 `;
 
-exports[`SimpleForm onChange username, test performance 1`] = `
+exports[`SimpleFormTs onChange username, test performance 1`] = `
 Object {
   "profile.firstName": 2,
   "profile.lastName": 2,
@@ -195,7 +195,7 @@ Object {
 }
 `;
 
-exports[`SimpleForm setError profile.firstName 1`] = `
+exports[`SimpleFormTs setError profile.firstName 1`] = `
 Array [
   <div
     class="input-wrap"
@@ -248,7 +248,7 @@ Array [
 ]
 `;
 
-exports[`SimpleForm setError profile.firstName and submit 1`] = `
+exports[`SimpleFormTs setError profile.firstName and submit 1`] = `
 Array [
   <div
     class="input-wrap"
@@ -301,7 +301,7 @@ Array [
 ]
 `;
 
-exports[`SimpleForm setError profile.firstName, change and submit 1`] = `
+exports[`SimpleFormTs setError profile.firstName, change and submit 1`] = `
 Array [
   <div
     class="input-wrap"
