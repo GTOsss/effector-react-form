@@ -9,20 +9,22 @@ import {
 } from 'effector';
 import { SyntheticEvent } from 'react';
 import {
-  ControllerParams,
   CreateFormParams,
   ErrorsInline,
+  FieldInitParams,
   FieldsInline,
   FieldState,
   Form,
   FormState,
-  Message,
+  SetFieldStateParams,
   SetOrDeleteErrorParams,
+  SetOrDeleteOuterErrorParams,
+  SetValueParams,
   SubmitParams,
 } from '../ts';
 import { initialFieldState, initialFormState } from '../default-states';
 import { getValue } from '../utils/dom-helper';
-import { deleteIn, getIn, GetName, getName, setIn } from '../utils/object-manager';
+import { deleteIn, getIn, GetName, getName, makeConsistentKey, setIn } from '../utils/object-manager';
 
 const createForm = <Values extends object = any, Meta = any>({
   validate,
@@ -40,13 +42,13 @@ const createForm = <Values extends object = any, Meta = any>({
 
   const setMeta = createEvent<Meta>(`Form_SetValue`);
 
-  const setValue = createEvent<{ field: string; value: any }>(`Form_SetValue`);
+  const setValue = createEvent<SetValueParams>(`Form_SetValue`);
   const setOrDeleteError = createEvent<SetOrDeleteErrorParams>(`Form_SetOrDeleteError`);
   const setErrorsInlineState = createEvent<ErrorsInline>(`Form_SetErrorsInlineState`);
-  const setFieldState = createEvent<{ field: string; state: FieldState }>(`Form_SetFieldState`);
+  const setFieldState = createEvent<SetFieldStateParams>(`Form_SetFieldState`);
   const setSubmitted = createEvent<boolean>(`Form_SetSubmitted`);
   const resetOuterFieldStateFlags = createEvent('Form_ResetOuterFieldStateFlags');
-  const setOrDeleteOuterError = createEvent<{ field: string; error: Message }>('Form_SetOrDeleteOuterError');
+  const setOrDeleteOuterError = createEvent<SetOrDeleteOuterErrorParams>('Form_SetOrDeleteOuterError');
   const reset = createEvent('Form_Reset');
 
   const setOuterErrorsInlineState = createEvent<ErrorsInline>('Form_SetOuterErrorsInlineState');
@@ -78,7 +80,7 @@ const createForm = <Values extends object = any, Meta = any>({
   }));
   const onFocusFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnFocus`);
   const onBlurFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnBlur`);
-  const fieldInit = createEvent<{ name: string; validate?: ControllerParams['validate'] }>(`Form_fieldInit`);
+  const fieldInit = createEvent<FieldInitParams>(`Form_fieldInit`);
 
   const validateByValues = ({ values, fieldsInline }) => {
     const errorsInlineState = {};
@@ -171,14 +173,14 @@ const createForm = <Values extends object = any, Meta = any>({
 
   $errorsInline
     .on(setOrDeleteError, (state, { field, error }) =>
-      error ? { ...state, [field]: error } : deleteIn(state, field, false, false),
+      error ? { ...state, [makeConsistentKey(field)]: error } : deleteIn(state, field, false, false),
     )
     .on(setErrorsInlineState, (_, errorsInline) => errorsInline)
     .reset(reset);
 
   $outerErrorsInline
     .on(setOrDeleteOuterError, (state, { field, error }) =>
-      error ? { ...state, [field]: error } : deleteIn(state, field, false, false),
+      error ? { ...state, [makeConsistentKey(field)]: error } : deleteIn(state, field, false, false),
     )
     .on(setOuterErrorsInlineState, (_, errorsInline) => errorsInline)
     .reset(reset);
@@ -186,8 +188,8 @@ const createForm = <Values extends object = any, Meta = any>({
   $fieldsInline
     .on(setOrDeleteOuterError, (state, { field }) => ({
       ...state,
-      [field]: {
-        ...state[field],
+      [makeConsistentKey(field)]: {
+        ...state[makeConsistentKey(field)],
         touchedAfterOuterError: false,
         changedAfterOuterError: false,
         blurredAfterOuterError: false,
@@ -207,10 +209,12 @@ const createForm = <Values extends object = any, Meta = any>({
       return newState;
     })
     .on(setFieldState, (state, { field, state: fieldState }) => {
-      return { ...state, [field]: fieldState };
+      return { ...state, [makeConsistentKey(field)]: fieldState };
     })
     .on(fieldInit, (state, { name, validate }) =>
-      state[name] ? state : { ...state, [name]: { ...initialFieldState, validate } },
+      state[makeConsistentKey(name)]
+        ? state
+        : { ...state, [makeConsistentKey(name)]: { ...initialFieldState, validate } },
     )
     .reset(reset);
 

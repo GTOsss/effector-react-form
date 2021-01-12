@@ -46,27 +46,27 @@ export type ControllerParams = {
 };
 
 export type SetValueParams = {
-  field: string;
+  field: string | string[];
   value: any;
 };
 
 export type SetOrDeleteErrorParams = {
-  field: string;
+  field: string | string[];
   error?: Message;
 };
 
 export type SetFieldStateParams = {
-  field: string;
+  field: string | string[];
   state: FieldState;
 };
 
 export type SetOrDeleteOuterErrorParams = {
-  field: string;
+  field: string | string[];
   error: Message;
 };
 
 export type FieldInitParams = {
-  name: string;
+  name: string | string[];
   validate?: ControllerParams['validate'];
 };
 
@@ -192,7 +192,7 @@ export type Form<Values extends object = any, Meta = any> = {
   onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
-  fieldInit: Event<{ name: string; validate?: ControllerParams['validate'] }>;
+  fieldInit: Event<FieldInitParams>;
 
   getName: GetName<Values>;
 };
