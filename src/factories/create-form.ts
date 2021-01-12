@@ -24,7 +24,16 @@ import {
 } from '../ts';
 import { initialFieldState, initialFormState } from '../default-states';
 import { getValue } from '../utils/dom-helper';
-import { deleteIn, getIn, GetName, getName, makeConsistentKey, setIn } from '../utils/object-manager';
+import {
+  deleteIn,
+  getIn,
+  GetName,
+  getName,
+  getNameStr,
+  GetNameStr,
+  makeConsistentKey,
+  setIn,
+} from '../utils/object-manager';
 
 const createForm = <Values extends object = any, Meta = any>({
   validate,
@@ -315,6 +324,7 @@ const createForm = <Values extends object = any, Meta = any>({
     fieldInit,
 
     getName: getName as GetName<Values>,
+    getNameStr: getNameStr as GetNameStr<Values>,
   };
 };
 
