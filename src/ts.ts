@@ -1,6 +1,6 @@
 import { Store, Event, Domain } from 'effector';
 import React from 'react';
-import { GetName } from './utils/object-manager';
+import { GetName, GetNameStr } from './utils/object-manager';
 
 export type AnyState = Record<string, any>;
 
@@ -195,6 +195,7 @@ export type Form<Values extends object = any, Meta = any> = {
   fieldInit: Event<FieldInitParams>;
 
   getName: GetName<Values>;
+  getNameStr: GetNameStr<Values>;
 };
 
 export type FieldArray<Values extends object = any> = {
