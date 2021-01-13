@@ -1,4 +1,4 @@
-export type GetName<Obj extends object> = {
+type GetName<Obj extends object> = {
   <K0 extends keyof Obj>(k0: K0): string[];
 
   <K0 extends keyof Obj, K1 extends keyof Obj[K0]>(k0: K0, k1: K1): string[];
@@ -61,4 +61,6 @@ export type GetName<Obj extends object> = {
   ): string[];
 };
 
-export const getName = (...keys: any): any => keys;
+const getName = (...keys: any): any => keys;
+
+export { getName, GetName };
