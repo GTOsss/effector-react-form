@@ -45,6 +45,7 @@ const createForm = <Values extends object = any, Meta = any>({
   initialValues,
   initialMeta = {},
   domain,
+  resetOuterErrorsBySubmit = true,
 }: CreateFormParams<Values> = {}): Form<Values> => {
   const createEvent = domain ? domain.createEvent : createEventNative;
   const createStore = domain ? domain.createStore : createStoreNative;
@@ -57,6 +58,7 @@ const createForm = <Values extends object = any, Meta = any>({
   const setFieldState = createEvent<SetFieldStateParams>(`Form_SetFieldState`);
   const setSubmitted = createEvent<boolean>(`Form_SetSubmitted`);
   const resetOuterFieldStateFlags = createEvent('Form_ResetOuterFieldStateFlags');
+  const resetOuterErrors = createEvent('Form_ResetOuterErrors');
   const setOrDeleteOuterError = createEvent<SetOrDeleteOuterErrorParams>('Form_SetOrDeleteOuterError');
   const reset = createEvent('Form_Reset');
 
@@ -118,6 +120,19 @@ const createForm = <Values extends object = any, Meta = any>({
   forward({
     from: submit,
     to: [validateForm, resetOuterFieldStateFlags],
+  });
+
+  if (resetOuterErrorsBySubmit) {
+    forward({
+      from: submit,
+      to: resetOuterErrors,
+    });
+  }
+
+  sample({
+    source: resetOuterErrors,
+    fn: () => ({}),
+    target: $outerErrorsInline,
   });
 
   sample({
@@ -302,6 +317,7 @@ const createForm = <Values extends object = any, Meta = any>({
     setFieldState,
     setSubmitted,
     resetOuterFieldStateFlags,
+    resetOuterErrors,
     setOrDeleteOuterError,
     setOuterErrorsInlineState,
     validateForm,

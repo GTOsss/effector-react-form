@@ -279,9 +279,6 @@ Array [
       role="textbox"
       value=""
     />
-    <span>
-      First name is not valid
-    </span>
   </div>,
   <div
     class="input-wrap"
