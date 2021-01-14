@@ -163,6 +163,7 @@ export type CreateFormParams<Values = any, MappedValues = any, Meta = any> = {
   initialValues?: Values;
   initialMeta?: Meta;
   domain?: Domain;
+  resetOuterErrorsBySubmit?: boolean;
 };
 
 export type Form<Values extends object = any, Meta = any> = {
@@ -179,6 +180,7 @@ export type Form<Values extends object = any, Meta = any> = {
   setFieldState: Event<SetFieldStateParams>;
   setSubmitted: Event<boolean>;
   resetOuterFieldStateFlags: Event<any>;
+  resetOuterErrors: Event<any>;
   setOrDeleteOuterError: Event<SetOrDeleteOuterErrorParams>;
   reset: Event<any>;
 
