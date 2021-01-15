@@ -102,7 +102,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
         keys: [refName.current],
         fn: (outerErrorsInline, [field]) => outerErrorsInline[field] || null,
       });
-      const error = innerError || outerError;
+      const error = outerError || innerError;
 
       const fieldState = useStoreMap<FieldsInline, FieldState, [string]>({
         store: $fieldsInline,
