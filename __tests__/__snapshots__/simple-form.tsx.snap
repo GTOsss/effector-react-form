@@ -248,6 +248,58 @@ Array [
 ]
 `;
 
+exports[`SimpleForm setError profile.firstName and change 1`] = `
+Array [
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Username
+    </label>
+    <input
+      class="input"
+      name="username"
+      placeholder="Username"
+      role="textbox"
+      value=""
+    />
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      First name
+    </label>
+    <input
+      class="input"
+      name="profile.firstName"
+      placeholder="First name"
+      role="textbox"
+      value="test"
+    />
+  </div>,
+  <div
+    class="input-wrap"
+    role="wrapper-for-input"
+  >
+    <label>
+      Last name
+    </label>
+    <input
+      class="input"
+      name="profile.lastName"
+      placeholder="Last name"
+      role="textbox"
+      value=""
+    />
+  </div>,
+]
+`;
+
+exports[`SimpleForm setError profile.firstName and change, $outerErrorsInline 1`] = `Object {}`;
+
 exports[`SimpleForm setError profile.firstName and submit 1`] = `
 Array [
   <div

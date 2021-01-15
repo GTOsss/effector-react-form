@@ -100,16 +100,13 @@ export type Controller<Meta = any> = () => ControllerInjectedResult<Meta>;
 
 export type ControllerHof<Meta = any> = (a: ControllerParams) => Controller<Meta>;
 
-export type FormValidateParams<Values> = {
-  values: Values;
-  errorsInline: ErrorsInline;
-};
-
-export type FormValidate<Values> = (params: FormValidateParams<Values>) => ErrorsInline;
+export type FormValidate<Values, Meta> = (params: FormValidateParams<Values, Meta>) => ErrorsInline;
 
 export type MapSubmit<Values, ResultValues, Meta = any> = (
   params: SubmitParams<Values, Meta>,
 ) => SubmitParams<ResultValues, Meta>;
+
+export type FormValidateParams<Values, Meta> = SubmitParams<Values, Meta>;
 
 export type OnSubmit<Values, Meta = any> = (params: SubmitParams<Values, Meta>) => void;
 
@@ -155,10 +152,10 @@ export type ResultUseFieldArray = {
 
 export type GuardFn<Values = any, Meta = any> = (params: SubmitParams<Values, Meta>) => boolean;
 
-export type CreateFormParams<Values = any, MappedValues = any, Meta = any> = {
-  validate?: FormValidate<Values>;
+export type CreateFormParams<Values = any, MappedValues = Values, Meta = any> = {
+  validate?: FormValidate<Values, Meta>;
   mapSubmit?: MapSubmit<Values, MappedValues, Meta>;
-  onSubmit?: OnSubmit<Values, Meta>;
+  onSubmit?: OnSubmit<MappedValues, Meta>;
   onSubmitGuardFn?: GuardFn<Values, Meta>;
   onChange?: OnChange<Values, Meta>;
   onChangeGuardFn?: GuardFn<Values, Meta>;
