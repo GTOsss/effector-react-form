@@ -44,11 +44,11 @@ const createForm = <Values extends object = any, Meta = any>({
   onChange: onChangeArg,
   onChangeGuardFn = ({ form }) => !form.hasError,
   initialValues,
-  initialMeta = {},
+  initialMeta = {} as any,
   domain,
   resetOuterErrorsBySubmit = true,
   resetOuterErrorByOnChange = true,
-}: CreateFormParams<Values> = {}): Form<Values> => {
+}: CreateFormParams<Values, Values, Meta> = {}): Form<Values> => {
   const createEvent = domain ? domain.createEvent : createEventNative;
   const createStore = domain ? domain.createStore : createStoreNative;
 
@@ -96,7 +96,7 @@ const createForm = <Values extends object = any, Meta = any>({
   const onBlurFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnBlur`);
   const fieldInit = createEvent<FieldInitParams>(`Form_fieldInit`);
 
-  const validateByValues = ({ values, fieldsInline }) => {
+  const validateByValues = ({ values, fieldsInline, ...rest }: SubmitParams) => {
     const errorsInlineState = {};
 
     Object.entries<FieldState>(fieldsInline).forEach(([name, { validate }]) => {
@@ -107,7 +107,7 @@ const createForm = <Values extends object = any, Meta = any>({
     });
 
     if (validate) {
-      const formLevelErrorsInlineState = validate({ values, errorsInline: errorsInlineState });
+      const formLevelErrorsInlineState = validate({ ...rest, values, errorsInline: errorsInlineState, fieldsInline });
       Object.entries(formLevelErrorsInlineState).forEach(([name, error]) => {
         if (error) {
           errorsInlineState[name] = error;
@@ -147,13 +147,13 @@ const createForm = <Values extends object = any, Meta = any>({
   });
 
   sample({
-    source: { values: $values, fieldsInline: $fieldsInline },
+    source: $allFormState,
     clock: validateForm,
     fn: (params) => validateByValues(params),
     target: $errorsInline,
   });
   sample({
-    source: { values: $values, fieldsInline: $fieldsInline },
+    source: $allFormState,
     clock: $values,
     fn: (params) => validateByValues(params),
     target: $errorsInline,
