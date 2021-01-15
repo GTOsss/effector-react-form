@@ -120,6 +120,14 @@ const createForm = <Values extends object = any, Meta = any>({
     return errorsInlineState;
   };
 
+  if (resetOuterErrorByOnChange) {
+    sample({
+      source: onChangeField,
+      fn: ({ name }) => name,
+      target: resetOuterError,
+    });
+  }
+
   forward({
     from: submit,
     to: [validateForm, resetOuterFieldStateFlags],
@@ -210,11 +218,8 @@ const createForm = <Values extends object = any, Meta = any>({
       error ? { ...state, [makeConsistentKey(field)]: error } : deleteIn(state, field, false, false),
     )
     .on(setOuterErrorsInlineState, (_, errorsInline) => errorsInline)
+    .on(resetOuterError, (errors, field) => deleteIn(errors, field, false, false))
     .reset(reset);
-
-  if (resetOuterErrorByOnChange) {
-    $outerErrorsInline.on(resetOuterError, (errors, field) => deleteIn(errors, field, false, false));
-  }
 
   $fieldsInline
     .on(setOrDeleteOuterError, (state, { field }) => ({

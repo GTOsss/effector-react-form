@@ -116,6 +116,27 @@ describe('SimpleForm', () => {
     expect(inputs).toMatchSnapshot();
   });
 
+  test('setError profile.firstName and change', () => {
+    const form = createForm();
+    renderForm({ form });
+    const button = screen.getByText('set error for firstName');
+    fireEvent.click(button);
+    const input = screen.getByPlaceholderText('First name');
+    fireEvent.change(input, { target: { value: 'test' } });
+    const inputs = screen.getAllByRole('wrapper-for-input');
+    expect(inputs).toMatchSnapshot();
+  });
+
+  test('setError profile.firstName and change, $outerErrorsInline', () => {
+    const form = createForm();
+    renderForm({ form });
+    const button = screen.getByText('set error for firstName');
+    fireEvent.click(button);
+    const input = screen.getByPlaceholderText('First name');
+    fireEvent.change(input, { target: { value: 'test' } });
+    expect(form.$outerErrorsInline.getState()).toMatchSnapshot();
+  });
+
   test('setError profile.firstName and submit', () => {
     const form = createForm();
     renderForm({ form });
