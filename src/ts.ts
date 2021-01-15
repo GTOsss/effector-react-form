@@ -65,6 +65,8 @@ export type SetOrDeleteOuterErrorParams = {
   error: Message;
 };
 
+export type ResetOuterErrorParams = string | string[];
+
 export type FieldInitParams = {
   name: string | string[];
   validate?: ControllerParams['validate'];
@@ -164,6 +166,7 @@ export type CreateFormParams<Values = any, MappedValues = any, Meta = any> = {
   initialMeta?: Meta;
   domain?: Domain;
   resetOuterErrorsBySubmit?: boolean;
+  resetOuterErrorByOnChange?: boolean;
 };
 
 export type Form<Values extends object = any, Meta = any> = {
