@@ -161,6 +161,16 @@ describe('FieldArray', () => {
     expect(form.$values.getState()).toMatchSnapshot();
   });
 
+  test('add form item with values > $errorsInline', () => {
+    reset();
+    const form = createForm();
+    const fieldArray = createFieldArray({ form });
+    render(<FieldArray form={form} fieldArray={fieldArray} onPush={(push) => push({ id: getId() })} />);
+    const addFormItem = screen.getByText('add form item with values');
+    fireEvent.click(addFormItem);
+    expect(form.$errorsInline.getState()).toMatchSnapshot();
+  });
+
   test('add form item with values (x3) > $values', () => {
     reset();
     const formItems = [
