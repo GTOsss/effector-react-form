@@ -1,4 +1,4 @@
-import { createEvent as createEventNative } from 'effector';
+import { createEvent as createEventNative, sample } from 'effector';
 import { CreateFieldArrayParams, FieldArray } from '../ts';
 import { getIn, removeFromInlineMap, setIn } from '../utils/object-manager';
 
@@ -90,6 +90,12 @@ const createFieldArray = <Values extends object = any>({
   //   });
   //   return setIn(values, refName.current, newFields);
   // });
+
+  sample({
+    source: form.$allFormState,
+    clock: form.fieldInit,
+    target: form.validateForm,
+  });
 
   return {
     form,

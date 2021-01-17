@@ -345,6 +345,7 @@ const createForm = <Values extends object = any, Meta = any>({
     $fieldsInline,
     $form,
     $meta,
+    $allFormState,
 
     onChangeFieldBrowser,
     onFocusFieldBrowser,

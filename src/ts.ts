@@ -166,6 +166,15 @@ export type CreateFormParams<Values = any, MappedValues = Values, Meta = any> = 
   resetOuterErrorByOnChange?: boolean;
 };
 
+type AllFormState<Values extends object, Meta = any> = Store<{
+  values: Values;
+  errorsInline: Record<string, string>;
+  outerErrorsInline: Record<string, string>;
+  fieldsInline: Record<string, FieldState>;
+  form: FormState;
+  meta: Meta;
+}>;
+
 export type Form<Values extends object = any, Meta = any> = {
   $values: Store<Values>;
   $errorsInline: Store<ErrorsInline>;
@@ -173,6 +182,7 @@ export type Form<Values extends object = any, Meta = any> = {
   $form: Store<FormState>;
   $fieldsInline: Store<Record<string, FieldState>>;
   $meta: Store<Meta>;
+  $allFormState: AllFormState<Values, Meta>;
 
   setValue: Event<SetValueParams>;
   setOrDeleteError: Event<SetOrDeleteErrorParams>;

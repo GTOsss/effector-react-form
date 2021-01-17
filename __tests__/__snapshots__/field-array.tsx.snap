@@ -743,6 +743,13 @@ Object {
 }
 `;
 
+exports[`FieldArray add form item with values > $errorsInline 1`] = `
+Object {
+  "parents.0.profile.firstName": "Field is required",
+  "parents.0.username": "Field is required",
+}
+`;
+
 exports[`FieldArray add form item with values > $values 1`] = `
 Object {
   "parents": Array [
