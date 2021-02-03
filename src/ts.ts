@@ -50,6 +50,8 @@ export type SetValueParams = {
   value: any;
 };
 
+export type SetValuesParams<Values> = Values;
+
 export type SetOrDeleteErrorParams = {
   field: string | string[];
   error?: Message;
@@ -185,6 +187,7 @@ export type Form<Values extends object = any, Meta = any> = {
   $allFormState: AllFormState<Values, Meta>;
 
   setValue: Event<SetValueParams>;
+  setValues: Event<SetValuesParams<Values>>;
   setOrDeleteError: Event<SetOrDeleteErrorParams>;
   setErrorsInlineState: Event<any>;
   setFieldState: Event<SetFieldStateParams>;

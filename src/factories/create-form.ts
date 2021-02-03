@@ -21,6 +21,7 @@ import {
   SetOrDeleteErrorParams,
   SetOrDeleteOuterErrorParams,
   SetValueParams,
+  SetValuesParams,
   SubmitParams,
 } from '../ts';
 import { initialFieldState, initialFormState } from '../default-states';
@@ -55,6 +56,7 @@ const createForm = <Values extends object = any, Meta = any>({
   const setMeta = createEvent<Meta>(`Form_SetValue`);
 
   const setValue = createEvent<SetValueParams>(`Form_SetValue`);
+  const setValues = createEvent<SetValuesParams<Values>>(`Form_SetValues`);
   const setOrDeleteError = createEvent<SetOrDeleteErrorParams>(`Form_SetOrDeleteError`);
   const setErrorsInlineState = createEvent<ErrorsInline>(`Form_SetErrorsInlineState`);
   const setFieldState = createEvent<SetFieldStateParams>(`Form_SetFieldState`);
@@ -203,6 +205,7 @@ const createForm = <Values extends object = any, Meta = any>({
 
   $values
     .on(setValue, (state, { field, value }) => setIn(state, field, value))
+    .on(setValues, (_, values) => values)
     .on(onChangeField, (state, { value, name }) => setIn(state, name, value))
     .reset(reset);
 
@@ -324,6 +327,7 @@ const createForm = <Values extends object = any, Meta = any>({
 
   return {
     setValue,
+    setValues,
     setOrDeleteError,
     setErrorsInlineState,
     setFieldState,
