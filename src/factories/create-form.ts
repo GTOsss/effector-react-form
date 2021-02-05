@@ -89,11 +89,14 @@ const createForm = <Values extends object = any, Meta = any>({
     meta: $meta,
   });
 
-  const onChangeFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnChange`);
-  const onChangeField = onChangeFieldBrowser.map<{ value: any; name: string }>(({ name, event }) => ({
-    value: getValue(event),
-    name,
-  }));
+  const onChangeFieldBrowser = createEvent<{ event: SyntheticEvent; name: string; flat?: boolean }>(`Form_OnChange`);
+  const onChangeField = onChangeFieldBrowser.map<{ value: any; name: string; flat?: boolean }>(
+    ({ name, event, flat }) => ({
+      value: getValue(event),
+      name,
+      flat,
+    }),
+  );
   const onFocusFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnFocus`);
   const onBlurFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnBlur`);
   const fieldInit = createEvent<FieldInitParams>(`Form_fieldInit`);
@@ -206,7 +209,9 @@ const createForm = <Values extends object = any, Meta = any>({
   $values
     .on(setValue, (state, { field, value }) => setIn(state, field, value))
     .on(setValues, (_, values) => values)
-    .on(onChangeField, (state, { value, name }) => setIn(state, name, value))
+    .on(onChangeField, (state, { value, name, flat }) =>
+      flat ? { ...state, [name]: value } : setIn(state, name, value),
+    )
     .reset(reset);
 
   $errorsInline
@@ -250,10 +255,10 @@ const createForm = <Values extends object = any, Meta = any>({
     .on(setFieldState, (state, { field, state: fieldState }) => {
       return { ...state, [makeConsistentKey(field)]: fieldState };
     })
-    .on(fieldInit, (state, { name, validate }) =>
+    .on(fieldInit, (state, { name, validate, flat }) =>
       state[makeConsistentKey(name)]
         ? state
-        : { ...state, [makeConsistentKey(name)]: { ...initialFieldState, validate } },
+        : { ...state, [flat ? name : makeConsistentKey(name)]: { ...initialFieldState, validate } },
     )
     .reset(reset);
 

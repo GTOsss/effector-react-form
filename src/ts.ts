@@ -42,6 +42,7 @@ export type FieldState = {
 
 export type ControllerParams = {
   name: string | string[];
+  flat?: boolean;
   validate?: (value: any) => Message;
 };
 
@@ -71,6 +72,7 @@ export type ResetOuterErrorParams = string | string[];
 
 export type FieldInitParams = {
   name: string | string[];
+  flat?: boolean;
   validate?: ControllerParams['validate'];
 };
 
@@ -204,7 +206,7 @@ export type Form<Values extends object = any, Meta = any> = {
   submit: Event<any>;
   onSubmit: Event<SubmitParams<Values, Meta>>;
 
-  onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string; flat?: boolean }>;
   onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
   fieldInit: Event<FieldInitParams>;
