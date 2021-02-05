@@ -77,19 +77,21 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
     setMeta(meta);
   }, [meta]);
 
-  const controller = useCallback<ControllerHof>(({ name: nameProp, validate }) => {
+  const controller = useCallback<ControllerHof>(({ name: nameProp, validate, flat }) => {
     return (): ControllerInjectedResult => {
       const refName = useRef<string>(makeConsistentKey(nameProp));
       refName.current = makeConsistentKey(nameProp);
+      const refFlat = useRef<boolean>(flat);
+      refFlat.current = flat;
 
       useEffect(() => {
-        fieldInit({ name: refName.current, validate });
+        fieldInit({ name: refName.current, validate, flat });
       }, []);
 
       const value = useStoreMap({
         store: $values,
         keys: [refName.current],
-        fn: (values, [field]) => getIn(values, field) || null,
+        fn: (values, [field]) => (flat ? values[field] : getIn(values, field)) || null,
       });
 
       const innerError = useStoreMap({
@@ -139,7 +141,8 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
         input: {
           name: refName.current,
           value,
-          onChange: (eventOrValue) => onChangeFieldBrowser({ event: eventOrValue, name: refName.current }),
+          onChange: (eventOrValue) =>
+            onChangeFieldBrowser({ event: eventOrValue, name: refName.current, flat: refFlat.current }),
           onFocus: (event) => onFocusFieldBrowser({ event, name: refName.current }),
           onBlur: (event) => onBlurFieldBrowser({ event, name: refName.current }),
         },

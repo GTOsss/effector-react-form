@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SimpleFormFlat meta and onSubmit 1`] = `
+Object {
+  "errorsInline": Object {},
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "profile.lastName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": false,
+    "hasOuterError": false,
+    "submitted": true,
+  },
+  "meta": Object {
+    "formName": "simpleForm",
+  },
+  "outerErrorsInline": Object {},
+  "values": Object {},
+}
+`;
+
+exports[`SimpleFormFlat onChange profile.firstName $values 1`] = `
+Object {
+  "profile.firstName": "test",
+}
+`;
+
+exports[`SimpleFormFlat onChange profile.firstName, profile.lastName  $values 1`] = `
+Object {
+  "profile": Object {
+    "lastName": "test2",
+  },
+  "profile.firstName": "test1",
+}
+`;
+
+exports[`SimpleFormFlat onChange profile.lastName $values 1`] = `
+Object {
+  "profile": Object {
+    "lastName": "test",
+  },
+}
+`;
