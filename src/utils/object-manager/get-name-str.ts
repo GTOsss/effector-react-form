@@ -1,4 +1,4 @@
-export type GetNameStr<Obj extends object> = {
+export type GetNameStr<Obj> = {
   <K0 extends keyof Obj>(k0: K0): string;
 
   <K0 extends keyof Obj, K1 extends keyof Obj[K0]>(k0: K0, k1: K1): string;
