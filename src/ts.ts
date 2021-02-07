@@ -116,7 +116,7 @@ export type OnSubmit<Values, Meta = any> = (params: SubmitParams<Values, Meta>) 
 
 export type OnChange<Values, Meta = any> = OnSubmit<Values, Meta>;
 
-export type UseErrorParams<Values extends object = any> = {
+export type UseErrorParams<Values = any> = {
   name: string;
   form: Form<Values>;
 };
@@ -134,7 +134,7 @@ export type UseErrorResult<Meta = any> = {
   isShowInnerError: boolean;
 };
 
-export type FieldArrayParams<Values extends object = any> = {
+export type FieldArrayParams<Values = any> = {
   name: string;
   fieldArray: FieldArray<Values>;
 };
@@ -170,7 +170,7 @@ export type CreateFormParams<Values = any, MappedValues = Values, Meta = any> = 
   resetOuterErrorByOnChange?: boolean;
 };
 
-type AllFormState<Values extends object, Meta = any> = Store<{
+type AllFormState<Values, Meta = any> = Store<{
   values: Values;
   errorsInline: Record<string, string>;
   outerErrorsInline: Record<string, string>;
@@ -179,7 +179,7 @@ type AllFormState<Values extends object, Meta = any> = Store<{
   meta: Meta;
 }>;
 
-export type Form<Values extends object = any, Meta = any> = {
+export type Form<Values = any, Meta = any> = {
   $values: Store<Values>;
   $errorsInline: Store<ErrorsInline>;
   $outerErrorsInline: Store<ErrorsInline>;
@@ -215,13 +215,13 @@ export type Form<Values extends object = any, Meta = any> = {
   getNameStr: GetNameStr<Values>;
 };
 
-export type FieldArray<Values extends object = any> = {
+export type FieldArray<Values = any> = {
   form: Form<Values>;
   push: Event<{ fieldName: string; value: any | any[] }>;
   remove: Event<{ fieldName: string; index: number }>;
 };
 
-export type CreateFieldArrayParams<Values extends object = any> = {
+export type CreateFieldArrayParams<Values = any> = {
   form: Form<Values>;
   domain?: Domain;
 };
