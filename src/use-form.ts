@@ -28,6 +28,7 @@ type UseFormParamsWithFactory<Values extends object, Meta> = {
 type UseFormResultWithFactory = {
   controller: ControllerHof;
   handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
+  setMeta: (meta: any) => void;
   setValue: (params: SetValueParams) => SetValueParams;
   setOrDeleteError: (params: SetOrDeleteErrorParams) => SetOrDeleteErrorParams;
   setFieldState: (params: SetFieldStateParams) => SetFieldStateParams;
@@ -172,6 +173,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   return {
     controller,
     handleSubmit,
+    setMeta,
     setValue,
     setOrDeleteError,
     setFieldState,

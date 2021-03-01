@@ -53,7 +53,7 @@ const createForm = <Values extends object = any, Meta = any>({
   const createEvent = domain ? domain.createEvent : createEventNative;
   const createStore = domain ? domain.createStore : createStoreNative;
 
-  const setMeta = createEvent<Meta>(`Form_SetValue`);
+  const setMeta = createEvent<Meta>(`Form_SetMeta`);
 
   const setValue = createEvent<SetValueParams>(`Form_SetValue`);
   const setValues = createEvent<SetValuesParams<Values>>(`Form_SetValues`);
