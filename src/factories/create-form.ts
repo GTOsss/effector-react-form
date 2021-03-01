@@ -212,14 +212,14 @@ const createForm = <Values extends object = any, Meta = any>({
     .on(onChangeField, (state, { value, name, flat }) =>
       flat ? { ...state, [name]: value } : setIn(state, name, value),
     )
-    .reset(reset);
+    .on(reset, () => initialValues);
 
   $errorsInline
     .on(setOrDeleteError, (state, { field, error }) =>
       error ? { ...state, [makeConsistentKey(field)]: error } : deleteIn(state, field, false, false),
     )
     .on(setErrorsInlineState, (_, errorsInline) => errorsInline)
-    .reset(reset);
+    .on(reset, () => ({}));
 
   $outerErrorsInline
     .on(setOrDeleteOuterError, (state, { field, error }) =>
@@ -227,7 +227,7 @@ const createForm = <Values extends object = any, Meta = any>({
     )
     .on(setOuterErrorsInlineState, (_, errorsInline) => errorsInline)
     .on(resetOuterError, (errors, field) => deleteIn(errors, field, false, false))
-    .reset(reset);
+    .on(reset, () => ({}));
 
   $fieldsInline
     .on(setOrDeleteOuterError, (state, { field }) => ({
@@ -260,7 +260,7 @@ const createForm = <Values extends object = any, Meta = any>({
         ? state
         : { ...state, [flat ? name : makeConsistentKey(name)]: { ...initialFieldState, validate } },
     )
-    .reset(reset);
+    .on(reset, () => ({}));
 
   $form
     .on($outerErrorsInline.updates, (state, outerErrors) =>
@@ -271,9 +271,9 @@ const createForm = <Values extends object = any, Meta = any>({
     .on($errorsInline.updates, (state, errorsInline) =>
       setIn(state, 'hasError', Boolean(Object.keys(errorsInline).length)),
     )
-    .reset(reset);
+    .on(reset, () => initialFormState);
 
-  $meta.on(setMeta, (state, meta) => meta || state).reset(reset);
+  $meta.on(setMeta, (state, meta) => meta || state).on(reset, () => initialMeta);
 
   /// Field {
 
