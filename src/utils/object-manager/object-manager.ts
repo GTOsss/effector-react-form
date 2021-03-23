@@ -10,7 +10,7 @@ import stringToPath from 'lodash.topath';
  */
 export const deleteIn = <Obj = any>(
   state: Obj,
-  path: Array<string> | string,
+  path: string | string[],
   removeEmpty = false,
   inDeep = true, // false for inlineMap
   index = 0,
@@ -74,7 +74,12 @@ export const deleteIn = <Obj = any>(
  * @param {number} pathIndex Not require
  * @returns {object} State
  */
-export const setIn = <Obj = any, Result = any | any[]>(state: Obj, path, value, pathIndex = 0): Result => {
+export const setIn = <Obj = any, Result = any | any[]>(
+  state: Obj,
+  path: string | string[],
+  value,
+  pathIndex = 0,
+): Result => {
   const pathArray = pathIndex === 0 ? stringToPath(path) : path;
 
   if (pathIndex >= pathArray.length) {
