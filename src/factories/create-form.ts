@@ -256,8 +256,15 @@ const createForm = <Values extends object = any, Meta = any>({
       return { ...state, [makeConsistentKey(field)]: fieldState };
     })
     .on(fieldInit, (state, { name, validate, flat }) =>
-      state[makeConsistentKey(name)]
-        ? state
+      state[flat ? name : makeConsistentKey(name)]
+        ? {
+            ...state,
+            [flat ? name : makeConsistentKey(name)]: {
+              ...state[flat ? name : makeConsistentKey(name)],
+              ...initialFieldState,
+              validate,
+            },
+          }
         : { ...state, [flat ? name : makeConsistentKey(name)]: { ...initialFieldState, validate } },
     )
     .reset(reset);
