@@ -210,4 +210,12 @@ describe('SimpleForm', () => {
     fireEvent.click(buttonSubmit);
     expect(fn.mock.calls.length).toBe(1);
   });
+
+  test('fieldInit event', () => {
+    const fn = jest.fn(() => null);
+    const form = createForm();
+    form.fieldInit.watch(fn);
+    renderForm({ form });
+    expect(fn.mock.calls.length).toBe(3);
+  });
 });
