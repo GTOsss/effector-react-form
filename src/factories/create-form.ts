@@ -74,12 +74,12 @@ const createForm = <Values extends object = any, Meta = any>({
   const onSubmit = createEvent<SubmitParams<Values, Meta>>(`Form_${name}_OnSubmit`);
   const onChange = createEvent<SubmitParams<Values, Meta>>(`Form_${name}_OnChange`);
 
-  const $values = createStore<Values>(initialValues || ({} as Values));
-  const $errorsInline = createStore<ErrorsInline>({});
-  const $outerErrorsInline = createStore<ErrorsInline>({});
-  const $fieldsInline = createStore<FieldsInline>({});
-  const $form = createStore<FormState>(initialFormState);
-  const $meta = createStore<Meta>(initialMeta);
+  const $values = createStore<Values>(initialValues || ({} as Values), { name: `Form_${name}_$values` });
+  const $errorsInline = createStore<ErrorsInline>({}, { name: `Form_${name}_$errorsInline` });
+  const $outerErrorsInline = createStore<ErrorsInline>({}, { name: `Form_${name}_$outerErrorsInline` });
+  const $fieldsInline = createStore<FieldsInline>({}, { name: `Form_${name}_$fieldsInline` });
+  const $form = createStore<FormState>(initialFormState, { name: `Form_${name}_$form` });
+  const $meta = createStore<Meta>(initialMeta, { name: `Form_${name}_$meta` });
 
   const $allFormState = combine({
     values: $values,
