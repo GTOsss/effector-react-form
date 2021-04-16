@@ -38,6 +38,7 @@ import {
 } from '../utils/object-manager';
 
 const createForm = <Values extends object = any, Meta = any>({
+  name,
   validate,
   mapSubmit = (params) => params,
   onSubmit: onSubmitArg,
@@ -53,32 +54,32 @@ const createForm = <Values extends object = any, Meta = any>({
   const createEvent = domain ? domain.createEvent : createEventNative;
   const createStore = domain ? domain.createStore : createStoreNative;
 
-  const setMeta = createEvent<Meta>(`Form_SetMeta`);
+  const setMeta = createEvent<Meta>(`Form_${name}_SetMeta`);
 
-  const setValue = createEvent<SetValueParams>(`Form_SetValue`);
-  const setValues = createEvent<SetValuesParams<Values>>(`Form_SetValues`);
-  const setOrDeleteError = createEvent<SetOrDeleteErrorParams>(`Form_SetOrDeleteError`);
-  const setErrorsInlineState = createEvent<ErrorsInline>(`Form_SetErrorsInlineState`);
-  const setFieldState = createEvent<SetFieldStateParams>(`Form_SetFieldState`);
-  const setSubmitted = createEvent<boolean>(`Form_SetSubmitted`);
-  const resetOuterFieldStateFlags = createEvent('Form_ResetOuterFieldStateFlags');
-  const resetOuterErrors = createEvent('Form_ResetOuterErrors');
-  const resetOuterError = createEvent<ResetOuterErrorParams>('Form_ResetOuterError');
-  const setOrDeleteOuterError = createEvent<SetOrDeleteOuterErrorParams>('Form_SetOrDeleteOuterError');
-  const reset = createEvent('Form_Reset');
+  const setValue = createEvent<SetValueParams>(`Form_${name}_SetValue`);
+  const setValues = createEvent<SetValuesParams<Values>>(`Form_${name}_SetValues`);
+  const setOrDeleteError = createEvent<SetOrDeleteErrorParams>(`Form_${name}_SetOrDeleteError`);
+  const setErrorsInlineState = createEvent<ErrorsInline>(`Form_${name}_SetErrorsInlineState`);
+  const setFieldState = createEvent<SetFieldStateParams>(`Form_${name}_SetFieldState`);
+  const setSubmitted = createEvent<boolean>(`Form_${name}_SetSubmitted`);
+  const resetOuterFieldStateFlags = createEvent(`Form_${name}_ResetOuterFieldStateFlags`);
+  const resetOuterErrors = createEvent(`Form_${name}_ResetOuterErrors`);
+  const resetOuterError = createEvent<ResetOuterErrorParams>(`Form_${name}_ResetOuterError`);
+  const setOrDeleteOuterError = createEvent<SetOrDeleteOuterErrorParams>(`Form_${name}_SetOrDeleteOuterError`);
+  const reset = createEvent(`Form_${name}_Reset`);
 
-  const setOuterErrorsInlineState = createEvent<ErrorsInline>('Form_SetOuterErrorsInlineState');
-  const validateForm = createEvent('Form_ValidateForm');
-  const submit = createEvent('Form_Submit');
-  const onSubmit = createEvent<SubmitParams<Values, Meta>>('Form_OnSubmit');
-  const onChange = createEvent<SubmitParams<Values, Meta>>('Form_OnChange');
+  const setOuterErrorsInlineState = createEvent<ErrorsInline>(`Form_${name}_SetOuterErrorsInlineState`);
+  const validateForm = createEvent(`Form_${name}_ValidateForm`);
+  const submit = createEvent(`Form_${name}_Submit`);
+  const onSubmit = createEvent<SubmitParams<Values, Meta>>(`Form_${name}_OnSubmit`);
+  const onChange = createEvent<SubmitParams<Values, Meta>>(`Form_${name}_OnChange`);
 
-  const $values = createStore<Values>(initialValues || ({} as Values));
-  const $errorsInline = createStore<ErrorsInline>({});
-  const $outerErrorsInline = createStore<ErrorsInline>({});
-  const $fieldsInline = createStore<FieldsInline>({});
-  const $form = createStore<FormState>(initialFormState);
-  const $meta = createStore<Meta>(initialMeta);
+  const $values = createStore<Values>(initialValues || ({} as Values), { name: `Form_${name}_$values` });
+  const $errorsInline = createStore<ErrorsInline>({}, { name: `Form_${name}_$errorsInline` });
+  const $outerErrorsInline = createStore<ErrorsInline>({}, { name: `Form_${name}_$outerErrorsInline` });
+  const $fieldsInline = createStore<FieldsInline>({}, { name: `Form_${name}_$fieldsInline` });
+  const $form = createStore<FormState>(initialFormState, { name: `Form_${name}_$form` });
+  const $meta = createStore<Meta>(initialMeta, { name: `Form_${name}_$meta` });
 
   const $allFormState = combine({
     values: $values,
@@ -89,7 +90,9 @@ const createForm = <Values extends object = any, Meta = any>({
     meta: $meta,
   });
 
-  const onChangeFieldBrowser = createEvent<{ event: SyntheticEvent; name: string; flat?: boolean }>(`Form_OnChange`);
+  const onChangeFieldBrowser = createEvent<{ event: SyntheticEvent; name: string; flat?: boolean }>(
+    `Form_${name}_OnChange`,
+  );
   const onChangeField = onChangeFieldBrowser.map<{ value: any; name: string; flat?: boolean }>(
     ({ name, event, flat }) => ({
       value: getValue(event),
@@ -97,9 +100,9 @@ const createForm = <Values extends object = any, Meta = any>({
       flat,
     }),
   );
-  const onFocusFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnFocus`);
-  const onBlurFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_OnBlur`);
-  const fieldInit = createEvent<FieldInitParams>(`Form_fieldInit`);
+  const onFocusFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_${name}_OnFocus`);
+  const onBlurFieldBrowser = createEvent<{ event: SyntheticEvent; name: string }>(`Form_${name}_OnBlur`);
+  const fieldInit = createEvent<FieldInitParams>(`Form_${name}_fieldInit`);
 
   const validateByValues = ({ values, fieldsInline, ...rest }: SubmitParams) => {
     const errorsInlineState = {};
@@ -370,6 +373,8 @@ const createForm = <Values extends object = any, Meta = any>({
 
     getName: getName as GetName<Values>,
     getNameStr: getNameStr as GetNameStr<Values>,
+
+    name,
   };
 };
 

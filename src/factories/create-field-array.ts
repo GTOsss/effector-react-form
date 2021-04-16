@@ -10,8 +10,8 @@ const createFieldArray = <Values extends object = any>({
 
   const createEvent = domain ? domain.createEvent : createEventNative;
 
-  const remove = createEvent<{ fieldName: string; index: number }>('hookForm_fieldArray_Remove');
-  const push = createEvent<{ fieldName: string; value: any | any[] }>('hookForm_fieldArray_Push');
+  const remove = createEvent<{ fieldName: string; index: number }>(`hookForm_${form.name}_fieldArray_Remove`);
+  const push = createEvent<{ fieldName: string; value: any | any[] }>(`hookForm_${form.name}_fieldArray_Push`);
 
   // const unshift = useMemo(() => createEvent<any>('hookForm_fieldArray_Unshift'), []);
   // const move = useMemo(() => createEvent<{ from: number; to: number }>('hookForm_fieldArray_Move'), []);

@@ -157,6 +157,7 @@ export type ResultUseFieldArray = {
 export type GuardFn<Values = any, Meta = any> = (params: SubmitParams<Values, Meta>) => boolean;
 
 export type CreateFormParams<Values = any, MappedValues = Values, Meta = any> = {
+  name?: string;
   validate?: FormValidate<Values, Meta>;
   mapSubmit?: MapSubmit<Values, MappedValues, Meta>;
   onSubmit?: OnSubmit<MappedValues, Meta>;
@@ -213,6 +214,8 @@ export type Form<Values = any, Meta = any> = {
 
   getName: GetName<Values>;
   getNameStr: GetNameStr<Values>;
+
+  name: string;
 };
 
 export type FieldArray<Values = any> = {

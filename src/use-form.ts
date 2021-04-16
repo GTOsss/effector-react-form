@@ -12,6 +12,7 @@ import {
   Message,
   SetOrDeleteErrorParams,
   SetValueParams,
+  SetValuesParams,
   SetFieldStateParams,
   SetOrDeleteOuterErrorParams,
   FieldInitParams,
@@ -25,11 +26,12 @@ type UseFormParamsWithFactory<Values extends object, Meta> = {
   resetUnmount?: boolean;
 };
 
-type UseFormResultWithFactory = {
+type UseFormResultWithFactory<Values> = {
   controller: ControllerHof;
   handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
   setMeta: (meta: any) => void;
-  setValue: (params: SetValueParams) => SetValueParams;
+  setValue: (params: SetValueParams) => void;
+  setValues: (params: SetValuesParams<Values>) => void;
   setOrDeleteError: (params: SetOrDeleteErrorParams) => SetOrDeleteErrorParams;
   setFieldState: (params: SetFieldStateParams) => SetFieldStateParams;
   setOrDeleteOuterError: (params: SetOrDeleteOuterErrorParams) => SetOrDeleteOuterErrorParams;
@@ -44,11 +46,12 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   form,
   meta,
   resetUnmount = true,
-}: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory => {
+}: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory<Values> => {
   const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
 
   const setMeta = useEvent(form.setMeta);
   const setValue = useEvent(form.setValue);
+  const setValues = useEvent(form.setValues);
 
   const setOrDeleteError = useEvent(form.setOrDeleteError);
   const setFieldState = useEvent(form.setFieldState);
@@ -175,6 +178,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
     handleSubmit,
     setMeta,
     setValue,
+    setValues,
     setOrDeleteError,
     setFieldState,
     setOrDeleteOuterError,
