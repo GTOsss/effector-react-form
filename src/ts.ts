@@ -198,7 +198,7 @@ export type Form<Values = any, Meta = any> = {
   resetOuterFieldStateFlags: Event<any>;
   resetOuterErrors: Event<any>;
   setOrDeleteOuterError: Event<SetOrDeleteOuterErrorParams>;
-  reset: Event<any>;
+  reset: Event<void>;
 
   setMeta: Event<Meta>;
 
