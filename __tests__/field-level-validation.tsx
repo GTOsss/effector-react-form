@@ -1,7 +1,7 @@
 import { Controller } from '../src/ts';
 import React from 'react';
 import { useForm } from '../src';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import createForm from '../src/factories/create-form';
 
 // interface Values {
@@ -104,5 +104,18 @@ describe('FieldLevelValidation', () => {
     fireEvent.blur(inputFirstName);
     const inputs = screen.getAllByRole('wrapper-for-input');
     expect(inputs).toMatchSnapshot();
+  });
+
+  test('reset event', () => {
+    const form = createForm();
+    render(<FieldLevelValidation form={form} />);
+    const inputFirstName = screen.getByPlaceholderText('First name');
+    act(() => {
+      fireEvent.focus(inputFirstName);
+      fireEvent.change(inputFirstName, { target: { value: 't' } });
+      fireEvent.blur(inputFirstName);
+      form.reset();
+    });
+    expect(form.$allFormState.getState()).toMatchSnapshot();
   });
 });

@@ -156,6 +156,57 @@ Array [
 ]
 `;
 
+exports[`FieldLevelValidation reset event 1`] = `
+Object {
+  "errorsInline": Object {
+    "profile.firstName": "Field is required",
+  },
+  "fieldsInline": Object {
+    "profile.firstName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": [Function],
+    },
+    "profile.lastName": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+    "username": Object {
+      "_type": "fieldMeta",
+      "active": false,
+      "blurred": false,
+      "blurredAfterOuterError": false,
+      "changed": false,
+      "changedAfterOuterError": false,
+      "touched": false,
+      "touchedAfterOuterError": false,
+      "validate": undefined,
+    },
+  },
+  "form": Object {
+    "hasError": true,
+    "hasOuterError": false,
+    "submitted": false,
+  },
+  "meta": Object {},
+  "outerErrorsInline": Object {},
+  "values": Object {},
+}
+`;
+
 exports[`FieldLevelValidation submit 1`] = `
 Array [
   <div

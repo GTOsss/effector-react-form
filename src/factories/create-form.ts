@@ -78,6 +78,7 @@ const createForm = <Values extends object = any, Meta = any>({
   const $errorsInline = createStore<ErrorsInline>({}, { name: `Form_${name}_$errorsInline` });
   const $outerErrorsInline = createStore<ErrorsInline>({}, { name: `Form_${name}_$outerErrorsInline` });
   const $fieldsInline = createStore<FieldsInline>({}, { name: `Form_${name}_$fieldsInline` });
+  const $fieldsInlineInitData = createStore({}, { name: `Form_${name}_$fieldsInlineInitData` });
   const $form = createStore<FormState>(initialFormState, { name: `Form_${name}_$form` });
   const $meta = createStore<Meta>(initialMeta, { name: `Form_${name}_$meta` });
 
@@ -269,8 +270,26 @@ const createForm = <Values extends object = any, Meta = any>({
             },
           }
         : { ...state, [flat ? name : makeConsistentKey(name)]: { ...initialFieldState, validate } },
-    )
-    .reset(reset);
+    );
+
+  $fieldsInlineInitData.on(fieldInit, (state, { name, validate, flat }) =>
+    state[flat ? name : makeConsistentKey(name)]
+      ? {
+          ...state,
+          [flat ? name : makeConsistentKey(name)]: {
+            ...state[flat ? name : makeConsistentKey(name)],
+            ...initialFieldState,
+            validate,
+          },
+        }
+      : { ...state, [flat ? name : makeConsistentKey(name)]: { ...initialFieldState, validate } },
+  );
+
+  sample({
+    source: $fieldsInlineInitData,
+    clock: reset,
+    target: $fieldsInline,
+  });
 
   $form
     .on($outerErrorsInline.updates, (state, outerErrors) =>
