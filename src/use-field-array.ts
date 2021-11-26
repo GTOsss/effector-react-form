@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useRef } from 'react';
-import { useStore, useEvent } from 'effector-react';
+import { useStore, useEvent } from 'effector-react/scope';
 import { AnyState, FieldArrayParams, MapFieldArrayCallback, ResultUseFieldArray } from './ts';
 import { getIn } from './utils/object-manager';
 

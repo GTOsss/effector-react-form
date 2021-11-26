@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useEvent, useStoreMap } from 'effector-react';
+import { useEvent, useStoreMap } from 'effector-react/scope';
 import {
   ControllerHof,
   ControllerInjectedResult,

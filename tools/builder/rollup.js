@@ -4,8 +4,8 @@ const { terser } = require('rollup-plugin-terser');
 const rollup = require('rollup');
 
 const input = 'src/index.ts';
-const externalCSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
-const externalSSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
+const externalCSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/scope'];
+const externalSSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/scope'];
 
 configCSR = {
   input,

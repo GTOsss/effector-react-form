@@ -1,4 +1,4 @@
-import { useStore, useStoreMap } from 'effector-react';
+import { useStore, useStoreMap } from 'effector-react/scope';
 import { ErrorsInline, FieldsInline, FieldState, FormState, Message, UseErrorParams, UseErrorResult } from './ts';
 import { getIn } from './utils/object-manager';
 import { initialFieldState } from './default-states';
