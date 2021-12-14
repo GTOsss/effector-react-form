@@ -22,6 +22,11 @@ export type SubmitParams<Values = any, Meta = any> = {
   meta: Meta;
 };
 
+export type SubmitFieldParams<Value = any, Meta = any> = {
+  value: Value;
+  meta: Meta;
+};
+
 export type FormState = {
   submitted: boolean;
   hasError: boolean;
@@ -110,11 +115,19 @@ export type MapSubmit<Values, ResultValues, Meta = any> = (
   params: SubmitParams<Values, Meta>,
 ) => SubmitParams<ResultValues, Meta>;
 
+export type MapFieldSubmit<Values, ResultValues, Meta = any> = (
+  params: SubmitFieldParams<Values, Meta>,
+) => SubmitFieldParams<ResultValues, Meta>;
+
 export type FormValidateParams<Values, Meta> = SubmitParams<Values, Meta>;
 
 export type OnSubmit<Values, Meta = any> = (params: SubmitParams<Values, Meta>) => void;
 
+export type OnSubmitField<Values, Meta = any> = (params: SubmitFieldParams<Values, Meta>) => void;
+
 export type OnChange<Values, Meta = any> = OnSubmit<Values, Meta>;
+
+export type OnChangeField<Values, Meta = any> = (params: SubmitFieldParams<Values, Meta>) => void;
 
 export type UseErrorParams<Values = any> = {
   name: string;
@@ -156,6 +169,8 @@ export type ResultUseFieldArray = {
 
 export type GuardFn<Values = any, Meta = any> = (params: SubmitParams<Values, Meta>) => boolean;
 
+export type GuardFieldFn<Value = any, Meta = any> = (params: SubmitFieldParams<Value, Meta>) => boolean;
+
 export type CreateFormParams<Values = any, MappedValues = Values, Meta = any> = {
   name?: string;
   validate?: FormValidate<Values, Meta>;
@@ -171,12 +186,32 @@ export type CreateFormParams<Values = any, MappedValues = Values, Meta = any> = 
   resetOuterErrorByOnChange?: boolean;
 };
 
+export type CreateFieldParams<Value = any, MappedValue = Value, Meta = any> = {
+  name?: string;
+  validate?: FormValidate<Value, Meta>;
+  mapSubmit?: MapFieldSubmit<Value, MappedValue, Meta>;
+  onSubmit?: OnSubmitField<MappedValue, Meta>;
+  onSubmitGuardFn?: GuardFieldFn<Value, Meta>;
+  onChange?: OnChangeField<Value, Meta>;
+  onChangeGuardFn?: GuardFieldFn<Value, Meta>;
+  initialValue?: Value;
+  initialMeta?: Meta;
+  domain?: Domain;
+  resetOuterErrorsBySubmit?: boolean;
+  resetOuterErrorByOnChange?: boolean;
+};
+
 type AllFormState<Values, Meta = any> = Store<{
   values: Values;
   errorsInline: Record<string, string>;
   outerErrorsInline: Record<string, string>;
   fieldsInline: Record<string, FieldState>;
   form: FormState;
+  meta: Meta;
+}>;
+
+type AllFieldState<Value, Meta = any> = Store<{
+  value: Value;
   meta: Meta;
 }>;
 
@@ -214,6 +249,42 @@ export type Form<Values = any, Meta = any> = {
 
   getName: GetName<Values>;
   getNameStr: GetNameStr<Values>;
+
+  name: string;
+};
+
+export type Field<Value = any, Meta = any> = {
+  $value: Store<Value>;
+  // $errorsInline: Store<ErrorsInline>;
+  // $outerErrorsInline: Store<ErrorsInline>;
+  // $form: Store<FormState>;
+  // $fieldsInline: Store<Record<string, FieldState>>;
+  $meta: Store<Meta>;
+  $allFieldState: AllFieldState<Value, Meta>;
+
+  setValue: Event<Value>;
+  // setOrDeleteError: Event<ErrorsInline>;
+  // setFieldState: Event<SetFieldStateParams>;
+  // setSubmitted: Event<boolean>;
+  // resetOuterFieldStateFlags: Event<any>;
+  // resetOuterErrors: Event<any>;
+  // setOrDeleteOuterError: Event<SetOrDeleteOuterErrorParams>;
+  reset: Event<void>;
+
+  setMeta: Event<Meta>;
+
+  // setOuterErrorsInlineState: Event<any>;
+  validateForm: Event<any>;
+  submit: Event<any>;
+  onSubmit: Event<SubmitFieldParams<Value, Meta>>;
+
+  onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string; flat?: boolean }>;
+  onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
+  fieldInit: Event<FieldInitParams>;
+
+  getName: GetName<Value>;
+  getNameStr: GetNameStr<Value>;
 
   name: string;
 };
