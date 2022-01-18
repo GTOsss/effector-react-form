@@ -64,49 +64,52 @@
 <h3>createForm arguments</h3>
 Accepts an object with following optional params:
 
+<b>name</b>: form name
+
+<b>validate</b>: function, for validation values of the form.
+
+Example: 
+    const validateForm = ({ values }) => {
+      const errors = {};
+
+      if (values.newPassword !== values.repeatPassword) {
+        errors.newPassword = 'passwordsDontMatch';
+        errors.repeatPassword = 'passwordsDontMatch';
+      }
+
+      if (values.newPassword && values.newPassword === values.oldPassword) {
+        errors.newPassword = 'passwordMustDiffer';
+      }
+
+      return errors;
+    };
+    
+
+
+<b>mapSubmit</b>: a function that transforms data that received from the form fields before passing it to the onSubmit function.
+ 
+<b>onSubmit</b>: a function that fires on a form submit even. 
+
+<b>onSubmitGuardFn</b>: before the onSubmit function is executed, the value of this field is checked. By default, it contains a predicate function that checks if there are validation errors in form fields. If there are no errors, it returns true and onSubmit is triggered. You can pass your own predicate function that will accept the values ​​of the form fields and an object with meta.
+
+<b>onChange</b>: a function that`s triggered when the form fields change.
+<b>onChangeGuardFn</b>: before the onChange function is executed, the value of this field is checked. By default, it contains a predicate function that checks if there are validation errors in form fields. If there are no errors, it will return true and onChange will be fired. You can pass your own predicate function that will accept the values of the form fields and an object with meta.
+ 
 <b>initalValues</b>: an object with initial values of your form fields.
 
 Example:
-    const initialValues = {
-      name: "John",
-      lastName: "Smith"
-    }
- <b>meta</b>: an object with initial values of your form fields.
-
-Example:
 
     const initialValues = {
       name: "John",
       lastName: "Smith"
     }
 
- <b>mapSubmit</b>: an object with initial values of your form fields.
+<b>initialMeta</b>: an object with initial values of your form fields.
+ 
+<b>domain</b>: takes Effector-domain in which stores and form events will be created.
 
-Example:
-    const initialValues = {
-      name: "John",
-      lastName: "Smith"
-    }
-<b>onSubmit</b>: an object with initial values of your form fields.
+<b>resetOuterErrorsBySubmit</b>: takes true / false. Determines whether outer form errors should be cleared on the onSubmit event. The default is true.
 
-Example:
-    const initialValues = {
-      name: "John",
-      lastName: "Smith"
-    }
-<b>mapOnChange</b>: an object with initial values of your form fields.
+<b>resetOuterErrorByOnChange</b>: takes true / false. Determines whether outer form errors should be cleared on the onChange event. The default is true.
 
-Example:
-    const initialValues = {
-      name: "John",
-      lastName: "Smith"
-    }
-<b>onChange</b>: an object with initial values of your form fields.
-
-Example:
-    const initialValues = {
-      name: "John",
-      lastName: "Smith"
-    }
-
-[Examples](https://effector-react-form.webstap.ru/en/examples/simple-form)
+[Docs](https://effector-react-form.webstap.ru/en/api/unit-creators/create-form) and [Examples](https://effector-react-form.webstap.ru/en/examples/simple-form)
