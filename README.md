@@ -68,7 +68,8 @@ Accepts an object with following optional params:
 
 <b>validate</b>: function, for validation values of the form.
 
-Example: 
+Example:
+
     const validateForm = ({ values }) => {
       const errors = {};
 
