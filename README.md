@@ -1,3 +1,5 @@
+<h2>Visit [effector-react-form.webstap](https://effector-react-form.webstap.ru/en) to see full documentation and examples</h2> 
+
 <h2>QuikStart</h2>
 
 <h3>Install</h3>
