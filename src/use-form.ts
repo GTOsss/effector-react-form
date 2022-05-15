@@ -95,7 +95,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
       const value = useStoreMap({
         store: $values,
         keys: [refName.current],
-        fn: (values, [field]) => (flat ? values[field] : getIn(values, field)) || null,
+        fn: (values, [field]) => (flat ? values[field] : getIn(values, field)) ?? null,
       });
 
       const innerError = useStoreMap({
