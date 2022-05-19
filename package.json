@@ -23,7 +23,8 @@
     "lint": "cross-env eslint . --ext .js,.jsx,.ts,.tsx --fix.",
     "test": "cross-env NODE_ENV=test jest",
     "clean": "rimraf dist lib es types",
-    "commit": "cross-env git-cz"
+    "commit": "cross-env git-cz",
+    "publish": "yarn run build && npm publish"
   },
   "author": "Goncharov Timofey",
   "repository": {
