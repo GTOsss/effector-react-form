@@ -128,8 +128,8 @@ export const getIn = <Obj, Result>(state: Obj, field: string | string[], default
   if (!state) {
     return defaultValue;
   }
-
   const path: string[] = Array.isArray(field) ? field : stringToPath(field);
+
   const { length } = path;
   if (!length) {
     return defaultValue;
@@ -139,13 +139,8 @@ export const getIn = <Obj, Result>(state: Obj, field: string | string[], default
   for (let i = 0; i < length && result; i += 1) {
     result = result[path[i]];
   }
-
-  if (!result) {
-    return defaultValue;
-  }
-
   // @ts-ignore
-  return result;
+  return result ?? defaultValue;
 };
 
 export const makeNested = <Result = Record<string, any>>(inlineMap: Record<string, any>): Result =>
