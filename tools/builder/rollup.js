@@ -74,11 +74,11 @@ const configSSR = {
 
 const outputSSR = [
   {
-    file: `ssr.js`,
+    file: `scope.js`,
     format: 'cjs',
   },
   {
-    file: `ssr.esm.js`,
+    file: `scope.esm.js`,
     format: 'esm',
   },
 ];
