@@ -92,7 +92,7 @@ export const setIn = <Obj = any, Result = any | any[]>(
 
   if (!state) {
     if (isNaN(first)) {
-      return { [first]: next } as Result;
+      return {[first]: next} as unknown as Result;
     }
     const initialized = [];
     // @ts-ignore
