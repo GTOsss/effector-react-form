@@ -10,9 +10,9 @@
       "require": "./effector-react-form.cjs.js",
       "default": "./effector-react-form.esm.js"
     },
-    "./ssr": {
-      "require": "./ssr.js",
-      "default": "./ssr.esm.js"
+    "./scope": {
+      "require": "./scope.js",
+      "default": "./scope.esm.js"
     }
   },
   "scripts": {
