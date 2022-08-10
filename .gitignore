@@ -7,8 +7,8 @@
 /types
 effector-react-form.cjs.js
 effector-react-form.esm.js
-ssr.js
-ssr.esm.js
+scope.js
+scope.esm.js
 
 .vscode
 node_modules

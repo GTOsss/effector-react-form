@@ -4,10 +4,10 @@ const { terser } = require('rollup-plugin-terser');
 const rollup = require('rollup');
 
 const input = 'src/index.ts';
-const externalCSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
-const externalSSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/ssr'];
+const externalCSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/scope'];
+const externalSSR = ['lodash.topath', 'react', 'effector', 'effector-react', 'effector-react/scope'];
 
-configCSR = {
+const configCSR = {
   input,
   plugins: [
     nodeResolve({
@@ -65,7 +65,10 @@ const configSSR = {
       babelHelpers: 'runtime',
       exclude: 'node_modules/**',
       extensions: ['.js', '.ts'],
-      plugins: [['@babel/plugin-transform-typescript'], ['effector/babel-plugin', { reactSsr: true }]],
+      plugins: [['@babel/plugin-transform-typescript'], ['effector/babel-plugin', {
+        reactSsr: true,
+        factories: ['src/factories/create-form', 'src/factories/create-field-array']
+      }]],
     }),
     // terser(),
   ],
