@@ -1,6 +1,6 @@
 {
   "name": "effector-react-form",
-  "version": "2.2.9",
+  "version": "3.0.0-0",
   "description": "form manager",
   "main": "effector-react-form.cjs.js",
   "module": "effector-react-form.esm.js",
