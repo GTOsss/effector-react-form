@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useRef } from 'react';
+import { ReactNode, useCallback, useRef, useMemo } from 'react';
 import { useStore, useEvent } from 'effector-react';
 import { AnyState, FieldArrayParams, MapFieldArrayCallback, ResultUseFieldArray } from './ts';
 import { getIn } from './utils/object-manager';
@@ -37,10 +37,13 @@ const useFieldArray = <Values extends object = AnyState>({
     [values],
   ); // todo Fix type
 
+  const count = useMemo(() => (getIn(values, refName.current, []) as any[]).length, [values]);
+
   return {
     map,
     remove: (index: number) => remove({ fieldName: refName.current, index }),
     push: (value: any | any[]) => push({ fieldName: refName.current, value }),
+    count
   };
 };
 
