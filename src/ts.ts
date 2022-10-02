@@ -44,6 +44,7 @@ export type ControllerParams = {
   name: string | string[];
   flat?: boolean;
   validate?: (value: any) => Message;
+  initialValue?: any;
 };
 
 export type SetValueParams = {
@@ -74,6 +75,7 @@ export type FieldInitParams = {
   name: string | string[];
   flat?: boolean;
   validate?: ControllerParams['validate'];
+  initialValue?: any;
 };
 
 export type ControllerInjectedResult<Meta = any> = {

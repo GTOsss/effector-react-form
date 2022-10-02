@@ -286,6 +286,14 @@ const createForm = <Values extends object = any, Meta = any>({
   );
 
   sample({
+    clock: fieldInit,
+    source: $values,
+    // TODO: Возможно имеет смысл тут вызвать еще и filter и validate(initialValue)
+    fn: (_values, { name, initialValue }) => ({ field: name, value: initialValue }),
+    target: setValue
+  });
+
+  sample({
     source: $fieldsInlineInitData,
     clock: reset,
     target: $fieldsInline,
