@@ -81,7 +81,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
     setMeta(meta);
   }, [meta]);
 
-  const controller = useCallback<ControllerHof>(({ name: nameProp, validate, flat }) => {
+  const controller = useCallback<ControllerHof>(({ name: nameProp, validate, flat, initialValue }) => {
     return (): ControllerInjectedResult => {
       const refName = useRef<string>(makeConsistentKey(nameProp));
       refName.current = makeConsistentKey(nameProp);
@@ -89,7 +89,7 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
       refFlat.current = flat;
 
       useEffect(() => {
-        fieldInit({ name: refName.current, validate, flat });
+        fieldInit({ name: refName.current, validate, flat, initialValue });
       }, []);
 
       const value = useStoreMap({
