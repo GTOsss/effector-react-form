@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useEvent, useStoreMap } from 'effector-react';
+import { useUnit, useStoreMap } from 'effector-react';
 import {
   ControllerHof,
   ControllerInjectedResult,
@@ -49,23 +49,23 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
 }: UseFormParamsWithFactory<Values, Meta>): UseFormResultWithFactory<Values> => {
   const { $values, $form, $fieldsInline, $errorsInline, $outerErrorsInline } = form;
 
-  const setMeta = useEvent(form.setMeta);
-  const setValue = useEvent(form.setValue);
-  const setValues = useEvent(form.setValues);
+  const setMeta = useUnit(form.setMeta);
+  const setValue = useUnit(form.setValue);
+  const setValues = useUnit(form.setValues);
 
-  const setOrDeleteError = useEvent(form.setOrDeleteError);
-  const setFieldState = useEvent(form.setFieldState);
-  const setOrDeleteOuterError = useEvent(form.setOrDeleteOuterError);
+  const setOrDeleteError = useUnit(form.setOrDeleteError);
+  const setFieldState = useUnit(form.setFieldState);
+  const setOrDeleteOuterError = useUnit(form.setOrDeleteOuterError);
 
-  const setOuterErrorsInlineState = useEvent(form.setOuterErrorsInlineState);
-  const validateForm = useEvent(form.validateForm) as any;
-  const submit = useEvent(form.submit) as any;
-  const reset = useEvent(form.reset) as any;
+  const setOuterErrorsInlineState = useUnit(form.setOuterErrorsInlineState);
+  const validateForm = useUnit(form.validateForm) as any;
+  const submit = useUnit(form.submit) as any;
+  const reset = useUnit(form.reset) as any;
 
-  const onChangeFieldBrowser = useEvent(form.onChangeFieldBrowser);
-  const onFocusFieldBrowser = useEvent(form.onFocusFieldBrowser);
-  const onBlurFieldBrowser = useEvent(form.onBlurFieldBrowser);
-  const fieldInit = useEvent(form.fieldInit);
+  const onChangeFieldBrowser = useUnit(form.onChangeFieldBrowser);
+  const onFocusFieldBrowser = useUnit(form.onFocusFieldBrowser);
+  const onBlurFieldBrowser = useUnit(form.onBlurFieldBrowser);
+  const fieldInit = useUnit(form.fieldInit);
 
   useEffect(() => {
     validateForm();
