@@ -2,10 +2,9 @@ import {
   combine,
   createEvent as createEventNative,
   createStore as createStoreNative,
-  forward,
-  guard,
   is,
   sample,
+  UnitTargetable,
 } from 'effector';
 import { SyntheticEvent } from 'react';
 import {
@@ -137,15 +136,15 @@ const createForm = <Values extends object = any, Meta = any>({
     });
   }
 
-  forward({
-    from: submit,
-    to: [validateForm, resetOuterFieldStateFlags],
+  sample({
+    clock: submit,
+    target: [validateForm, resetOuterFieldStateFlags],
   });
 
   if (resetOuterErrorsBySubmit) {
-    forward({
-      from: submit,
-      to: resetOuterErrors,
+    sample({
+      clock: submit,
+      target: resetOuterErrors,
     });
   }
 
@@ -169,30 +168,30 @@ const createForm = <Values extends object = any, Meta = any>({
   });
 
   sample({
-    source: $allFormState,
-    clock: guard({
-      source: submit,
+    clock: sample({
+      clock: submit,
       filter: $allFormState.map(onSubmitGuardFn),
     }),
+    source: $allFormState,
     fn: mapSubmit,
     target: onSubmit,
   });
 
   sample({
-    source: $allFormState,
-    clock: guard({
-      source: onChangeFieldBrowser,
+    clock: sample({
+      clock: onChangeFieldBrowser,
       filter: $allFormState.map(onChangeGuardFn),
     }),
+    source: $allFormState,
     fn: mapSubmit,
     target: onChange,
   });
 
   if (onSubmitArg) {
     if (is.effect(onSubmitArg) || is.event(onSubmitArg)) {
-      forward({
-        from: onSubmit,
-        to: onSubmitArg,
+      sample({
+        clock: onSubmit,
+        target: onSubmitArg as UnitTargetable<any>,
       });
     } else if (typeof onSubmitArg === 'function') {
       onSubmit.watch(onSubmitArg);
@@ -201,9 +200,9 @@ const createForm = <Values extends object = any, Meta = any>({
 
   if (onChangeArg) {
     if (is.effect(onChangeArg) || is.event(onChangeArg)) {
-      forward({
-        from: onChange,
-        to: onChangeArg,
+      sample({
+        clock: onChange,
+        target: onChangeArg as UnitTargetable<any>,
       });
     } else if (typeof onChangeArg === 'function') {
       onChange.watch(onChangeArg);

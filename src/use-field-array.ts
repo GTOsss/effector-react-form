@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useRef, useMemo } from 'react';
-import { useStore, useEvent } from 'effector-react';
+import { useUnit } from 'effector-react';
 import { AnyState, FieldArrayParams, MapFieldArrayCallback, ResultUseFieldArray } from './ts';
 import { getIn } from './utils/object-manager';
 
@@ -14,10 +14,10 @@ const useFieldArray = <Values extends object = AnyState>({
     form: { $values },
   } = fieldArray;
 
-  const push = useEvent(fieldArray.push);
-  const remove = useEvent(fieldArray.remove);
+  const push = useUnit(fieldArray.push);
+  const remove = useUnit(fieldArray.remove);
 
-  const values = useStore($values);
+  const values = useUnit($values);
 
   const map = useCallback<(fn: MapFieldArrayCallback) => ReactNode[]>(
     (callback: MapFieldArrayCallback) => {
@@ -43,7 +43,7 @@ const useFieldArray = <Values extends object = AnyState>({
     map,
     remove: (index: number) => remove({ fieldName: refName.current, index }),
     push: (value: any | any[]) => push({ fieldName: refName.current, value }),
-    count
+    count,
   };
 };
 
