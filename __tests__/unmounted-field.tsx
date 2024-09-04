@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { createEvent } from 'effector';
-import { useStore } from 'effector-react';
+import { useUnit } from 'effector-react';
 import { useForm } from '../src';
 import { Controller } from '../src/ts';
 import { setIn, removeFromInlineMap } from '../src/utils/object-manager';
@@ -44,7 +44,7 @@ const renderForm = ({ form }: { form: Form<any> }) => {
   const SimpleForm = () => {
     const { handleSubmit, controller } = useForm<Values>({ form });
 
-    const { fields } = useStore($values);
+    const { fields } = useUnit($values);
 
     return (
       <form onSubmit={handleSubmit}>
