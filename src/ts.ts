@@ -152,6 +152,7 @@ export type ResultUseFieldArray = {
   map: (fn: MapFieldArrayCallback) => React.ReactNode[];
   remove: (index: number) => void;
   push: (value: any | Array<any>) => void;
+  count: number;
 };
 
 export type GuardFn<Values = any, Meta = any> = (params: SubmitParams<Values, Meta>) => boolean;
