@@ -1,16 +1,18 @@
 {
   "name": "effector-react-form",
-  "version": "3.0.0-3",
+  "version": "3.1.1",
   "description": "form manager",
   "main": "effector-react-form.cjs.js",
   "module": "effector-react-form.esm.js",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "require": "./effector-react-form.cjs.js",
       "default": "./effector-react-form.esm.js"
     },
     "./ssr": {
+      "types": "./types/ssr/index.d.ts",
       "require": "./ssr.js",
       "default": "./ssr.esm.js"
     }
@@ -33,8 +35,8 @@
   },
   "license": "ISC",
   "peerDependencies": {
-    "effector": ">=22.0.0",
-    "effector-react": ">=22.0.0",
+    "effector": ">=23.0.0",
+    "effector-react": ">=23.0.0",
     "lodash.topath": ">=4.5.2",
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0"
@@ -68,8 +70,8 @@
     "conventional-changelog-cli": "^2.2.2",
     "cross-env": "^7.0.2",
     "cz-conventional-changelog": "^3.3.0",
-    "effector": "^22.3.0",
-    "effector-react": "^22.1.6",
+    "effector": "^23.0.0",
+    "effector-react": "^23.0.0",
     "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-airbnb-typescript": "^12.0.0",

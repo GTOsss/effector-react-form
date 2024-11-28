@@ -1,4 +1,4 @@
-import { Store, Event, Domain } from 'effector';
+import { Store, EventCallable, Domain, StoreWritable } from 'effector';
 import React from 'react';
 import { GetName, GetNameStr } from './utils/object-manager';
 
@@ -93,9 +93,9 @@ export type ControllerInjectedResult<Meta = any> = {
   form: FormState;
   meta: Meta;
   validate?: (value: any) => Message;
-  setFieldState: ({ field: string, state: FieldState }) => void;
-  setOrDeleteError: ({ field: string, error: Message }) => void;
-  setOrDeleteOuterError: ({ field: string, error: Message }) => void;
+  setFieldState: (params: { field: string; state: FieldState }) => void;
+  setOrDeleteError: (params: { field: string; error: Message }) => void;
+  setOrDeleteOuterError: (params: { field: string; error: Message }) => void;
   setOuterErrorsInlineState: (errors: ErrorsInline) => void;
   fieldState: FieldState;
 };
@@ -182,36 +182,36 @@ type AllFormState<Values, Meta = any> = Store<{
 }>;
 
 export type Form<Values = any, Meta = any> = {
-  $values: Store<Values>;
+  $values: StoreWritable<Values>;
   $errorsInline: Store<ErrorsInline>;
   $outerErrorsInline: Store<ErrorsInline>;
   $form: Store<FormState>;
-  $fieldsInline: Store<Record<string, FieldState>>;
+  $fieldsInline: StoreWritable<Record<string, FieldState>>;
   $meta: Store<Meta>;
   $allFormState: AllFormState<Values, Meta>;
 
-  setValue: Event<SetValueParams>;
-  setValues: Event<SetValuesParams<Values>>;
-  setOrDeleteError: Event<SetOrDeleteErrorParams>;
-  setErrorsInlineState: Event<any>;
-  setFieldState: Event<SetFieldStateParams>;
-  setSubmitted: Event<boolean>;
-  resetOuterFieldStateFlags: Event<any>;
-  resetOuterErrors: Event<any>;
-  setOrDeleteOuterError: Event<SetOrDeleteOuterErrorParams>;
-  reset: Event<void>;
+  setValue: EventCallable<SetValueParams>;
+  setValues: EventCallable<SetValuesParams<Values>>;
+  setOrDeleteError: EventCallable<SetOrDeleteErrorParams>;
+  setErrorsInlineState: EventCallable<any>;
+  setFieldState: EventCallable<SetFieldStateParams>;
+  setSubmitted: EventCallable<boolean>;
+  resetOuterFieldStateFlags: EventCallable<any>;
+  resetOuterErrors: EventCallable<any>;
+  setOrDeleteOuterError: EventCallable<SetOrDeleteOuterErrorParams>;
+  reset: EventCallable<void>;
 
-  setMeta: Event<Meta>;
+  setMeta: EventCallable<Meta>;
 
-  setOuterErrorsInlineState: Event<any>;
-  validateForm: Event<any>;
-  submit: Event<any>;
-  onSubmit: Event<SubmitParams<Values, Meta>>;
+  setOuterErrorsInlineState: EventCallable<any>;
+  validateForm: EventCallable<any>;
+  submit: EventCallable<any>;
+  onSubmit: EventCallable<SubmitParams<Values, Meta>>;
 
-  onChangeFieldBrowser: Event<{ event: React.SyntheticEvent; name: string; flat?: boolean }>;
-  onFocusFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
-  onBlurFieldBrowser: Event<{ event: React.SyntheticEvent; name: string }>;
-  fieldInit: Event<FieldInitParams>;
+  onChangeFieldBrowser: EventCallable<{ event: React.SyntheticEvent; name: string; flat?: boolean }>;
+  onFocusFieldBrowser: EventCallable<{ event: React.SyntheticEvent; name: string }>;
+  onBlurFieldBrowser: EventCallable<{ event: React.SyntheticEvent; name: string }>;
+  fieldInit: EventCallable<FieldInitParams>;
 
   getName: GetName<Values>;
   getNameStr: GetNameStr<Values>;
@@ -221,8 +221,8 @@ export type Form<Values = any, Meta = any> = {
 
 export type FieldArray<Values = any> = {
   form: Form<Values>;
-  push: Event<{ fieldName: string; value: any | any[] }>;
-  remove: Event<{ fieldName: string; index: number }>;
+  push: EventCallable<{ fieldName: string; value: any | any[] }>;
+  remove: EventCallable<{ fieldName: string; index: number }>;
 };
 
 export type CreateFieldArrayParams<Values = any> = {
