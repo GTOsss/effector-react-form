@@ -1,16 +1,18 @@
 {
   "name": "effector-react-form",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "form manager",
   "main": "effector-react-form.cjs.js",
   "module": "effector-react-form.esm.js",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "require": "./effector-react-form.cjs.js",
       "default": "./effector-react-form.esm.js"
     },
     "./ssr": {
+      "types": "./types/ssr/index.d.ts",
       "require": "./ssr.js",
       "default": "./ssr.esm.js"
     }
