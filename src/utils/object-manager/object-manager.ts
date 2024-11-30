@@ -1,4 +1,5 @@
 import stringToPath from 'lodash.topath';
+import {ObjKey} from "../../ts";
 
 /**
  * @param {object} state Redux state
@@ -170,7 +171,7 @@ export const removeFromInlineMap = (map: Record<string, any>, key: string) => {
   return newInlineMap;
 };
 
-export const makeConsistentKey = (key: string | string[]) => {
+export const makeConsistentKey = (key: ObjKey | ObjKey[]) => {
   if (Array.isArray(key)) {
     return key.join('.');
   }

@@ -19,6 +19,7 @@ import {
 } from './ts';
 import { getIn, makeConsistentKey } from './utils/object-manager';
 import { initialFieldState } from './default-states';
+import { DerivedFieldType } from './ts-derived-field-type';
 
 type UseFormParamsWithFactory<Values extends object, Meta> = {
   form: Form<Values>;
@@ -26,8 +27,10 @@ type UseFormParamsWithFactory<Values extends object, Meta> = {
   resetUnmount?: boolean;
 };
 
-type UseFormResultWithFactory<Values> = {
-  controller: ControllerHof;
+type UseFormResultWithFactory<Values extends AnyState> = {
+  controller: ControllerHof<any, DerivedFieldType<Values>>;
+  /** alias for controller */
+  c: ControllerHof<any, DerivedFieldType<Values>>;
   handleSubmit: (e: React.SyntheticEvent<HTMLFormElement>) => void;
   setMeta: (meta: any) => void;
   setValue: (params: SetValueParams) => void;
@@ -42,7 +45,7 @@ type UseFormResultWithFactory<Values> = {
   fieldInit: (params: FieldInitParams) => FieldInitParams;
 };
 
-const useForm = <Values extends AnyState = AnyState, Meta = any>({
+const useForm = <Values extends AnyState, Meta>({
   form,
   meta,
   resetUnmount = true,
@@ -174,7 +177,8 @@ const useForm = <Values extends AnyState = AnyState, Meta = any>({
   }, []);
 
   return {
-    controller,
+    controller: controller as ControllerHof<any, DerivedFieldType<Values>>,
+    c: controller as ControllerHof<any, DerivedFieldType<Values>>,
     handleSubmit,
     setMeta,
     setValue,
