@@ -1,4 +1,5 @@
 import stringToPath from 'lodash.topath';
+import {ObjKey} from "../../ts";
 
 /**
  * @param {object} state Redux state
@@ -10,7 +11,7 @@ import stringToPath from 'lodash.topath';
  */
 export const deleteIn = <Obj = any>(
   state: Obj,
-  path: string | string[],
+  path: ObjKey | ObjKey[],
   removeEmpty = false,
   inDeep = true, // false for inlineMap
   index = 0,
@@ -76,7 +77,7 @@ export const deleteIn = <Obj = any>(
  */
 export const setIn = <Obj = any, Result = any | any[]>(
   state: Obj,
-  path: string | string[],
+  path: ObjKey | ObjKey[],
   value,
   pathIndex = 0,
 ): Result => {
@@ -124,7 +125,7 @@ export const setIn = <Obj = any, Result = any | any[]>(
  * @param {*?} defaultValue
  * @returns {object} State
  */
-export const getIn = <Obj, Result>(state: Obj, field: string | string[], defaultValue?: Result): Result => {
+export const getIn = <Obj, Result>(state: Obj, field: ObjKey | ObjKey[], defaultValue?: Result): Result => {
   if (!state) {
     return defaultValue;
   }
@@ -170,7 +171,7 @@ export const removeFromInlineMap = (map: Record<string, any>, key: string) => {
   return newInlineMap;
 };
 
-export const makeConsistentKey = (key: string | string[]) => {
+export const makeConsistentKey = (key: ObjKey | ObjKey[]) => {
   if (Array.isArray(key)) {
     return key.join('.');
   }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { useForm } from '../src';
-import { Controller } from '../src/ts';
+import { useForm, Controller } from '../src';
 import createForm from '../src/factories/create-form';
 import { createEvent } from 'effector';
 
@@ -219,3 +218,5 @@ describe('SimpleForm', () => {
     expect(fn.mock.calls.length).toBe(3);
   });
 });
+
+

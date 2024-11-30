@@ -2,7 +2,8 @@ import { Store, EventCallable, Domain, StoreWritable } from 'effector';
 import React from 'react';
 import { GetName, GetNameStr } from './utils/object-manager';
 
-export type AnyState = Record<string, any>;
+export type ObjKey = string | number | symbol;
+export type AnyState = Record<ObjKey, any>;
 
 export type ErrorsInline = Record<string, Message>;
 
@@ -40,46 +41,46 @@ export type FieldState = {
   validate?: (value: any) => string | undefined;
 };
 
-export type ControllerParams = {
-  name: string | string[];
+export type ControllerParams<Field extends ObjKey> = {
+  name: Field;
   flat?: boolean;
   validate?: (value: any) => Message;
 };
 
 export type SetValueParams = {
-  field: string | string[];
+  field: ObjKey | ObjKey[];
   value: any;
 };
 
 export type SetValuesParams<Values> = Values;
 
 export type SetOrDeleteErrorParams = {
-  field: string | string[];
+  field: ObjKey | ObjKey[];
   error?: Message;
 };
 
 export type SetFieldStateParams = {
-  field: string | string[];
+  field: ObjKey | ObjKey[];
   state: FieldState;
 };
 
 export type SetOrDeleteOuterErrorParams = {
-  field: string | string[];
+  field: ObjKey | ObjKey[];
   error: Message;
 };
 
 export type ResetOuterErrorParams = string | string[];
 
 export type FieldInitParams = {
-  name: string | string[];
+  name: ObjKey | ObjKey[];
   flat?: boolean;
-  validate?: ControllerParams['validate'];
+  validate?: ControllerParams<ObjKey>['validate'];
 };
 
 export type ControllerInjectedResult<Meta = any> = {
   input: {
     name: string;
-    value;
+    value: any;
     onChange: (event: any) => void;
     onFocus: (event: any) => void;
     onBlur: (event: any) => void;
@@ -102,7 +103,7 @@ export type ControllerInjectedResult<Meta = any> = {
 
 export type Controller<Meta = any> = () => ControllerInjectedResult<Meta>;
 
-export type ControllerHof<Meta = any> = (a: ControllerParams) => Controller<Meta>;
+export type ControllerHof<Meta = any, Field extends ObjKey = ObjKey> = (a: ControllerParams<Field>) => Controller<Meta>;
 
 export type FormValidate<Values, Meta> = (params: FormValidateParams<Values, Meta>) => ErrorsInline;
 
@@ -213,7 +214,11 @@ export type Form<Values = any, Meta = any> = {
   onBlurFieldBrowser: EventCallable<{ event: React.SyntheticEvent; name: string }>;
   fieldInit: EventCallable<FieldInitParams>;
 
+  /**
+   * Not actual anymore for Type checking, used only for system goals */
   getName: GetName<Values>;
+  /**
+   * Not actual anymore for Type checking, used only for system goals */
   getNameStr: GetNameStr<Values>;
 
   name: string;
