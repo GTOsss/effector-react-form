@@ -37,7 +37,7 @@ import {
 } from '../utils/object-manager';
 
 const createForm = <Values extends object = any, Meta = any>({
-  name,
+  name: formName,
   validate,
   mapSubmit = (params) => params,
   onSubmit: onSubmitArg,
@@ -53,6 +53,7 @@ const createForm = <Values extends object = any, Meta = any>({
   const createEvent = domain ? domain.createEvent : createEventNative;
   const createStore = domain ? domain.createStore : createStoreNative;
 
+  const name = formName || 'unNamed';
   const setMeta = createEvent<Meta>(`Form_${name}_SetMeta`);
 
   const setValue = createEvent<SetValueParams>(`Form_${name}_SetValue`);
@@ -383,6 +384,8 @@ const createForm = <Values extends object = any, Meta = any>({
     $form,
     $meta,
     $allFormState,
+
+    onChangeField,
 
     onChangeFieldBrowser,
     onFocusFieldBrowser,

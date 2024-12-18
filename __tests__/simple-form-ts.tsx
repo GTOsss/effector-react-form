@@ -36,13 +36,13 @@ const renderForm = ({ inputRender, form }: { inputRender?: any; form: Form<Value
   };
 
   const SimpleForm = () => {
-    const { handleSubmit, controller } = useForm({ form, meta: { formName: 'simpleForm' } });
+    const { handleSubmit, controller, c } = useForm({ form, meta: { formName: 'simpleForm' } });
 
     return (
       <form onSubmit={handleSubmit}>
-        <Input label="Username" controller={controller({ name: form.getName('username') })} />
-        <Input label="First name" controller={controller({ name: form.getName('profile', 'firstName') })} />
-        <Input label="Last name" controller={controller({ name: form.getName('profile', 'lastName') })} />
+        <Input label="Username" controller={controller({ name: 'username' })} />
+        <Input label="First name" controller={controller({ name: 'profile.firstName' })} />
+        <Input label="Last name" controller={c({ name: 'profile.lastName' })} />
         <button type="submit">submit</button>
         <button
           type="button"
