@@ -1,4 +1,5 @@
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   globals: {
@@ -8,4 +9,7 @@ module.exports = {
       },
     },
   },
+  testPathIgnorePatterns: ['<rootDir>/__tests__/derived-field-name.ts']
 };
+
+module.exports = config

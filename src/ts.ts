@@ -1,4 +1,4 @@
-import { Store, EventCallable, Domain, StoreWritable } from 'effector';
+import { Store, EventCallable, Domain, StoreWritable, Event } from 'effector';
 import React from 'react';
 import { GetName, GetNameStr } from './utils/object-manager';
 
@@ -208,6 +208,11 @@ export type Form<Values = any, Meta = any> = {
   validateForm: EventCallable<any>;
   submit: EventCallable<any>;
   onSubmit: EventCallable<SubmitParams<Values, Meta>>;
+
+  /**
+   * Computed event from onChangeFieldBrowser, contains computed payload from native event.
+   * Not for call, use for subscribe/handle */
+  onChangeField: Event<{ value: any; name: string; flat?: boolean }>;
 
   onChangeFieldBrowser: EventCallable<{ event: React.SyntheticEvent; name: string; flat?: boolean }>;
   onFocusFieldBrowser: EventCallable<{ event: React.SyntheticEvent; name: string }>;
